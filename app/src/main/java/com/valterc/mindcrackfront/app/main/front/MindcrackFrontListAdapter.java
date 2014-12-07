@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.valterc.mindcrackfront.app.R;
+
 import java.util.ArrayList;
 
 /**
@@ -58,12 +60,24 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private View getVideoView(int position, View convertView, ViewGroup parent) {
-        return null;
+    private View getVideoView(int position, View view, ViewGroup parent) {
+        if (view == null) {
+            view = View.inflate(context, R.layout.list_front_video, null);
+        }
+
+        //TODO: Init view
+
+        return view;
     }
 
-    private View getTitleView(int position, View convertView, ViewGroup parent) {
-        return null;
+    private View getTitleView(int position, View view, ViewGroup parent) {
+        if (view == null) {
+            view = View.inflate(context, R.layout.list_front_title, null);
+        }
+
+        //TODO: Init view
+
+        return view;
     }
 
 
