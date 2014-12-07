@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\mopubsdk\src\main\res" />
+        <source path="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\mopubsdk\build\res\rs\release" />
+        <source path="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\mopubsdk\build\res\generated\release" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\mopubsdk\src\release\res" />
+    </dataSet>
+
+</merger>

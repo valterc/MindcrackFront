@@ -1,0 +1,194 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* buid.gradle
+* build.properties
+* default.properties
+* etc\
+* etc\expectedFile.jpg
+* etc\mraid.js
+* pom.xml
+* proguard.cfg
+* scripts\
+* scripts\mavenize_support_library
+* src\
+* src\test\
+* src\test\java\
+* src\test\java\com\
+* src\test\java\com\mopub\
+* src\test\java\com\mopub\common\
+* src\test\java\com\mopub\common\CacheServiceTest.java
+* src\test\java\com\mopub\common\DownloadTaskTest.java
+* src\test\java\com\mopub\common\GpsHelperTest.java
+* src\test\java\com\mopub\common\HttpResponsesTest.java
+* src\test\java\com\mopub\common\util\
+* src\test\java\com\mopub\common\util\AsyncTasksTest.java
+* src\test\java\com\mopub\common\util\DrawablesTest.java
+* src\test\java\com\mopub\common\util\FilesTest.java
+* src\test\java\com\mopub\common\util\IntentUtilsTest.java
+* src\test\java\com\mopub\common\util\ManifestUtilsTest.java
+* src\test\java\com\mopub\common\util\ReflectionTest.java
+* src\test\java\com\mopub\common\util\StreamsTest.java
+* src\test\java\com\mopub\common\util\StringsTest.java
+* src\test\java\com\mopub\common\util\VersionCodeTest.java
+* src\test\java\com\mopub\common\util\ViewsTest.java
+* src\test\java\com\mopub\common\util\test\
+* src\test\java\com\mopub\common\util\test\support\
+* src\test\java\com\mopub\common\util\test\support\TestDateAndTime.java
+* src\test\java\com\mopub\common\util\test\support\TestMethodBuilderFactory.java
+* src\test\java\com\mopub\mobileads\
+* src\test\java\com\mopub\mobileads\AdAlertGestureListenerTest.java
+* src\test\java\com\mopub\mobileads\AdAlertReporterTest.java
+* src\test\java\com\mopub\mobileads\AdConfigurationTest.java
+* src\test\java\com\mopub\mobileads\AdFetcherTest.java
+* src\test\java\com\mopub\mobileads\AdLoadTaskTest.java
+* src\test\java\com\mopub\mobileads\AdTypeTranslatorTest.java
+* src\test\java\com\mopub\mobileads\AdViewControllerTest.java
+* src\test\java\com\mopub\mobileads\BaseHtmlWebViewTest.java
+* src\test\java\com\mopub\mobileads\BaseInterstitialActivityTest.java
+* src\test\java\com\mopub\mobileads\BaseVideoPlayerActivitiyTest.java
+* src\test\java\com\mopub\mobileads\BaseWebViewTest.java
+* src\test\java\com\mopub\mobileads\CustomEventAdLoadTaskTest.java
+* src\test\java\com\mopub\mobileads\CustomEventBannerAdapterTest.java
+* src\test\java\com\mopub\mobileads\CustomEventInterstitialAdapterTest.java
+* src\test\java\com\mopub\mobileads\EventForwardingBroadcastReceiverTest.java
+* src\test\java\com\mopub\mobileads\FacebookKeywordProviderTest.java
+* src\test\java\com\mopub\mobileads\HtmlBannerTest.java
+* src\test\java\com\mopub\mobileads\HtmlBannerWebViewTest.java
+* src\test\java\com\mopub\mobileads\HtmlInterstitialTest.java
+* src\test\java\com\mopub\mobileads\HtmlInterstitialWebViewTest.java
+* src\test\java\com\mopub\mobileads\HtmlWebViewClientTest.java
+* src\test\java\com\mopub\mobileads\MoPubActivityTest.java
+* src\test\java\com\mopub\mobileads\MoPubBrowserControllerTest.java
+* src\test\java\com\mopub\mobileads\MoPubConversionTrackerTest.java
+* src\test\java\com\mopub\mobileads\MoPubInterstitialTest.java
+* src\test\java\com\mopub\mobileads\MoPubViewTest.java
+* src\test\java\com\mopub\mobileads\MraidActivityTest.java
+* src\test\java\com\mopub\mobileads\MraidBannerTest.java
+* src\test\java\com\mopub\mobileads\MraidCommandFactoryTest.java
+* src\test\java\com\mopub\mobileads\MraidCommandPlayVideoTest.java
+* src\test\java\com\mopub\mobileads\MraidCommandResizeTest.java
+* src\test\java\com\mopub\mobileads\MraidCommandStorePictureTest.java
+* src\test\java\com\mopub\mobileads\MraidCommandTest.java
+* src\test\java\com\mopub\mobileads\MraidDisplayControllerTest.java
+* src\test\java\com\mopub\mobileads\MraidInterstitialTest.java
+* src\test\java\com\mopub\mobileads\MraidSupportsPropertyTest.java
+* src\test\java\com\mopub\mobileads\MraidVideoPlayerActivityTest.java
+* src\test\java\com\mopub\mobileads\MraidVideoViewControllerTest.java
+* src\test\java\com\mopub\mobileads\MraidViewTest.java
+* src\test\java\com\mopub\mobileads\ResponseBodyInterstitialTest.java
+* src\test\java\com\mopub\mobileads\TaskTrackerTest.java
+* src\test\java\com\mopub\mobileads\VastVideoDownloadTaskTest.java
+* src\test\java\com\mopub\mobileads\VastVideoInterstitialTest.java
+* src\test\java\com\mopub\mobileads\VastVideoToolbarTest.java
+* src\test\java\com\mopub\mobileads\VastVideoViewControllerTest.java
+* src\test\java\com\mopub\mobileads\ViewGestureDetectorTest.java
+* src\test\java\com\mopub\mobileads\WebViewUrlGeneratorTest.java
+* src\test\java\com\mopub\mobileads\factories\
+* src\test\java\com\mopub\mobileads\factories\CustomEventBannerFactoryTest.java
+* src\test\java\com\mopub\mobileads\factories\CustomEventInterstitialFactoryTest.java
+* src\test\java\com\mopub\mobileads\test\
+* src\test\java\com\mopub\mobileads\test\support\
+* src\test\java\com\mopub\mobileads\test\support\FileUtils.java
+* src\test\java\com\mopub\mobileads\test\support\GestureUtils.java
+* src\test\java\com\mopub\mobileads\test\support\JsonUtils.java
+* src\test\java\com\mopub\mobileads\test\support\SdkTestRunner.java
+* src\test\java\com\mopub\mobileads\test\support\TestAdFetchTaskFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestAdFetcherFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestAdViewControllerFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestCustomEventBannerAdapterFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestCustomEventBannerFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestCustomEventInterstitialAdapterFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestCustomEventInterstitialFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestHtmlBannerWebViewFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestHtmlInterstitialWebViewFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestHttpClientFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestHttpResponseWithHeaders.java
+* src\test\java\com\mopub\mobileads\test\support\TestMoPubViewFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestMraidViewFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestVastManagerFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestVastVideoDownloadTaskFactory.java
+* src\test\java\com\mopub\mobileads\test\support\TestViewGestureDetectorFactory.java
+* src\test\java\com\mopub\mobileads\test\support\ThreadUtils.java
+* src\test\java\com\mopub\mobileads\util\
+* src\test\java\com\mopub\mobileads\util\HttpClientsTest.java
+* src\test\java\com\mopub\mobileads\util\HttpResponsesTest.java
+* src\test\java\com\mopub\mobileads\util\HttpUtilsTest.java
+* src\test\java\com\mopub\mobileads\util\JsonTest.java
+* src\test\java\com\mopub\mobileads\util\MraidsTest.java
+* src\test\java\com\mopub\mobileads\util\vast\
+* src\test\java\com\mopub\mobileads\util\vast\VastManagerTest.java
+* src\test\java\com\mopub\mobileads\util\vast\VastXmlManagerAggregatorTest.java
+* src\test\java\com\mopub\mobileads\util\vast\VastXmlManagerTest.java
+* src\test\java\com\mopub\nativeads\
+* src\test\java\com\mopub\nativeads\AdapterHelperTest.java
+* src\test\java\com\mopub\nativeads\ImageDiskTaskManagerTest.java
+* src\test\java\com\mopub\nativeads\ImageDownloadTaskManagerTest.java
+* src\test\java\com\mopub\nativeads\ImageServiceTest.java
+* src\test\java\com\mopub\nativeads\ImageViewServiceTest.java
+* src\test\java\com\mopub\nativeads\ImpressionTrackingManagerTest.java
+* src\test\java\com\mopub\nativeads\MoPubNativeTest.java
+* src\test\java\com\mopub\nativeads\NativeAdViewHelperTest.java
+* src\test\java\com\mopub\nativeads\NativeResponseTest.java
+* src\test\java\com\mopub\nativeads\NativeViewHolderTest.java
+* src\test\java\com\mopub\nativeads\test\
+* src\test\java\com\mopub\nativeads\test\support\
+* src\test\java\com\mopub\nativeads\test\support\SdkTestRunner.java
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:+
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => mopubsdk\src\main\AndroidManifest.xml
+* libs\GoogleAdMobAdsSdk-6.4.1.jar => mopubsdk\libs\GoogleAdMobAdsSdk-6.4.1.jar
+* libs\MMSDK.jar => mopubsdk\libs\MMSDK.jar
+* res\ => mopubsdk\src\main\res\
+* src\main\java\ => mopubsdk\src\main\java\
+
+Missing Android Support Repository:
+-----------------------------------
+Some useful libraries, such as the Android Support Library, are
+installed from a special Maven repository, which should be installed
+via the SDK manager.
+
+It looks like this library is missing from your SDK installation at:
+null
+
+To install it, open the SDK manager, and in the Extras category,
+select "Android Support Repository". You may also want to install the
+"Google Repository" if you want to use libraries like Google Play
+Services.
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

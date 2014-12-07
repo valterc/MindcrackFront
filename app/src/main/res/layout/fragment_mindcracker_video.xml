@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".main.video.MindcrackerVideoFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <fragment
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+            android:id="@+id/fragmentYoutube"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutAd"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" android:visibility="gone">
+
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/adview"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp"
+                />
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+
+</LinearLayout>
