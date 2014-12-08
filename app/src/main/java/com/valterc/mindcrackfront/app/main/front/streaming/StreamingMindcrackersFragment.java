@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask;
+import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask.*;
 import com.valterc.views.ExpandableGridView;
 
 /**
@@ -49,6 +51,12 @@ public class StreamingMindcrackersFragment extends Fragment {
             }
         });
 
+        new GetUsersStreamingAsyncTask().execute(new GetUsersStreamingInfo(new GetUsersStreamingListener() {
+            @Override
+            public void onGetUsersStreamingComplete(String[] users) {
+
+            }
+        }));
 
         return view;
     }

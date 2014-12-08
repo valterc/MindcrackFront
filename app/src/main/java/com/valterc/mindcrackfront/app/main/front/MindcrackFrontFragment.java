@@ -35,14 +35,7 @@ public class MindcrackFrontFragment extends Fragment {
         listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
 
 
-        new GetVideoPlaylistItemsAsyncTask().execute(new GetVideoPlaylistItemsAsyncTask.GetVideoPlaylistItemsInfo(new GetVideoPlaylistItemsAsyncTask.GetVideoPlaylistItemsListener() {
-            @Override
-            public void onGetVideoListComplete(PlaylistItemListResponse response) {
 
-            }
-        }, "UUFKDEp9si4RmHFWJW1vYsMA", null));
-
-        //UUFKDEp9si4RmHFWJW1vYsMA
 
         return view;
     }
