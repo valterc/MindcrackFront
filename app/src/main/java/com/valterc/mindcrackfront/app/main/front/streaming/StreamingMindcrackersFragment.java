@@ -24,13 +24,12 @@ public class StreamingMindcrackersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_streaming, null);
 
         ExpandableGridView gridView = (ExpandableGridView) view.findViewById(R.id.expandableGridViewStreaming);
-
         gridView.setExpanded(true);
 
         gridView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return 50;
+                return 7;
             }
 
             @Override

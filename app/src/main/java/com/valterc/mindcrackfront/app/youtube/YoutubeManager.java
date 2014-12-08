@@ -9,10 +9,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -37,22 +37,34 @@ public class YoutubeManager {
 
     }
 
-    public SearchListResponse getVideosFromUser(String userId) throws IOException {
-        return getVideosFromUser(userId, null);
+    public SearchListResponse getVideosFromUserSearch(String userId) throws IOException {
+        return getVideosFromUserSearch(userId, null);
     }
 
-    public SearchListResponse getVideosFromUser(String userId, String pageToken) throws IOException {
+    public SearchListResponse getVideosFromUserSearch(String userId, String pageToken) throws IOException {
         YouTube.Search.List search = youtube.search().list("id, snippet");
         search.setKey(YOUTUBE_BROWSER_KEY);
         search.setChannelId(userId);
         search.setOrder("date");
         search.setType("video");
-        search.setMaxResults(15L);
+        search.setMaxResults(20L);
 
         if (pageToken != null)
             search.setPageToken(pageToken);
 
         return search.execute();
+    }
+
+    public PlaylistItemListResponse getVideosFromUserPlaylist(String playlistId, String pageToken) throws IOException {
+        YouTube.PlaylistItems.List list = youtube.playlistItems().list("id, snippet");
+        list.setKey(YOUTUBE_BROWSER_KEY);
+        list.setPlaylistId(playlistId);
+        list.setMaxResults(20L);
+
+        if (pageToken != null)
+            list.setPageToken(pageToken);
+
+        return list.execute();
     }
 
     public Video getVideo(String videoId) throws IOException {

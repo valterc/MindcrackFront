@@ -6,19 +6,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 
-import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
-import com.valterc.mindcrackfront.app.youtube.GetVideoListAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.GetVideoListAsyncTask.*;
+import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by Valter on 28/05/2014.
  */
-public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListListener {
+public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlaylistItemsListener {
 
     private boolean loading;
     private Context context;
@@ -110,10 +111,10 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListL
         }
 
         MindcrackerVideoItemViewHolder viewHolder  = (MindcrackerVideoItemViewHolder) view.getTag();
-        SearchResult searchResult = items.get(i).searchResult;
+        PlaylistItem playlistItem = items.get(i).playlistItem;
 
-        viewHolder.webImageViewVideoImage.setImageSource(searchResult.getSnippet().getThumbnails().getMedium().getUrl());
-        viewHolder.textViewVideoTitle.setText(searchResult.getSnippet().getTitle());
+        viewHolder.webImageViewVideoImage.setImageSource(playlistItem.getSnippet().getThumbnails().getMedium().getUrl());
+        viewHolder.textViewVideoTitle.setText(playlistItem.getSnippet().getTitle());
 
         return view;
     }
@@ -156,7 +157,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListL
     }
 
     @Override
-    public void onGetVideoListComplete(SearchListResponse response) {
+    public void onGetVideoListComplete(PlaylistItemListResponse response) {
 
         if (items.size() > 0 && items.get(items.size() - 1).type == MindcrackerListItem.TYPE_LOADING)
             items.remove(items.size() - 1);
@@ -166,11 +167,13 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListL
         } else {
 
             for (int i = 0; i < response.getItems().size(); i++) {
-                SearchResult searchResult = response.getItems().get(i);
-                items.add(new MindcrackerListItem(searchResult, MindcrackerListItem.TYPE_VIDEO));
+                PlaylistItem playlistItem = response.getItems().get(i);
+                items.add(new MindcrackerListItem(playlistItem, MindcrackerListItem.TYPE_VIDEO));
 
-                if ((items.size() - items.size() / 5 - 1) % 5 == 0)
-                    items.add(new MindcrackerListItem(searchResult, MindcrackerListItem.TYPE_AD));
+                if (MindcrackFrontApplication.getSettings().getShowAds()) {
+                    if ((items.size() - items.size() / 5 - 1) % 5 == 0)
+                        items.add(new MindcrackerListItem(playlistItem, MindcrackerListItem.TYPE_AD));
+                }
             }
 
             this.pageToken = response.getNextPageToken();
@@ -179,6 +182,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListL
 
         notifyDataSetChanged();
         loading = false;
+
     }
 
     private void loadMoreVideos(){
@@ -191,8 +195,9 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoListL
         this.items.add(new MindcrackerListItem(MindcrackerListItem.TYPE_LOADING));
         notifyDataSetChanged();
 
-        GetVideoListInfo videoListInfo = new GetVideoListInfo(this, this.mindcracker.getYoutubeId(), this.pageToken);
-        new GetVideoListAsyncTask().execute(videoListInfo);
+        GetVideoPlaylistItemsInfo videoPlaylistItemsInfo = new GetVideoPlaylistItemsInfo(this, this.mindcracker.getYoutubePlaylistId(), this.pageToken);
+        new GetVideoPlaylistItemsAsyncTask().execute(videoPlaylistItemsInfo);
     }
+
 
 }

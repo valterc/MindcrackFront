@@ -5,11 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.R;
-import com.valterc.views.ExpandableGridView;
+import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -32,8 +32,17 @@ public class MindcrackFrontFragment extends Fragment {
         viewStreamingHeader = inflater.inflate(R.layout.list_front_header_streaming, null);
         listView.addHeaderView(viewStreamingHeader);
 
-        listView.setAdapter(new MindcrackFrontListAdapter());
+        listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
 
+
+        new GetVideoPlaylistItemsAsyncTask().execute(new GetVideoPlaylistItemsAsyncTask.GetVideoPlaylistItemsInfo(new GetVideoPlaylistItemsAsyncTask.GetVideoPlaylistItemsListener() {
+            @Override
+            public void onGetVideoListComplete(PlaylistItemListResponse response) {
+
+            }
+        }, "UUFKDEp9si4RmHFWJW1vYsMA", null));
+
+        //UUFKDEp9si4RmHFWJW1vYsMA
 
         return view;
     }

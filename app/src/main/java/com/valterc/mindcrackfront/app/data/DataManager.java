@@ -54,6 +54,28 @@ public class DataManager extends BindableBase {
         return null;
     }
 
+    public Mindcracker getMindcrackerYoutubeId(String youtubeId){
+        for (int i = 0; i < mindcrackers.size(); i++) {
+            Mindcracker mindcracker = mindcrackers.get(i);
+            if (mindcracker.getYoutubeId() != null && mindcracker.getYoutubeId().equals(youtubeId)) {
+                return mindcracker;
+            }
+        }
+
+        return null;
+    }
+
+    public Mindcracker getMindcrackerTwitchId(String twitchId){
+        for (int i = 0; i < mindcrackers.size(); i++) {
+            Mindcracker mindcracker = mindcrackers.get(i);
+            if (mindcracker.getTwitchId() != null && mindcracker.getTwitchId().equals(twitchId)) {
+                return mindcracker;
+            }
+        }
+
+        return null;
+    }
+
     public void addFavorite(Mindcracker m){
         //If already in favorites do nothing
         for (Mindcracker mindcracker : favoriteMindcrackers){

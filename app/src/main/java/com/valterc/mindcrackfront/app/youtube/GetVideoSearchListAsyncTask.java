@@ -10,17 +10,17 @@ import java.io.IOException;
 /**
  * Created by Valter on 30/05/2014.
  */
-public class GetVideoListAsyncTask extends AsyncTask<GetVideoListAsyncTask.GetVideoListInfo, Void, SearchListResponse> {
+public class GetVideoSearchListAsyncTask extends AsyncTask<GetVideoSearchListAsyncTask.GetVideoSearchListInfo, Void, SearchListResponse> {
 
     private GetVideoListListener listener;
 
     @Override
-    protected SearchListResponse doInBackground(GetVideoListInfo... params) {
-        GetVideoListInfo info = params[0];
+    protected SearchListResponse doInBackground(GetVideoSearchListInfo... params) {
+        GetVideoSearchListInfo info = params[0];
         this.listener = info.listener;
 
         try {
-            SearchListResponse response = MindcrackFrontApplication.getYoutubeManager().getVideosFromUser(info.userId, info.pageToken);
+            SearchListResponse response = MindcrackFrontApplication.getYoutubeManager().getVideosFromUserSearch(info.userId, info.pageToken);
             return response;
         } catch (IOException e) {
         }
@@ -35,12 +35,12 @@ public class GetVideoListAsyncTask extends AsyncTask<GetVideoListAsyncTask.GetVi
     }
 
 
-    public static class GetVideoListInfo {
+    public static class GetVideoSearchListInfo {
         private GetVideoListListener listener;
         public String userId;
         public String pageToken;
 
-        public GetVideoListInfo(GetVideoListListener listener, String userId, String pageToken) {
+        public GetVideoSearchListInfo(GetVideoListListener listener, String userId, String pageToken) {
             this.listener = listener;
             this.userId = userId;
             this.pageToken = pageToken;

@@ -38,20 +38,21 @@ public class DataSource {
 
         String id = null;
         try {
-            id = c.getString(0);
+            id = c.getString(c.getColumnIndex("id"));
         } catch (Exception e) {
             return null;
         }
 
-        String name = c.getString(1);
-        String youtubeName = c.getString(2);
-        String youtubeId = c.getString(3);
-        String twitchId = c.getString(9);
-        int showTitleOnList = c.getInt(4);
-        int notifications = c.getInt(5);
-        int unseenVideoCount = c.getInt(6);
-        String lastVideoId = c.getString(7);
-        String lastVideoDateString = c.getString(8);
+        String name = c.getString(c.getColumnIndex("name"));
+        String youtubeName = c.getString(c.getColumnIndex("youtube_name"));
+        String youtubeId = c.getString(c.getColumnIndex("youtube_id"));
+        String youtubePlaylistId = c.getString(c.getColumnIndex("youtube_plist_id"));
+        String twitchId = c.getString(c.getColumnIndex("twitch_id"));
+        int showTitleOnList = c.getInt(c.getColumnIndex("show_title_on_list"));
+        int notifications = c.getInt(c.getColumnIndex("notifications"));
+        int unseenVideoCount = c.getInt(c.getColumnIndex("unseen_video_count"));
+        String lastVideoId = c.getString(c.getColumnIndex("last_video_id"));
+        String lastVideoDateString = c.getString(c.getColumnIndex("last_video_date"));
 
         Date lastVideoDate  = null;
         if (lastVideoDateString != null) {
@@ -62,7 +63,7 @@ public class DataSource {
             }
         }
 
-        mindcracker = new Mindcracker(id, name, youtubeName, youtubeId, twitchId, showTitleOnList == 1, notifications == 1, unseenVideoCount, lastVideoId, lastVideoDateString == null ? null : lastVideoDate);
+        mindcracker = new Mindcracker(id, name, youtubeName, youtubeId, youtubePlaylistId, twitchId, showTitleOnList == 1, notifications == 1, unseenVideoCount, lastVideoId, lastVideoDateString == null ? null : lastVideoDate);
 
         return mindcracker;
     }
@@ -78,12 +79,13 @@ public class DataSource {
                         "name",
                         "youtube_name",
                         "youtube_id",
+                        "youtube_plist_id",
+                        "twitch_id",
                         "show_title_on_list",
                         "notifications",
                         "unseen_video_count",
                         "last_video_id",
-                        "last_video_date",
-                        "twitch_id"
+                        "last_video_date"
                 }, null, null, null, null, "name COLLATE NOCASE", null);
 
         if (c.moveToFirst()) {
@@ -125,6 +127,7 @@ public class DataSource {
                 "name = ?, " +
                 "youtube_name = ?, " +
                 "youtube_id = ?, " +
+                "youtube_plist_id = ?, " +
                 "twitch_id = ?, " +
                 "show_title_on_list = ?, " +
                 "notifications = ?, " +
@@ -147,6 +150,7 @@ public class DataSource {
                 statement.bindString(index++, m.getName());
                 statement.bindString(index++, m.getYoutubeName());
                 statement.bindString(index++, m.getYoutubeId());
+                statement.bindString(index++, m.getYoutubePlaylistId());
                 statement.bindString(index++, m.getTwitchId());
                 statement.bindLong(index++, m.getShowTitleOnList() ? 1 : 0);
                 statement.bindLong(index++, m.getNotificationsEnabled() ? 1 : 0);

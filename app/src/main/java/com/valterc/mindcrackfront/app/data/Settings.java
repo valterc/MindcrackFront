@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Random;
 
 /**
@@ -16,7 +17,6 @@ public class Settings {
     private static final String TAG = "Settings";
     /*
 
-    1kBKnc
     1w5M0D
     5fEInK
     w3BGtc
@@ -35,11 +35,13 @@ public class Settings {
     private static final String KEY_HASH_VALUES = "IMkel0";
     private static final String KEY_SHOW_ADS = "g98uMr";
     private static final String KEY_SHOW_SPLASH = "ZQyqaO";
+    private static final String KEY_FIRST_RUN_TIMESTAMP = "1kBKnc";
 
     private SharedPreferences sharedPreferences;
 
     private Boolean showAds;
     private Boolean showSplashScreen;
+    private long firstRunTimeStamp;
 
     public Settings(Context context) {
         sharedPreferences = context.getSharedPreferences(SETTINGS_FILE_NAME, Context.MODE_PRIVATE);
@@ -55,10 +57,13 @@ public class Settings {
 
         Boolean showAds = sharedPreferences.getBoolean(KEY_SHOW_ADS, true);
         Boolean showSplash = sharedPreferences.getBoolean(KEY_SHOW_SPLASH, true);
+        long firstRunTimeStamp = sharedPreferences.getLong(KEY_FIRST_RUN_TIMESTAMP, -1);
+
         String hash = sharedPreferences.getString(KEY_HASH_VALUES, "");
 
         this.showAds = showAds;
         this.showSplashScreen = showSplash;
+        this.firstRunTimeStamp = firstRunTimeStamp;
 
         String localHash = ComputeHash(hashCode() + "");
 
@@ -74,6 +79,7 @@ public class Settings {
     private void setDefaultValues() {
         this.showAds = true;
         this.showSplashScreen = true;
+        this.firstRunTimeStamp = Calendar.getInstance().getTimeInMillis();
         Log.d(TAG, "Default setting values loaded!");
     }
 
@@ -104,6 +110,7 @@ public class Settings {
 
         editor.putBoolean(KEY_SHOW_ADS, getShowAds());
         editor.putBoolean(KEY_SHOW_SPLASH, getShowSplashScreen());
+        editor.putLong(KEY_FIRST_RUN_TIMESTAMP, getFirstRunTimeStamp());
 
         editor.putString(KEY_HASH_VALUES, ComputeHash(hashCode() + ""));
 
@@ -117,7 +124,8 @@ public class Settings {
     }
 
     public Boolean getShowAds() {
-        return showAds;
+        //Only show ads after a day from the first run of the app
+        return showAds && Calendar.getInstance().getTimeInMillis() - getFirstRunTimeStamp() > 3600 * 1000 * 24;
     }
 
     public void setShowAds(Boolean showAds) {
@@ -132,6 +140,14 @@ public class Settings {
         this.showSplashScreen = showSplashScreen;
     }
 
+    public long getFirstRunTimeStamp() {
+        return firstRunTimeStamp;
+    }
+
+    public void setFirstRunTimeStamp(long firstRunTimeStamp) {
+        this.firstRunTimeStamp = firstRunTimeStamp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,6 +155,7 @@ public class Settings {
 
         Settings settings = (Settings) o;
 
+        if (firstRunTimeStamp != settings.firstRunTimeStamp) return false;
         if (!showAds.equals(settings.showAds)) return false;
         if (!showSplashScreen.equals(settings.showSplashScreen)) return false;
 
@@ -149,9 +166,7 @@ public class Settings {
     public int hashCode() {
         int result = showAds.hashCode();
         result = 31 * result + showSplashScreen.hashCode();
+        result = 31 * result + (int) (firstRunTimeStamp ^ (firstRunTimeStamp >>> 32));
         return result;
     }
-
-
-
 }

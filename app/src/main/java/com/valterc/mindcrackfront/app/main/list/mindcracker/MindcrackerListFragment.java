@@ -5,19 +5,13 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.services.youtube.model.Channel;
-import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
 import com.valterc.WebImageView;
 import com.valterc.data.download.DownloadImageAsyncTask;
 import com.valterc.data.download.DownloadImageListener;
@@ -25,18 +19,10 @@ import com.valterc.data.download.DownloadImageRequest;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
-import com.valterc.mindcrackfront.app.data.MindcrackerVideo;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
-import com.valterc.mindcrackfront.app.main.navigationdrawer.NavigationDrawerFragment;
 import com.valterc.mindcrackfront.app.youtube.GetChannelAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.GetVideoListAsyncTask;
 
 import static com.valterc.mindcrackfront.app.youtube.GetChannelAsyncTask.*;
-
-import com.valterc.mindcrackfront.app.youtube.GetVideoListAsyncTask.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Valter on 24/05/2014.
@@ -202,7 +188,7 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
         MindcrackerListItem item = (MindcrackerListItem) adapter.getItem(position);
 
         if (item != null && listener != null) {
-            listener.onVideoSelected(mindcrackerId, item.searchResult.getId().getVideoId());
+            listener.onVideoSelected(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
         }
 
     }
