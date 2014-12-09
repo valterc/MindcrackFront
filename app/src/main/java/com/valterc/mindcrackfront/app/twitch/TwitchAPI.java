@@ -1,8 +1,12 @@
 package com.valterc.mindcrackfront.app.twitch;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+
 import com.google.gson.JsonObject;
 import com.vcutils.DownloadResponse;
 import com.vcutils.Downloader;
+import com.vcutils.IntentUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,14 +17,18 @@ import org.json.JSONObject;
  */
 public class TwitchAPI {
 
+    private static final String TwitchPackage = "tv.twitch.android.viewer";
+
+    private static final String TWITCH_USER_CHANNEL_PAGE = "http://twitch.tv/";
+    private static final String TWITCH_APP_DEEP_LINKING_URI = "twitch://stream/";
     private static final String TWITCH_API_STREAM = "https://api.twitch.tv/kraken/streams/";
     private static final String TWITCH_API_STREAM_CHANNELS = "https://api.twitch.tv/kraken/streams?channel=";
 
-    public static Boolean IsUserStreaming(String twitchUserId){
+    public static Boolean IsUserStreaming(String twitchUserId) {
 
         DownloadResponse<String> apiResponse = Downloader.downloadGet(TWITCH_API_STREAM + twitchUserId);
 
-        if (apiResponse.getResult() != DownloadResponse.DownloadResult.Ok || apiResponse.getResponse() == null){
+        if (apiResponse.getResult() != DownloadResponse.DownloadResult.Ok || apiResponse.getResponse() == null) {
             return false;
         }
 
@@ -28,19 +36,19 @@ public class TwitchAPI {
             JSONObject jsonResponse = new JSONObject(apiResponse.getResponse());
             return jsonResponse.has("stream") && jsonResponse.get("stream") != null;
         } catch (JSONException e) {
-           //Ignore exceptions
+            //Ignore exceptions
         }
 
         return false;
     }
 
-
     /**
      * Checks the streaming status of several twitch users
+     *
      * @param twitchUserIds users to query streaming status
      * @return NULL on error, array containing the users streaming
      */
-    public static String[] GetUsersStreaming(String[] twitchUserIds){
+    public static String[] GetUsersStreaming(String[] twitchUserIds) {
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -53,7 +61,7 @@ public class TwitchAPI {
 
         DownloadResponse<String> apiResponse = Downloader.downloadGet(stringBuilder.toString());
 
-        if (apiResponse.getResult() != DownloadResponse.DownloadResult.Ok || apiResponse.getResponse() == null){
+        if (apiResponse.getResult() != DownloadResponse.DownloadResult.Ok || apiResponse.getResponse() == null) {
             return null;
         }
 
@@ -75,6 +83,18 @@ public class TwitchAPI {
         }
 
         return null;
+    }
+
+    public static void OpenTwitchStream(Context context, String twitchUserId) {
+
+        final PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(TwitchPackage, PackageManager.GET_ACTIVITIES);
+            IntentUtils.actionView(context, TWITCH_APP_DEEP_LINKING_URI + twitchUserId);
+        } catch (PackageManager.NameNotFoundException e) {
+            IntentUtils.actionView(context, TWITCH_USER_CHANNEL_PAGE + twitchUserId);
+        }
+
     }
 
 }

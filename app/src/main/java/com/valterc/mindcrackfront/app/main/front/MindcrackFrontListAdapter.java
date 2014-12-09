@@ -78,8 +78,8 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         WebImageView webImageView = (WebImageView) view.findViewById(R.id.webImageViewVideoImage);
         TextView textView = (TextView) view.findViewById(R.id.textViewVideoTitle);
 
-        webImageView.setImageSource(item.searchResult.getSnippet().getThumbnails().getMedium().getUrl());
-        textView.setText(item.searchResult.getSnippet().getTitle());
+        webImageView.setImageSource(item.playlistItem.getSnippet().getThumbnails().getMedium().getUrl());
+        textView.setText(item.playlistItem.getSnippet().getTitle());
 
         return view;
     }

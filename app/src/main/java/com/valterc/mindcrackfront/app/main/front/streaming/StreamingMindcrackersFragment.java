@@ -1,21 +1,29 @@
 package com.valterc.mindcrackfront.app.main.front.streaming;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask;
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask.*;
+import com.valterc.mindcrackfront.app.twitch.TwitchAPI;
 import com.valterc.views.ExpandableGridView;
+import com.vcutils.IntentUtils;
 
 /**
  * Created by Valter on 07/12/2014.
  */
-public class StreamingMindcrackersFragment extends Fragment {
+public class StreamingMindcrackersFragment extends Fragment implements GetUsersStreamingListener {
+
+    private View view;
+    private ExpandableGridView gridView;
 
     public StreamingMindcrackersFragment(){
 
@@ -23,41 +31,43 @@ public class StreamingMindcrackersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_streaming, null);
+        view = inflater.inflate(R.layout.fragment_streaming, null);
 
-        ExpandableGridView gridView = (ExpandableGridView) view.findViewById(R.id.expandableGridViewStreaming);
+        TextView textView = (TextView) view.findViewById(R.id.textViewStreaming);
+        textView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf"));
+
+        gridView = (ExpandableGridView) view.findViewById(R.id.expandableGridViewStreaming);
         gridView.setExpanded(true);
-
-        gridView.setAdapter(new BaseAdapter() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public int getCount() {
-                return 7;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return position;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                return View.inflate(getActivity(), R.layout.grid_streaming_mindcracker, null);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TwitchAPI.OpenTwitchStream(getActivity(), (String) gridView.getAdapter().getItem(position));
             }
         });
 
-        new GetUsersStreamingAsyncTask().execute(new GetUsersStreamingInfo(new GetUsersStreamingListener() {
-            @Override
-            public void onGetUsersStreamingComplete(String[] users) {
-
-            }
-        }));
+        view.setVisibility(View.GONE);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new GetUsersStreamingAsyncTask().execute(new GetUsersStreamingInfo(this));
+    }
+
+    @Override
+    public void onGetUsersStreamingComplete(String[] users) {
+        if (users != null && users.length > 0){
+            gridView.setAdapter(new StreamingMindcrackersAdapter(getActivity(), users));
+            view.setVisibility(View.VISIBLE);
+        } else {
+            gridView.setAdapter(null);
+            getView().setVisibility(View.GONE);
+
+            //Test code
+            //gridView.setAdapter(new StreamingMindcrackersAdapter(getActivity(), new String[]{"sethbling", "ethotv", "sevadus", "anderzel"}));
+            //view.setVisibility(View.VISIBLE);
+        }
     }
 }

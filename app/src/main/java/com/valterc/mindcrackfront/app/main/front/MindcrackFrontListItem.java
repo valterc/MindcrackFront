@@ -1,6 +1,6 @@
 package com.valterc.mindcrackfront.app.main.front;
 
-import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.PlaylistItem;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -12,16 +12,16 @@ public class MindcrackFrontListItem {
 
     public int type;
     public String title;
-    public SearchResult searchResult;
+    public PlaylistItem playlistItem;
 
     public MindcrackFrontListItem(String title){
         this.type = TYPE_TITLE;
         this.title = title;
     }
 
-    public MindcrackFrontListItem(SearchResult searchResult){
+    public MindcrackFrontListItem(PlaylistItem playlistItem){
         this.type = TYPE_VIDEO;
-        this.searchResult = searchResult;
+        this.playlistItem = playlistItem;
     }
 
 
