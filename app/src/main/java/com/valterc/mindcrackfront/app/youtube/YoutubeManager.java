@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -109,7 +110,7 @@ public class YoutubeManager {
 
         private final static String GDATA_USER_UPLOADS = "https://gdata.youtube.com/feeds/api/users/%s/uploads?fields=entry(id,title,published,gd:comments,yt:statistics)&max-results=10&alt=json";
 
-        public static Object GetVideosFromUserGdata(String userId) {
+        public static ArrayList<GDataYoutubeVideo> GetVideosFromUserGdata(String userId) {
 
             String gdataUrl = String.format(GDATA_USER_UPLOADS, userId);
 
@@ -118,6 +119,8 @@ public class YoutubeManager {
             if (gdataResponse.getResult() != DownloadResponse.DownloadResult.Ok) {
                 return null;
             }
+
+            ArrayList<GDataYoutubeVideo> videos = new ArrayList<>();
 
             try {
                 JSONObject jsonResponse = new JSONObject(gdataResponse.getResponse());
@@ -146,17 +149,17 @@ public class YoutubeManager {
                         publishDate = Calendar.getInstance().getTime();
                     }
 
-
-                    //TODO: Insert videos into list, return list; include some form of userId
-
+                    GDataYoutubeVideo youtubeVideo = new GDataYoutubeVideo(videoId, videoName, null, publishDate, viewCount, commentCount);
+                    videos.add(youtubeVideo);
                 }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                return null;
             }
 
-            return null;
+            return videos;
         }
 
     }

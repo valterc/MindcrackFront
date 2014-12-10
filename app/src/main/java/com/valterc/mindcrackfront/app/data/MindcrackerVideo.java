@@ -13,9 +13,11 @@ public class MindcrackerVideo {
     private String youtubeId;
     private String imageUrl;
     private Date publishDate;
-    private int likes;
-    private int dislikes;
+    private long commentCount;
+    private long viewCount;
     private Boolean liked;
     private Boolean watched;
+
+
 
 }
