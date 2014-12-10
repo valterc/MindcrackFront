@@ -10,6 +10,9 @@ import android.widget.ListView;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
+import com.valterc.utils.MultiporpuseAsyncTaskData;
+import com.valterc.utils.MultipurposeAsyncTask;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -34,7 +37,18 @@ public class MindcrackFrontFragment extends Fragment {
 
         listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
 
+        new MultipurposeAsyncTask<Void>(new MultiporpuseAsyncTaskData<Void>() {
+            @Override
+            public Void runOnBackground() {
+                YoutubeManager.Gdata.GetVideosFromUserGdata("UCfhM3yJ8a_sAJj0qOKb40gw");
+                return null;
+            }
 
+            @Override
+            public void onComplete(Void o) {
+
+            }
+        }).execute();
 
 
         return view;

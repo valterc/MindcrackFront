@@ -6,6 +6,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.util.GenericData;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
@@ -13,8 +14,18 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.vcutils.DownloadResponse;
+import com.vcutils.Downloader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Valter on 30/05/2014.
@@ -30,7 +41,7 @@ public class YoutubeManager {
 
     public YoutubeManager() {
 
-        youtube  = new YouTube.Builder(transport, jsonFactory, new HttpRequestInitializer() {
+        youtube = new YouTube.Builder(transport, jsonFactory, new HttpRequestInitializer() {
             public void initialize(HttpRequest request) throws IOException {
             }
         }).setApplicationName("Mindcrack Front").build();
@@ -85,11 +96,68 @@ public class YoutubeManager {
         return response.getItems().size() == 0 ? null : response.getItems().get(0);
     }
 
-    public void likeVideo(String videoId){
+
+    public void likeVideo(String videoId) {
 
     }
 
-    public void dislikeVideo(String videoId){
+    public void dislikeVideo(String videoId) {
+
+    }
+
+    public static class Gdata {
+
+        private final static String GDATA_USER_UPLOADS = "https://gdata.youtube.com/feeds/api/users/%s/uploads?fields=entry(id,title,published,gd:comments,yt:statistics)&max-results=10&alt=json";
+
+        public static Object GetVideosFromUserGdata(String userId) {
+
+            String gdataUrl = String.format(GDATA_USER_UPLOADS, userId);
+
+            DownloadResponse<String> gdataResponse = Downloader.downloadGet(gdataUrl);
+
+            if (gdataResponse.getResult() != DownloadResponse.DownloadResult.Ok) {
+                return null;
+            }
+
+            try {
+                JSONObject jsonResponse = new JSONObject(gdataResponse.getResponse());
+                JSONObject feed = jsonResponse.getJSONObject("feed");
+                JSONArray entryArray = feed.getJSONArray("entry");
+
+                for (int i = 0; i < entryArray.length(); i++) {
+                    JSONObject entry = entryArray.getJSONObject(i);
+
+                    String videoId = entry.getJSONObject("id").getString("$t");
+                    videoId = videoId.substring(videoId.lastIndexOf('/') + 1);
+
+
+                    String videoName = entry.getJSONObject("title").getString("$t");
+                    long commentCount = entry.getJSONObject("gd$comments").getJSONObject("gd$feedLink").getLong("countHint");
+                    long viewCount = Long.parseLong(entry.getJSONObject("yt$statistics").getString("viewCount"));
+                    String publishDateString = entry.getJSONObject("published").getString("$t");
+
+                    //2014-12-09T23:03:33.000Z
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    Date publishDate = null;
+
+                    try {
+                        publishDate = dateFormat.parse(publishDateString);
+                    } catch (ParseException e) {
+                        publishDate = Calendar.getInstance().getTime();
+                    }
+
+
+                    //TODO: Insert videos into list, return list; include some form of userId
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
 
     }
 

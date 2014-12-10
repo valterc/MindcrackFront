@@ -68,7 +68,7 @@ public class DataManager extends BindableBase {
     public Mindcracker getMindcrackerTwitchId(String twitchId){
         for (int i = 0; i < mindcrackers.size(); i++) {
             Mindcracker mindcracker = mindcrackers.get(i);
-            if (mindcracker.getTwitchId() != null && mindcracker.getTwitchId().equals(twitchId)) {
+            if (mindcracker.getTwitchId() != null && mindcracker.getTwitchId().toLowerCase().equals(twitchId.toLowerCase())) {
                 return mindcracker;
             }
         }
