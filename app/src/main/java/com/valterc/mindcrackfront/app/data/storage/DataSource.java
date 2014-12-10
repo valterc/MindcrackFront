@@ -1,12 +1,9 @@
 package com.valterc.mindcrackfront.app.data.storage;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.os.Build;
 import android.util.Log;
 
 import com.valterc.mindcrackfront.app.data.Mindcracker;
@@ -51,6 +48,7 @@ public class DataSource {
         int showTitleOnList = c.getInt(c.getColumnIndex("show_title_on_list"));
         int notifications = c.getInt(c.getColumnIndex("notifications"));
         int unseenVideoCount = c.getInt(c.getColumnIndex("unseen_video_count"));
+        long hits = c.getLong(c.getColumnIndex("hits"));
         String lastVideoId = c.getString(c.getColumnIndex("last_video_id"));
         String lastVideoDateString = c.getString(c.getColumnIndex("last_video_date"));
 
@@ -63,7 +61,7 @@ public class DataSource {
             }
         }
 
-        mindcracker = new Mindcracker(id, name, youtubeName, youtubeId, youtubePlaylistId, twitchId, showTitleOnList == 1, notifications == 1, unseenVideoCount, lastVideoId, lastVideoDateString == null ? null : lastVideoDate);
+        mindcracker = new Mindcracker(id, name, youtubeName, youtubeId, youtubePlaylistId, twitchId, showTitleOnList == 1, notifications == 1, unseenVideoCount, hits, lastVideoId, lastVideoDateString == null ? null : lastVideoDate);
 
         return mindcracker;
     }
@@ -84,6 +82,7 @@ public class DataSource {
                         "show_title_on_list",
                         "notifications",
                         "unseen_video_count",
+                        "hits",
                         "last_video_id",
                         "last_video_date"
                 }, null, null, null, null, "name COLLATE NOCASE", null);
@@ -132,6 +131,7 @@ public class DataSource {
                 "show_title_on_list = ?, " +
                 "notifications = ?, " +
                 "unseen_video_count = ?, " +
+                "hits = ?, " +
                 "last_video_id = ?, " +
                 "last_video_date = ? " +
                 "WHERE id = ?");
@@ -155,6 +155,7 @@ public class DataSource {
                 statement.bindLong(index++, m.getShowTitleOnList() ? 1 : 0);
                 statement.bindLong(index++, m.getNotificationsEnabled() ? 1 : 0);
                 statement.bindLong(index++, m.getUnseenVideoCount());
+                statement.bindLong(index++, m.getHits());
                 statement.bindString(index++, m.getLastVideoId());
                 statement.bindString(index++, m.getLastVideoDate() == null ? null : sdf.format(m.getLastVideoDate()));
                 statement.bindString(index++, m.getId());

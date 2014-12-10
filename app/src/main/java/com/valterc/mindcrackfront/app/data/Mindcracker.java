@@ -18,12 +18,13 @@ public class Mindcracker {
     private Boolean showTitleOnList;
     private Boolean notificationsEnabled;
     private int unseenVideoCount;
+    private long hits;
     private String lastVideoId;
     private Date lastVideoDate;
     private Boolean isDirty;
 
 
-    public Mindcracker(String id, String name, String youtubeName, String youtubeId, String youtubePlaylistId, String twitchId, Boolean showTitleOnList, Boolean notificationsEnabled, int unseenVideoCount, String lastVideoId, Date lastVideoDate) {
+    public Mindcracker(String id, String name, String youtubeName, String youtubeId, String youtubePlaylistId, String twitchId, Boolean showTitleOnList, Boolean notificationsEnabled, int unseenVideoCount, long hits, String lastVideoId, Date lastVideoDate) {
         this.id = id;
         this.name = name;
         this.youtubeName = youtubeName;
@@ -33,6 +34,7 @@ public class Mindcracker {
         this.showTitleOnList = showTitleOnList;
         this.notificationsEnabled = notificationsEnabled;
         this.unseenVideoCount = unseenVideoCount;
+        this.hits = hits;
         this.lastVideoId = lastVideoId;
         this.lastVideoDate = lastVideoDate;
         this.isDirty = false;
@@ -110,6 +112,13 @@ public class Mindcracker {
         this.unseenVideoCount = unseenVideoCount;
     }
 
+    public long getHits() {
+        return hits;
+    }
+
+    public void setHits(long hits) {
+        this.hits = hits;
+    }
 
     public String getLastVideoId() {
         return lastVideoId;

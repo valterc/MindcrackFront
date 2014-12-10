@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import com.valterc.WebImageView;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -20,6 +23,8 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MindcrackFrontListItem> items;
     private Typeface typefaceLight;
+    private ArrayList<GDataYoutubeVideo> recommendedVideos;
+    private ArrayList<GDataYoutubeVideo> recentVideos;
 
     public MindcrackFrontListAdapter(Context context) {
         this.context = context;
@@ -78,8 +83,8 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         WebImageView webImageView = (WebImageView) view.findViewById(R.id.webImageViewVideoImage);
         TextView textView = (TextView) view.findViewById(R.id.textViewVideoTitle);
 
-        webImageView.setImageSource(item.playlistItem.getSnippet().getThumbnails().getMedium().getUrl());
-        textView.setText(item.playlistItem.getSnippet().getTitle());
+        webImageView.setImageSource(item.video.getMediumImageUrl());
+        textView.setText(item.video.getTitle());
 
         return view;
     }
@@ -100,5 +105,9 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         return view;
     }
 
+    public void SetItems(ArrayList<MindcrackFrontListItem> items){
+        this.items = items;
+        super.notifyDataSetChanged();
+    }
 
 }

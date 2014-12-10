@@ -12,7 +12,11 @@ import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosGDataAsyncTask;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -22,7 +26,11 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
     private ListView listView;
     private View viewStreamingHeader;
     private ArrayList<String> usersToDownloadVideos;
+    private ArrayList<GDataYoutubeVideo> recentVideos;
+    private ArrayList<GDataYoutubeVideo> recommendedVideos;
+    private boolean firstLoad;
     private int tryCount;
+
 
     public MindcrackFrontFragment() {
 
@@ -36,7 +44,6 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
 
         viewStreamingHeader = inflater.inflate(R.layout.list_front_header_streaming, null);
         listView.addHeaderView(viewStreamingHeader);
-
         listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
 
         return view;
@@ -47,19 +54,32 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
         super.onViewCreated(view, savedInstanceState);
 
         usersToDownloadVideos = MindcrackFrontApplication.getDataManager().getMindcrackersYoutubeId();
-        new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, (String[]) usersToDownloadVideos.toArray()));
+        firstLoad = true;
+        new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, usersToDownloadVideos.toArray(new String[usersToDownloadVideos.size()])));
     }
 
     @Override
     public void onGetVideoListComplete(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
 
-        
+        boolean anyData = false;
 
         for (ArrayList<GDataYoutubeVideo> userVideos : videos){
-            if (userVideos != null && userVideos.size() > 0)
+            if (userVideos != null && userVideos.size() > 0) {
                 usersToDownloadVideos.remove(userVideos.get(0).getUserId());
-
+                anyData = true;
+            }
         }
+
+        processVideos(videos);
+
+        if (!anyData && firstLoad){
+            //TODO: Show error view
+            return;
+        }
+
+        firstLoad = false;
+
+        //TODO: Hide loading view
 
         if (tryCount < 5 && !usersToDownloadVideos.isEmpty()){
             tryCount++;
@@ -67,4 +87,28 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
         }
 
     }
+
+    private void processVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos){
+
+        if (recentVideos == null){
+            recentVideos = new ArrayList<>(50);
+        }
+
+        for (ArrayList<GDataYoutubeVideo> userVideos : videos){
+            if (userVideos != null && userVideos.size() > 0) {
+                recentVideos.addAll(userVideos);
+            }
+        }
+
+        Collections.sort(recentVideos, new Comparator<GDataYoutubeVideo>() {
+            @Override
+            public int compare(GDataYoutubeVideo lhs, GDataYoutubeVideo rhs) {
+                return lhs.getPublishDate().compareTo(rhs.getPublishDate());
+            }
+        });
+
+
+
+    }
+
 }

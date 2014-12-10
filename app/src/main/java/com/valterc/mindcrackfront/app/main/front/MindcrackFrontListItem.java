@@ -1,6 +1,7 @@
 package com.valterc.mindcrackfront.app.main.front;
 
 import com.google.api.services.youtube.model.PlaylistItem;
+import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -12,16 +13,16 @@ public class MindcrackFrontListItem {
 
     public int type;
     public String title;
-    public PlaylistItem playlistItem;
+    public GDataYoutubeVideo video;
 
     public MindcrackFrontListItem(String title){
         this.type = TYPE_TITLE;
         this.title = title;
     }
 
-    public MindcrackFrontListItem(PlaylistItem playlistItem){
+    public MindcrackFrontListItem(GDataYoutubeVideo video){
         this.type = TYPE_VIDEO;
-        this.playlistItem = playlistItem;
+        this.video = video;
     }
 
 
