@@ -1,9 +1,8 @@
-package com.valterc.mindcrackfront.app.youtube;
+package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
 import com.google.api.services.youtube.model.Channel;
-import com.google.api.services.youtube.model.Video;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
 import java.io.IOException;

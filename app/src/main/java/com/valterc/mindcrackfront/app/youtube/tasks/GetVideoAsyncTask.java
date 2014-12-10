@@ -1,4 +1,4 @@
-package com.valterc.mindcrackfront.app.youtube;
+package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 

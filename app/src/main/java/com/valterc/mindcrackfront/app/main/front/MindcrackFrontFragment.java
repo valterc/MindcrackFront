@@ -7,20 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
-import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
-import com.valterc.utils.MultiporpuseAsyncTaskData;
-import com.valterc.utils.MultipurposeAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosGDataAsyncTask;
+
+import java.util.ArrayList;
 
 /**
  * Created by Valter on 07/12/2014.
  */
-public class MindcrackFrontFragment extends Fragment {
+public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAsyncTask.GetVideosGDataListener {
 
     private ListView listView;
     private View viewStreamingHeader;
+    private ArrayList<String> usersToDownloadVideos;
+    private int tryCount;
 
     public MindcrackFrontFragment() {
 
@@ -37,20 +39,32 @@ public class MindcrackFrontFragment extends Fragment {
 
         listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
 
-        new MultipurposeAsyncTask<Void>(new MultiporpuseAsyncTaskData<Void>() {
-            @Override
-            public Void runOnBackground() {
-                YoutubeManager.Gdata.GetVideosFromUserGdata("UCfhM3yJ8a_sAJj0qOKb40gw");
-                return null;
-            }
-
-            @Override
-            public void onComplete(Void o) {
-
-            }
-        }).execute();
-
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        usersToDownloadVideos = MindcrackFrontApplication.getDataManager().getMindcrackersYoutubeId();
+        new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, (String[]) usersToDownloadVideos.toArray()));
+    }
+
+    @Override
+    public void onGetVideoListComplete(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
+
+        
+
+        for (ArrayList<GDataYoutubeVideo> userVideos : videos){
+            if (userVideos != null && userVideos.size() > 0)
+                usersToDownloadVideos.remove(userVideos.get(0).getUserId());
+
+        }
+
+        if (tryCount < 5 && !usersToDownloadVideos.isEmpty()){
+            tryCount++;
+            new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, (String[]) usersToDownloadVideos.toArray()));
+        }
+
     }
 }

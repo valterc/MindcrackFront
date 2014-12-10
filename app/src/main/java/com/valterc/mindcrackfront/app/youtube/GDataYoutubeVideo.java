@@ -10,14 +10,16 @@ public class GDataYoutubeVideo {
     private String id;
     private String name;
     private String description;
+    private String userId;
     private Date publishDate;
     private long viewCount;
     private long commentCount;
 
-    public GDataYoutubeVideo(String id, String name, String description, Date publishDate, long viewCount, long commentCount) {
+    public GDataYoutubeVideo(String id, String name, String description, String userId, Date publishDate, long viewCount, long commentCount) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.userId = userId;
         this.publishDate = publishDate;
         this.viewCount = viewCount;
         this.commentCount = commentCount;
@@ -45,6 +47,14 @@ public class GDataYoutubeVideo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Date getPublishDate() {

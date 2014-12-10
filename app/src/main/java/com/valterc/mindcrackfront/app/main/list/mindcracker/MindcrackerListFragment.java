@@ -20,9 +20,9 @@ import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
-import com.valterc.mindcrackfront.app.youtube.GetChannelAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask;
 
-import static com.valterc.mindcrackfront.app.youtube.GetChannelAsyncTask.*;
+import static com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask.*;
 
 /**
  * Created by Valter on 24/05/2014.

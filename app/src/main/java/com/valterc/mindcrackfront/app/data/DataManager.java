@@ -76,6 +76,16 @@ public class DataManager extends BindableBase {
         return null;
     }
 
+    public ArrayList<String> getMindcrackersYoutubeId(){
+        ArrayList<String> youtubeIds = new ArrayList<>(mindcrackers.size());
+
+        for (Mindcracker m : mindcrackers){
+            youtubeIds.add(m.getYoutubeId());
+        }
+
+        return youtubeIds;
+    }
+
     public void addFavorite(Mindcracker m){
         //If already in favorites do nothing
         for (Mindcracker mindcracker : favoriteMindcrackers){

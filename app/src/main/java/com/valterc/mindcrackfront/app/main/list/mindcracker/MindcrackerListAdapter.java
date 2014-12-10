@@ -11,8 +11,8 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
-import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.GetVideoPlaylistItemsAsyncTask.*;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoPlaylistItemsAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoPlaylistItemsAsyncTask.*;
 
 import java.util.ArrayList;
 

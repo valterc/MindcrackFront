@@ -7,9 +7,9 @@ import android.os.AsyncTask;
  */
 public class MultipurposeAsyncTask<T> extends AsyncTask<Void, Void, T> {
 
-    private MultiporpuseAsyncTaskData<T> data;
+    private MultipurposeAsyncTaskData<T> data;
 
-    public MultipurposeAsyncTask(MultiporpuseAsyncTaskData<T> data){
+    public MultipurposeAsyncTask(MultipurposeAsyncTaskData<T> data){
         this.data = data;
     }
 

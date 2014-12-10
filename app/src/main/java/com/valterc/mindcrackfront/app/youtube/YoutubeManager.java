@@ -149,10 +149,9 @@ public class YoutubeManager {
                         publishDate = Calendar.getInstance().getTime();
                     }
 
-                    GDataYoutubeVideo youtubeVideo = new GDataYoutubeVideo(videoId, videoName, null, publishDate, viewCount, commentCount);
+                    GDataYoutubeVideo youtubeVideo = new GDataYoutubeVideo(videoId, videoName, null, userId, publishDate, viewCount, commentCount);
                     videos.add(youtubeVideo);
                 }
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
