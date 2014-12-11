@@ -70,14 +70,15 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
             }
         }
 
-        processVideos(videos);
-
         if (!anyData && firstLoad){
             //TODO: Show error view
             return;
         }
 
         firstLoad = false;
+
+        //TODO: Do this operation on a background thread?
+        processVideos(videos);
 
         //TODO: Hide loading view
 
@@ -89,7 +90,11 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
     }
 
     private void processVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos){
+        processRecentVideos(videos);
+        processRecommendedVideos();
+    }
 
+    private void processRecentVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
         if (recentVideos == null){
             recentVideos = new ArrayList<>(50);
         }
@@ -106,8 +111,32 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
                 return lhs.getPublishDate().compareTo(rhs.getPublishDate());
             }
         });
+    }
 
+    private void processRecommendedVideos(){
 
+        ArrayList<String> recommendedMindcrackersYoutubeId = MindcrackFrontApplication.getDataManager().getRecommendedMindcrackersYoutubeId();
+
+        recommendedVideos = new ArrayList<>();
+
+        for (GDataYoutubeVideo video : recentVideos){
+            if (recommendedMindcrackersYoutubeId.contains(video.getUserId())){
+                recommendedVideos.add(video);
+            }
+        }
+
+        Collections.sort(recommendedVideos, new Comparator<GDataYoutubeVideo>() {
+            @Override
+            public int compare(GDataYoutubeVideo lhs /*-1*/, GDataYoutubeVideo rhs/*-1*/) {
+
+                //TODO: Order by date, view count, rating?
+
+                return 0;
+            }
+        });
+
+        recommendedVideos = new ArrayList<>(recommendedVideos.subList(0, 10 > recommendedVideos.size() ? recommendedVideos.size() : 15));
+        Collections.shuffle(recommendedVideos);
 
     }
 

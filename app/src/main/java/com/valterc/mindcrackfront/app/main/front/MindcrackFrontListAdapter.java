@@ -49,7 +49,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -65,6 +65,8 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
                 return getTitleView(position, convertView, parent);
             case MindcrackFrontListItem.TYPE_VIDEO:
                 return getVideoView(position, convertView, parent);
+            case MindcrackFrontListItem.TYPE_AD:
+                return getAdView(position, convertView, parent);
         }
 
         return convertView;
@@ -104,6 +106,19 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
 
         return view;
     }
+
+    private View getAdView(int position, View view, ViewGroup parent) {
+        if (view == null) {
+            view = View.inflate(context, R.layout.list_front_title, null);
+
+
+        }
+
+        //TODO: Ad View
+
+        return view;
+    }
+
 
     public void SetItems(ArrayList<MindcrackFrontListItem> items){
         this.items = items;
