@@ -15,6 +15,7 @@ import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosGDataAsyncTask;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -24,6 +25,7 @@ import java.util.Comparator;
 public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAsyncTask.GetVideosGDataListener {
 
     private ListView listView;
+    private MindcrackFrontListAdapter listAdapter;
     private View viewStreamingHeader;
     private ArrayList<String> usersToDownloadVideos;
     private ArrayList<GDataYoutubeVideo> recentVideos;
@@ -44,7 +46,9 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
 
         viewStreamingHeader = inflater.inflate(R.layout.list_front_header_streaming, null);
         listView.addHeaderView(viewStreamingHeader);
-        listView.setAdapter(new MindcrackFrontListAdapter(getActivity()));
+
+        listAdapter = new MindcrackFrontListAdapter(getActivity());
+        listView.setAdapter(listAdapter);
 
         return view;
     }
@@ -92,6 +96,24 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
     private void processVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos){
         processRecentVideos(videos);
         processRecommendedVideos();
+
+        ArrayList<MindcrackFrontListItem> listItems = new ArrayList<>(3 + recentVideos.size() + recommendedVideos.size());
+
+        listItems.add(new MindcrackFrontListItem("Recommended videos"));
+
+        for (GDataYoutubeVideo recommendedVideo : recommendedVideos){
+            listItems.add(new MindcrackFrontListItem(recommendedVideo));
+        }
+
+        listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+        listItems.add(new MindcrackFrontListItem("Recent videos"));
+
+        for (GDataYoutubeVideo recentVideo : recentVideos){
+            listItems.add(new MindcrackFrontListItem(recentVideo));
+        }
+
+        listAdapter.SetItems(listItems);
+
     }
 
     private void processRecentVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
@@ -101,14 +123,18 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
 
         for (ArrayList<GDataYoutubeVideo> userVideos : videos){
             if (userVideos != null && userVideos.size() > 0) {
-                recentVideos.addAll(userVideos);
+                for (GDataYoutubeVideo video : userVideos) {
+                    if (Calendar.getInstance().getTimeInMillis() - video.getPublishDate().getTime() < 3600 * 1000 * 48){
+                        recentVideos.add(video);
+                    }
+                }
             }
         }
 
         Collections.sort(recentVideos, new Comparator<GDataYoutubeVideo>() {
             @Override
             public int compare(GDataYoutubeVideo lhs, GDataYoutubeVideo rhs) {
-                return lhs.getPublishDate().compareTo(rhs.getPublishDate());
+                return rhs.getPublishDate().compareTo(lhs.getPublishDate());
             }
         });
     }
@@ -129,13 +155,31 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
             @Override
             public int compare(GDataYoutubeVideo lhs /*-1*/, GDataYoutubeVideo rhs/*-1*/) {
 
-                //TODO: Order by date, view count, rating?
+                Calendar lhsCal = Calendar.getInstance();
+                lhsCal.setTime(lhs.getPublishDate());
+                int lhsDay = lhsCal.get(Calendar.DAY_OF_YEAR);
+                int lhsYear = lhsCal.get(Calendar.YEAR);
+
+                Calendar rhsCal = Calendar.getInstance();
+                rhsCal.setTime(rhs.getPublishDate());
+                int rhsDay = rhsCal.get(Calendar.DAY_OF_YEAR);
+                int rhsYear = rhsCal.get(Calendar.YEAR);
+
+                if (lhsDay != rhsDay || lhsYear != rhsYear){
+                    return rhs.getPublishDate().compareTo(lhs.getPublishDate());
+                }
+
+                if (lhs.getViewCount() > rhs.getViewCount()) {
+                    return -1;
+                } else if (lhs.getViewCount() < rhs.getViewCount()){
+                    return 1;
+                }
 
                 return 0;
             }
         });
 
-        recommendedVideos = new ArrayList<>(recommendedVideos.subList(0, 10 > recommendedVideos.size() ? recommendedVideos.size() : 15));
+        recommendedVideos = new ArrayList<>(recommendedVideos.subList(0, 15 > recommendedVideos.size() ? recommendedVideos.size() : 15));
         Collections.shuffle(recommendedVideos);
 
     }

@@ -108,7 +108,7 @@ public class YoutubeManager {
 
     public static class Gdata {
 
-        private final static String GDATA_USER_UPLOADS = "https://gdata.youtube.com/feeds/api/users/%s/uploads?fields=entry(id,title,published,gd:comments,yt:statistics)&max-results=10&alt=json";
+        private final static String GDATA_USER_UPLOADS = "https://gdata.youtube.com/feeds/api/users/%s/uploads?fields=entry(id,title,published,gd:comments,yt:statistics)&max-results=5&alt=json";
 
         public static ArrayList<GDataYoutubeVideo> GetVideosFromUserGdata(String userId) {
 

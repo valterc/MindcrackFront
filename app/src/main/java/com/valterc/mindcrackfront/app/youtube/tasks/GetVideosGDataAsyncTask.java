@@ -1,12 +1,14 @@
 package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -23,10 +25,14 @@ public class GetVideosGDataAsyncTask extends AsyncTask<GetVideosGDataAsyncTask.G
 
         ArrayList<ArrayList<GDataYoutubeVideo>> usersVideos = new ArrayList<>(info.users.length);
 
+        long time = Calendar.getInstance().getTimeInMillis();
+
         for (int i = 0; i < info.users.length; i++) {
             ArrayList<GDataYoutubeVideo> userVideos = YoutubeManager.Gdata.GetVideosFromUserGdata(info.users[i]);
             usersVideos.add(userVideos);
         }
+
+        Log.d(getClass().getSimpleName(), "Elapsed total time: " + (Calendar.getInstance().getTimeInMillis() - time));
 
         return usersVideos;
     }
