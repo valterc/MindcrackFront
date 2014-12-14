@@ -2,6 +2,9 @@ package com.valterc.mindcrackfront.app.youtube;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.batch.BatchCallback;
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -98,7 +101,37 @@ public class YoutubeManager {
     }
 
 
-    public void likeVideo(String videoId) {
+    public ArrayList<PlaylistItemListResponse> batchGetVideosFromPlaylists(ArrayList<String> playlists) throws IOException {
+
+        final ArrayList<PlaylistItemListResponse> batchResponse = new ArrayList<>(playlists.size());
+        BatchRequest batch = youtube.batch();
+
+        for (int i = 0; i < playlists.size(); i++) {
+            YouTube.PlaylistItems.List list = youtube.playlistItems().list("id, snippet");
+            list.setKey(YOUTUBE_BROWSER_KEY);
+            list.setPlaylistId(playlists.get(i));
+            list.setMaxResults(3L);
+
+            batch.queue(list.buildHttpRequest(), PlaylistItemListResponse.class, PlaylistItemListResponse.class, new BatchCallback<PlaylistItemListResponse, PlaylistItemListResponse>() {
+                @Override
+                public void onSuccess(PlaylistItemListResponse playlistItemListResponse, HttpHeaders httpHeaders) throws IOException {
+                    batchResponse.add(playlistItemListResponse);
+                }
+
+                @Override
+                public void onFailure(PlaylistItemListResponse playlistItemListResponse, HttpHeaders httpHeaders) throws IOException {
+
+                }
+            });
+        }
+
+        batch.execute();
+
+        return batchResponse;
+    }
+
+    public void likeVideo(String videoId) throws IOException {
+
 
     }
 

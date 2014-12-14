@@ -6,11 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.data.Mindcracker;
+import com.valterc.mindcrackfront.app.data.MindcrackerVideo;
+import com.valterc.mindcrackfront.app.data.backend.GetRecentVideosAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosGDataAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosPlaylistItemBatchAsyncTask;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -57,9 +63,20 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        usersToDownloadVideos = MindcrackFrontApplication.getDataManager().getMindcrackersYoutubeId();
+        usersToDownloadVideos = new ArrayList<>();
+        for (Mindcracker m : MindcrackFrontApplication.getDataManager().getMindcrackers()){
+            usersToDownloadVideos.add(m.getYoutubePlaylistId());
+        }
+
         firstLoad = true;
-        new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, usersToDownloadVideos.toArray(new String[usersToDownloadVideos.size()])));
+        Toast.makeText(getActivity(), "DOWNLOAD START", Toast.LENGTH_SHORT).show();
+        new GetRecentVideosAsyncTask().execute(new GetRecentVideosAsyncTask.GetRecentVideosInfo(new GetRecentVideosAsyncTask.GetRecentVideosListener() {
+            @Override
+            public void onComplete(ArrayList<MindcrackerVideo> videos) {
+                Toast.makeText(getActivity(), "DOWNLOAD COMPLETE", Toast.LENGTH_LONG).show();
+            }
+        }));
+
     }
 
     @Override

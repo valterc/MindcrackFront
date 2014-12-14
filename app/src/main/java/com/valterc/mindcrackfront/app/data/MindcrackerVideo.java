@@ -11,27 +11,21 @@ public class MindcrackerVideo {
     private String title;
     private String description;
     private String youtubeId;
-    private String imageUrl;
+    private String thumbnailMediumUrl;
     private Date publishDate;
-    private long commentCount;
-    private long viewCount;
-    private double rating;
     private Boolean liked;
     private Boolean watched;
 
     public MindcrackerVideo() {
     }
 
-    public MindcrackerVideo(Mindcracker mindcracker, String title, String description, String youtubeId, String imageUrl, Date publishDate, long commentCount, long viewCount, double rating, Boolean liked, Boolean watched) {
+    public MindcrackerVideo(Mindcracker mindcracker, String title, String description, String youtubeId, String thumbnailMediumUrl, Date publishDate, Boolean liked, Boolean watched) {
         this.mindcracker = mindcracker;
         this.title = title;
         this.description = description;
         this.youtubeId = youtubeId;
-        this.imageUrl = imageUrl;
+        this.thumbnailMediumUrl = thumbnailMediumUrl;
         this.publishDate = publishDate;
-        this.commentCount = commentCount;
-        this.viewCount = viewCount;
-        this.rating = rating;
         this.liked = liked;
         this.watched = watched;
     }
@@ -68,12 +62,12 @@ public class MindcrackerVideo {
         this.youtubeId = youtubeId;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getThumbnailMediumUrl() {
+        return thumbnailMediumUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setThumbnailMediumUrl(String thumbnailMediumUrl) {
+        this.thumbnailMediumUrl = thumbnailMediumUrl;
     }
 
     public Date getPublishDate() {
@@ -82,30 +76,6 @@ public class MindcrackerVideo {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
-    }
-
-    public long getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(long commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public long getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(long viewCount) {
-        this.viewCount = viewCount;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public Boolean getLiked() {

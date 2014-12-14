@@ -3,10 +3,12 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
