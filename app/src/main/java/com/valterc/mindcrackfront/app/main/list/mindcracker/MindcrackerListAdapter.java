@@ -107,6 +107,9 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
             MindcrackerVideoItemViewHolder viewHolder = new MindcrackerVideoItemViewHolder();
             viewHolder.webImageViewVideoImage = (com.valterc.WebImageView) view.findViewById(R.id.webImageViewVideoImage);
             viewHolder.textViewVideoTitle = (android.widget.TextView) view.findViewById(R.id.textViewVideoTitle);
+
+            //TODO: Load light typeface and set it on textView
+
             view.setTag(viewHolder);
         }
 

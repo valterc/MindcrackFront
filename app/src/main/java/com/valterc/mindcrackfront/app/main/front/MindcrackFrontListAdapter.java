@@ -2,9 +2,11 @@ package com.valterc.mindcrackfront.app.main.front;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mopub.mobileads.MoPubView;
@@ -12,6 +14,7 @@ import com.valterc.WebImageView;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,13 +27,18 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MindcrackFrontListItem> items;
     private Typeface typefaceLight;
-    private ArrayList<GDataYoutubeVideo> recommendedVideos;
-    private ArrayList<GDataYoutubeVideo> recentVideos;
+    private SimpleDateFormat dateFormat;
 
     public MindcrackFrontListAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
         typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
+
+        if (DateFormat.is24HourFormat(context)) {
+            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'HH':'mm");
+        } else {
+            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'hh':'mma");
+        }
     }
 
     @Override
@@ -77,17 +85,25 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         if (view == null) {
             view = View.inflate(context, R.layout.list_front_video, null);
 
-            TextView textView = (TextView) view.findViewById(R.id.textViewVideoTitle);
-            textView.setTypeface(typefaceLight);
+            VideoItemViewHolder videoItemViewHolder = new VideoItemViewHolder();
+            videoItemViewHolder.imageViewUserLogo = (ImageView) view.findViewById(R.id.imageViewUserLogo);
+            videoItemViewHolder.webImageViewVideo = (WebImageView) view.findViewById(R.id.webImageViewVideoImage);
+            videoItemViewHolder.textViewUserName = (TextView) view.findViewById(R.id.textViewUserName);
+            videoItemViewHolder.textViewVideoPublishDate = (TextView) view.findViewById(R.id.textViewVideoPublishDate);
+            videoItemViewHolder.textViewVideoTitle = (TextView) view.findViewById(R.id.textViewVideoTitle);
+
+            videoItemViewHolder.textViewVideoTitle.setTypeface(typefaceLight);
+            view.setTag(videoItemViewHolder);
         }
 
         MindcrackFrontListItem item = (MindcrackFrontListItem) getItem(position);
+        VideoItemViewHolder videoItemViewHolder = (VideoItemViewHolder) view.getTag();
 
-        WebImageView webImageView = (WebImageView) view.findViewById(R.id.webImageViewVideoImage);
-        TextView textView = (TextView) view.findViewById(R.id.textViewVideoTitle);
-
-        webImageView.setImageSource(item.video.getThumbnailMediumUrl());
-        textView.setText(item.video.getTitle());
+        videoItemViewHolder.webImageViewVideo.setImageSource(item.video.getThumbnailMediumUrl());
+        videoItemViewHolder.imageViewUserLogo.setImageResource(item.video.getMindcracker().getImageResourceId());
+        videoItemViewHolder.textViewUserName.setText(item.video.getMindcracker().getName());
+        videoItemViewHolder.textViewVideoPublishDate.setText(dateFormat.format(item.video.getPublishDate()));
+        videoItemViewHolder.textViewVideoTitle.setText(item.video.getTitle());
 
         return view;
     }
@@ -141,8 +157,12 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         private MoPubView adView;
     }
 
-    private class VideoAdItemViewHolder {
-        private MoPubView adView;
+    private class VideoItemViewHolder {
+        private WebImageView webImageViewVideo;
+        private ImageView imageViewUserLogo;
+        private TextView textViewUserName;
+        private TextView textViewVideoPublishDate;
+        private TextView textViewVideoTitle;
     }
 
 }

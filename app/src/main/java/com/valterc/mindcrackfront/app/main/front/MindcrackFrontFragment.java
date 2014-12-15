@@ -1,41 +1,37 @@
 package com.valterc.mindcrackfront.app.main.front;
 
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
-import com.valterc.mindcrackfront.app.data.Mindcracker;
 import com.valterc.mindcrackfront.app.data.MindcrackerVideo;
 import com.valterc.mindcrackfront.app.data.backend.GetRecentVideosAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
-import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosGDataAsyncTask;
-import com.valterc.mindcrackfront.app.youtube.tasks.GetVideosPlaylistItemBatchAsyncTask;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ResourceBundle;
 
 /**
  * Created by Valter on 07/12/2014.
  */
 public class MindcrackFrontFragment extends Fragment implements GetRecentVideosAsyncTask.GetRecentVideosListener {
 
-    private ListView listView;
     private MindcrackFrontListAdapter listAdapter;
-    private View viewStreamingHeader;
+    private View viewLoading;
+    private View viewErrorLoading;
     private ArrayList<MindcrackerVideo> recentVideos;
     private ArrayList<MindcrackerVideo> recommendedVideos;
-
+    private Typeface typefaceLight;
 
     public MindcrackFrontFragment() {
 
@@ -45,13 +41,44 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_front, null);
 
-        listView = (ListView) view.findViewById(R.id.listView);
+        ListView listView = (ListView) view.findViewById(R.id.listView);
+        viewLoading = view.findViewById(R.id.relativeLayoutLoading);
+        viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
 
-        viewStreamingHeader = inflater.inflate(R.layout.list_front_header_streaming, null);
+        TextView loadingText = (TextView) view.findViewById(R.id.textViewLoading);
+        TextView errorLoadingText = (TextView) view.findViewById(R.id.textViewErrorText);
+        TextView errorLoadingTitle = (TextView) view.findViewById(R.id.textViewErrorTitle);
+        Button tryAgainButton = (Button) view.findViewById(R.id.buttonTryAgain);
+
+        typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
+        loadingText.setTypeface(typefaceLight);
+        errorLoadingText.setTypeface(typefaceLight);
+        errorLoadingTitle.setTypeface(typefaceLight);
+        tryAgainButton.setTypeface(typefaceLight);
+
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewErrorLoading.setVisibility(View.GONE);
+                viewLoading.setVisibility(View.VISIBLE);
+                new GetRecentVideosAsyncTask().execute(new GetRecentVideosAsyncTask.GetRecentVideosInfo(MindcrackFrontFragment.this));
+            }
+        });
+
+        View viewStreamingHeader = inflater.inflate(R.layout.list_front_header_streaming, null);
         listView.addHeaderView(viewStreamingHeader);
 
         listAdapter = new MindcrackFrontListAdapter(getActivity());
         listView.setAdapter(listAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "TODO: Open video!", Toast.LENGTH_SHORT).show();
+                //TODO: Open video fragment
+            }
+        });
 
         return view;
     }
@@ -66,12 +93,10 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
     @Override
     public void onComplete(ArrayList<MindcrackerVideo> videos) {
         if (videos != null){
-            //TODO: Hide loading view
-
+            viewLoading.setVisibility(View.GONE);
             processVideos(videos);
-
         } else {
-            //TODO: Show error video
+            viewErrorLoading.setVisibility(View.VISIBLE);
         }
     }
 

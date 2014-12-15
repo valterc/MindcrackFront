@@ -63,7 +63,7 @@ public class StreamingMindcrackersFragment extends Fragment implements GetUsersS
             view.setVisibility(View.VISIBLE);
         } else {
             gridView.setAdapter(null);
-            getView().setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
 
             //Test code
             //gridView.setAdapter(new StreamingMindcrackersAdapter(getActivity(), new String[]{"sethbling", "ethotv", "sevadus", "anderzel"}));

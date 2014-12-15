@@ -3,30 +3,82 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFDFDFD">
+    android:background="#FFFDFDFD"
+    android:orientation="vertical">
 
-    <com.valterc.WebImageView
-        android:id="@+id/webImageViewVideoImage"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="#FFDFDFDF"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textViewVideoTitle"
-        android:layout_width="wrap_content"
+        <com.vcutils.views.PixelImageView
+            android:id="@+id/imageViewUserLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/mindcrack_logo" />
+
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textViewVideoPublishDate"
+            android:layout_marginBottom="2dp"
+            android:layout_toEndOf="@+id/imageViewUserLogo"
+            android:layout_toRightOf="@+id/imageViewUserLogo"
+            android:text="Mindcrack Network"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewVideoPublishDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageViewUserLogo"
+            android:layout_toEndOf="@+id/imageViewUserLogo"
+            android:layout_toRightOf="@+id/imageViewUserLogo"
+            android:text="15/12 at 16:21"
+            android:textColor="#888"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="15dp"
-        android:fontFamily="sans-serif-light"
-        android:text="Video Title"
-        android:textSize="17sp" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="0dp">
+
+        <com.valterc.WebImageView
+            android:id="@+id/webImageViewVideoImage"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:background="#FFDFDFDF"
+            android:scaleType="fitXY"
+            android:tint="#3000"/>
+
+        <TextView
+            android:id="@+id/textViewVideoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/webImageViewVideoImage"
+            android:background="@drawable/gradient_bottom_black"
+            android:padding="10dp"
+            android:textSize="17sp"
+            android:textColor="#fff"
+            android:shadowColor="#000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:text="Video Title"/>
+
+    </RelativeLayout>
 
 
 </LinearLayout>
