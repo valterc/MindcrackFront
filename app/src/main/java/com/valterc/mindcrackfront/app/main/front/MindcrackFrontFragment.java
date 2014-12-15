@@ -28,16 +28,13 @@ import java.util.Comparator;
 /**
  * Created by Valter on 07/12/2014.
  */
-public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAsyncTask.GetVideosGDataListener {
+public class MindcrackFrontFragment extends Fragment implements GetRecentVideosAsyncTask.GetRecentVideosListener {
 
     private ListView listView;
     private MindcrackFrontListAdapter listAdapter;
     private View viewStreamingHeader;
-    private ArrayList<String> usersToDownloadVideos;
-    private ArrayList<GDataYoutubeVideo> recentVideos;
-    private ArrayList<GDataYoutubeVideo> recommendedVideos;
-    private boolean firstLoad;
-    private int tryCount;
+    private ArrayList<MindcrackerVideo> recentVideos;
+    private ArrayList<MindcrackerVideo> recommendedVideos;
 
 
     public MindcrackFrontFragment() {
@@ -63,97 +60,73 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        usersToDownloadVideos = new ArrayList<>();
-        for (Mindcracker m : MindcrackFrontApplication.getDataManager().getMindcrackers()){
-            usersToDownloadVideos.add(m.getYoutubePlaylistId());
-        }
-
-        firstLoad = true;
-        Toast.makeText(getActivity(), "DOWNLOAD START", Toast.LENGTH_SHORT).show();
-        new GetRecentVideosAsyncTask().execute(new GetRecentVideosAsyncTask.GetRecentVideosInfo(new GetRecentVideosAsyncTask.GetRecentVideosListener() {
-            @Override
-            public void onComplete(ArrayList<MindcrackerVideo> videos) {
-                Toast.makeText(getActivity(), "DOWNLOAD COMPLETE", Toast.LENGTH_LONG).show();
-            }
-        }));
-
+        new GetRecentVideosAsyncTask().execute(new GetRecentVideosAsyncTask.GetRecentVideosInfo(this));
     }
 
     @Override
-    public void onGetVideoListComplete(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
+    public void onComplete(ArrayList<MindcrackerVideo> videos) {
+        if (videos != null){
+            //TODO: Hide loading view
 
-        boolean anyData = false;
+            processVideos(videos);
 
-        for (ArrayList<GDataYoutubeVideo> userVideos : videos){
-            if (userVideos != null && userVideos.size() > 0) {
-                usersToDownloadVideos.remove(userVideos.get(0).getUserId());
-                anyData = true;
-            }
+        } else {
+            //TODO: Show error video
         }
-
-        if (!anyData && firstLoad){
-            //TODO: Show error view
-            return;
-        }
-
-        firstLoad = false;
-
-        //TODO: Do this operation on a background thread?
-        processVideos(videos);
-
-        //TODO: Hide loading view
-
-        if (tryCount < 5 && !usersToDownloadVideos.isEmpty()){
-            tryCount++;
-            new GetVideosGDataAsyncTask().execute(new GetVideosGDataAsyncTask.GetVideosGDataInfo(this, (String[]) usersToDownloadVideos.toArray()));
-        }
-
     }
 
-    private void processVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos){
+    private void processVideos(ArrayList<MindcrackerVideo> videos){
         processRecentVideos(videos);
         processRecommendedVideos();
 
         ArrayList<MindcrackFrontListItem> listItems = new ArrayList<>(3 + recentVideos.size() + recommendedVideos.size());
 
-        listItems.add(new MindcrackFrontListItem("Recommended videos"));
+        if (recommendedVideos.size() > 0) {
 
-        for (GDataYoutubeVideo recommendedVideo : recommendedVideos){
-            listItems.add(new MindcrackFrontListItem(recommendedVideo));
+            listItems.add(new MindcrackFrontListItem("Recommended videos"));
+
+            for (MindcrackerVideo recommendedVideo : recommendedVideos) {
+                listItems.add(new MindcrackFrontListItem(recommendedVideo));
+            }
+
+            listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+            listItems.add(new MindcrackFrontListItem("Recent videos"));
+
+            for (int i = 0; i < recentVideos.size(); i++) {
+                MindcrackerVideo recentVideo = recentVideos.get(i);
+                listItems.add(new MindcrackFrontListItem(recentVideo));
+
+                if ((i + 1) % 10 == 0){
+                    listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                }
+
+            }
+
+            for (MindcrackerVideo recentVideo : recentVideos){
+                listItems.add(new MindcrackFrontListItem(recentVideo));
+            }
+
+        } else {
+            listItems.add(new MindcrackFrontListItem("Latest videos"));
+
+            for (int i = 0; i < recentVideos.size(); i++) {
+                MindcrackerVideo recentVideo = recentVideos.get(i);
+                listItems.add(new MindcrackFrontListItem(recentVideo));
+
+                if ((i + 1) % 10 == 0) {
+                    listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                }
+
+            }
         }
 
-        listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
-        listItems.add(new MindcrackFrontListItem("Recent videos"));
-
-        for (GDataYoutubeVideo recentVideo : recentVideos){
-            listItems.add(new MindcrackFrontListItem(recentVideo));
-        }
 
         listAdapter.SetItems(listItems);
 
     }
 
-    private void processRecentVideos(ArrayList<ArrayList<GDataYoutubeVideo>> videos) {
-        if (recentVideos == null){
-            recentVideos = new ArrayList<>(50);
-        }
-
-        for (ArrayList<GDataYoutubeVideo> userVideos : videos){
-            if (userVideos != null && userVideos.size() > 0) {
-                for (GDataYoutubeVideo video : userVideos) {
-                    if (Calendar.getInstance().getTimeInMillis() - video.getPublishDate().getTime() < 3600 * 1000 * 48){
-                        recentVideos.add(video);
-                    }
-                }
-            }
-        }
-
-        Collections.sort(recentVideos, new Comparator<GDataYoutubeVideo>() {
-            @Override
-            public int compare(GDataYoutubeVideo lhs, GDataYoutubeVideo rhs) {
-                return rhs.getPublishDate().compareTo(lhs.getPublishDate());
-            }
-        });
+    private void processRecentVideos(ArrayList<MindcrackerVideo> videos) {
+            recentVideos = new ArrayList<>(videos);
     }
 
     private void processRecommendedVideos(){
@@ -162,42 +135,11 @@ public class MindcrackFrontFragment extends Fragment implements GetVideosGDataAs
 
         recommendedVideos = new ArrayList<>();
 
-        for (GDataYoutubeVideo video : recentVideos){
-            if (recommendedMindcrackersYoutubeId.contains(video.getUserId())){
+        for (MindcrackerVideo video : recentVideos){
+            if (recommendedMindcrackersYoutubeId.contains(video.getMindcracker().getYoutubeId())){
                 recommendedVideos.add(video);
             }
         }
-
-        Collections.sort(recommendedVideos, new Comparator<GDataYoutubeVideo>() {
-            @Override
-            public int compare(GDataYoutubeVideo lhs /*-1*/, GDataYoutubeVideo rhs/*-1*/) {
-
-                Calendar lhsCal = Calendar.getInstance();
-                lhsCal.setTime(lhs.getPublishDate());
-                int lhsDay = lhsCal.get(Calendar.DAY_OF_YEAR);
-                int lhsYear = lhsCal.get(Calendar.YEAR);
-
-                Calendar rhsCal = Calendar.getInstance();
-                rhsCal.setTime(rhs.getPublishDate());
-                int rhsDay = rhsCal.get(Calendar.DAY_OF_YEAR);
-                int rhsYear = rhsCal.get(Calendar.YEAR);
-
-                if (lhsDay != rhsDay || lhsYear != rhsYear){
-                    return rhs.getPublishDate().compareTo(lhs.getPublishDate());
-                }
-
-                if (lhs.getViewCount() > rhs.getViewCount()) {
-                    return -1;
-                } else if (lhs.getViewCount() < rhs.getViewCount()){
-                    return 1;
-                }
-
-                return 0;
-            }
-        });
-
-        recommendedVideos = new ArrayList<>(recommendedVideos.subList(0, 15 > recommendedVideos.size() ? recommendedVideos.size() : 15));
-        Collections.shuffle(recommendedVideos);
 
     }
 

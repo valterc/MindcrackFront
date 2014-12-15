@@ -118,12 +118,10 @@ public class DataManager extends BindableBase {
         List<Mindcracker> recommendedMindcrackers = sortedMindcrackers.subList(0, 5);
 
         for (Mindcracker mindcracker : recommendedMindcrackers){
-            if (!mindcrackersYoutubeIds.contains(mindcracker.getYoutubeId())){
+            if (mindcracker.getHits() > 1 && !mindcrackersYoutubeIds.contains(mindcracker.getYoutubeId())){
                 mindcrackersYoutubeIds.add(mindcracker.getYoutubeId());
             }
         }
-
-        Collections.shuffle(mindcrackersYoutubeIds);
 
         return mindcrackersYoutubeIds;
     }

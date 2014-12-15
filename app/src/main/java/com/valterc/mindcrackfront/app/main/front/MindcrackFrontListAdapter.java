@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.mopub.mobileads.MoPubView;
 import com.valterc.WebImageView;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
@@ -85,7 +86,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         WebImageView webImageView = (WebImageView) view.findViewById(R.id.webImageViewVideoImage);
         TextView textView = (TextView) view.findViewById(R.id.textViewVideoTitle);
 
-        webImageView.setImageSource(item.video.getMediumImageUrl());
+        webImageView.setImageSource(item.video.getThumbnailMediumUrl());
         textView.setText(item.video.getTitle());
 
         return view;
@@ -109,12 +110,23 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
 
     private View getAdView(int position, View view, ViewGroup parent) {
         if (view == null) {
-            view = View.inflate(context, R.layout.list_front_title, null);
+            view = View.inflate(context, R.layout.list_front_ad, null);
 
+            MoPubView moPubView = (MoPubView) view.findViewById(R.id.adview);
+            FrontAdItemViewHolder adViewHolder = new FrontAdItemViewHolder();
+            adViewHolder.adView = moPubView;
 
+            view.setTag(adViewHolder);
         }
 
-        //TODO: Ad View
+        FrontAdItemViewHolder adViewHolder = (FrontAdItemViewHolder) view.getTag();
+
+        if (adViewHolder.adView.getAdUnitId() == null) {
+            adViewHolder.adView.setAdUnitId("2a8f0f76e9764bf7aecab2c87ea3e187");
+            adViewHolder.adView.loadAd();
+        } else {
+            adViewHolder.adView.forceRefresh();
+        }
 
         return view;
     }
@@ -123,6 +135,14 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     public void SetItems(ArrayList<MindcrackFrontListItem> items){
         this.items = items;
         super.notifyDataSetChanged();
+    }
+
+    private class FrontAdItemViewHolder {
+        private MoPubView adView;
+    }
+
+    private class VideoAdItemViewHolder {
+        private MoPubView adView;
     }
 
 }
