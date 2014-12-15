@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Valter on 29/05/2014.
  */
 public class MindcrackerVideo {
-
+//TODO: Parcelable
     private Mindcracker mindcracker;
     private String title;
     private String description;

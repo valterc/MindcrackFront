@@ -63,6 +63,7 @@ public class MainActivity extends ActionBarActivity
     public void onVideoSelected(String mindcrackerId, String videoId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId))
                 .commit();

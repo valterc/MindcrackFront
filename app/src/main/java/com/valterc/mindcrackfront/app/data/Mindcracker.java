@@ -8,6 +8,7 @@ import java.util.Date;
  * Created by Valter on 18/05/2014.
  */
 public class Mindcracker {
+    //TODO: Parcelable
 
     private String id;
     private String name;
