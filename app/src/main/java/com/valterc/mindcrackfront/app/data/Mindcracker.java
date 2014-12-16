@@ -1,5 +1,8 @@
 package com.valterc.mindcrackfront.app.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.valterc.mindcrackfront.app.R;
 
 import java.util.Date;
@@ -7,8 +10,7 @@ import java.util.Date;
 /**
  * Created by Valter on 18/05/2014.
  */
-public class Mindcracker {
-    //TODO: Parcelable
+public class Mindcracker implements Parcelable {
 
     private String id;
     private String name;
@@ -183,5 +185,73 @@ public class Mindcracker {
 
         return -1;
     }
+
+    protected Mindcracker(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        youtubeName = in.readString();
+        youtubeId = in.readString();
+        youtubePlaylistId = in.readString();
+        twitchId = in.readString();
+        byte showTitleOnListVal = in.readByte();
+        showTitleOnList = showTitleOnListVal == 0x02 ? null : showTitleOnListVal != 0x00;
+        byte notificationsEnabledVal = in.readByte();
+        notificationsEnabled = notificationsEnabledVal == 0x02 ? null : notificationsEnabledVal != 0x00;
+        unseenVideoCount = in.readInt();
+        hits = in.readLong();
+        lastVideoId = in.readString();
+        long tmpLastVideoDate = in.readLong();
+        lastVideoDate = tmpLastVideoDate != -1 ? new Date(tmpLastVideoDate) : null;
+        byte isDirtyVal = in.readByte();
+        isDirty = isDirtyVal == 0x02 ? null : isDirtyVal != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(youtubeName);
+        dest.writeString(youtubeId);
+        dest.writeString(youtubePlaylistId);
+        dest.writeString(twitchId);
+        if (showTitleOnList == null) {
+            dest.writeByte((byte) (0x02));
+        } else {
+            dest.writeByte((byte) (showTitleOnList ? 0x01 : 0x00));
+        }
+        if (notificationsEnabled == null) {
+            dest.writeByte((byte) (0x02));
+        } else {
+            dest.writeByte((byte) (notificationsEnabled ? 0x01 : 0x00));
+        }
+        dest.writeInt(unseenVideoCount);
+        dest.writeLong(hits);
+        dest.writeString(lastVideoId);
+        dest.writeLong(lastVideoDate != null ? lastVideoDate.getTime() : -1L);
+        if (isDirty == null) {
+            dest.writeByte((byte) (0x02));
+        } else {
+            dest.writeByte((byte) (isDirty ? 0x01 : 0x00));
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Mindcracker> CREATOR = new Parcelable.Creator<Mindcracker>() {
+        @Override
+        public Mindcracker createFromParcel(Parcel in) {
+            return new Mindcracker(in);
+        }
+
+        @Override
+        public Mindcracker[] newArray(int size) {
+            return new Mindcracker[size];
+        }
+    };
+
 
 }

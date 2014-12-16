@@ -92,7 +92,7 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
 
     @Override
     public void onComplete(ArrayList<MindcrackerVideo> videos) {
-        if (videos != null){
+        if (videos != null) {
             viewLoading.setVisibility(View.GONE);
             processVideos(videos);
         } else {
@@ -100,7 +100,7 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
         }
     }
 
-    private void processVideos(ArrayList<MindcrackerVideo> videos){
+    private void processVideos(ArrayList<MindcrackerVideo> videos) {
         processRecentVideos(videos);
         processRecommendedVideos();
 
@@ -121,13 +121,13 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
                 MindcrackerVideo recentVideo = recentVideos.get(i);
                 listItems.add(new MindcrackFrontListItem(recentVideo));
 
-                if ((i + 1) % 10 == 0){
+                if ((i + 1) % 10 == 0) {
                     listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
                 }
 
             }
 
-            for (MindcrackerVideo recentVideo : recentVideos){
+            for (MindcrackerVideo recentVideo : recentVideos) {
                 listItems.add(new MindcrackFrontListItem(recentVideo));
             }
 
@@ -151,17 +151,17 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
     }
 
     private void processRecentVideos(ArrayList<MindcrackerVideo> videos) {
-            recentVideos = new ArrayList<>(videos);
+        recentVideos = new ArrayList<>(videos);
     }
 
-    private void processRecommendedVideos(){
+    private void processRecommendedVideos() {
 
         ArrayList<String> recommendedMindcrackersYoutubeId = MindcrackFrontApplication.getDataManager().getRecommendedMindcrackersYoutubeId();
 
         recommendedVideos = new ArrayList<>();
 
-        for (MindcrackerVideo video : recentVideos){
-            if (recommendedMindcrackersYoutubeId.contains(video.getMindcracker().getYoutubeId())){
+        for (MindcrackerVideo video : recentVideos) {
+            if (recommendedMindcrackersYoutubeId.contains(video.getMindcracker().getYoutubeId())) {
                 recommendedVideos.add(video);
             }
         }
