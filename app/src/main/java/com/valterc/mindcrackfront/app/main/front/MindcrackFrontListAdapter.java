@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.TimeZone;
 
 /**
  * Created by Valter on 07/12/2014.
@@ -39,6 +40,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         } else {
             dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'hh':'mma");
         }
+        dateFormat.setTimeZone(TimeZone.getDefault());
     }
 
     @Override

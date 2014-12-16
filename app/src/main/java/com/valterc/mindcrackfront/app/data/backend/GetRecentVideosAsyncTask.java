@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Valter on 14/12/2014.
@@ -49,7 +50,8 @@ public class GetRecentVideosAsyncTask extends AsyncTask<GetRecentVideosAsyncTask
 
                     Date date = null;
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
 
                     try {
                         date = dateFormat.parse(videoJson.getString("publish_date"));
