@@ -1,6 +1,7 @@
 package com.valterc.mindcrackfront.app.main;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -65,7 +66,8 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId))
+                .add(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
 
     }

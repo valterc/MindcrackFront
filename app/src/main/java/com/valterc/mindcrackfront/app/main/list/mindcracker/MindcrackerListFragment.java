@@ -175,7 +175,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
 
         TextView textViewName = (TextView) this.headerView.findViewById(R.id.textViewName);
         textViewName.setText(this.channel.getSnippet().getTitle());
-
+        textViewName.setTypeface(typefaceLight);
     }
 
     private void setUpFavoriteButton() {
