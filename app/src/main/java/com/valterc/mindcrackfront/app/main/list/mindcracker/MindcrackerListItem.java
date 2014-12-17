@@ -12,7 +12,6 @@ public class MindcrackerListItem {
     public static final int TYPE_LOADING = 2;
     public static  final int TYPE_ERROR = 3;
 
-    //TODO: Convert to MindcrackVideo
     public PlaylistItem playlistItem;
     public int type;
 

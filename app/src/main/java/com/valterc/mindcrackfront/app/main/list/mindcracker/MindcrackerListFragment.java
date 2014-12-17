@@ -53,6 +53,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     private String mindcrackerId;
     private Mindcracker mindcracker;
     private Channel channel;
+    private Typeface typefaceLight;
 
     private ListView listView;
     private View viewLoading;
@@ -70,7 +71,18 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         viewLoading = view.findViewById(R.id.relativeLayoutLoading);
         viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
 
+        typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
+        TextView loadingText = (TextView) view.findViewById(R.id.textViewLoading);
+        TextView errorLoadingText = (TextView) view.findViewById(R.id.textViewErrorText);
+        TextView errorLoadingTitle = (TextView) view.findViewById(R.id.textViewErrorTitle);
         Button buttonTryAgain = (Button) view.findViewById(R.id.buttonTryAgain);
+
+        loadingText.setTypeface(typefaceLight);
+        errorLoadingText.setTypeface(typefaceLight);
+        errorLoadingTitle.setTypeface(typefaceLight);
+        buttonTryAgain.setTypeface(typefaceLight);
+
         buttonTryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -104,7 +104,7 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
         processRecentVideos(videos);
         processRecommendedVideos();
 
-        ArrayList<MindcrackFrontListItem> listItems = new ArrayList<>(3 + recentVideos.size() + recommendedVideos.size());
+        ArrayList<MindcrackFrontListItem> listItems = new ArrayList<>(8 + recentVideos.size() + recommendedVideos.size());
 
         if (recommendedVideos.size() > 0) {
 

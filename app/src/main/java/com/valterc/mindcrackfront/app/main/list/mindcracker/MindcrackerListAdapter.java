@@ -1,10 +1,12 @@
 package com.valterc.mindcrackfront.app.main.list.mindcracker;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.api.services.youtube.model.PlaylistItem;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
@@ -26,11 +28,14 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
     private ArrayList<MindcrackerListItem> items;
     private Mindcracker mindcracker;
     private String pageToken;
+    private Typeface typefaceLight;
 
     public MindcrackerListAdapter(Context context, Mindcracker mindcracker) {
         this.context = context;
         this.mindcracker = mindcracker;
         this.items = new ArrayList<>();
+
+        typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
 
         loadMoreVideos();
     }
@@ -80,10 +85,14 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
 
         if (view == null) {
             view = View.inflate(context, R.layout.list_mindcracker_error, null);
+            Button button = (Button) view.findViewById(R.id.buttonLoadMoreVideos);
+            TextView textView = (TextView) view.findViewById(R.id.textViewErrorLoadingVideosTitle);
+
+            button.setTypeface(typefaceLight);
+            textView.setTypeface(typefaceLight);
         }
 
         Button button = (Button) view.findViewById(R.id.buttonLoadMoreVideos);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +121,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
             viewHolder.webImageViewVideoImage = (com.valterc.WebImageView) view.findViewById(R.id.webImageViewVideoImage);
             viewHolder.textViewVideoTitle = (android.widget.TextView) view.findViewById(R.id.textViewVideoTitle);
 
-            //TODO: Load light typeface and set it on textView
+            viewHolder.textViewVideoTitle.setTypeface(typefaceLight);
 
             view.setTag(viewHolder);
         }
