@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.MindcrackerVideo;
 import com.valterc.mindcrackfront.app.data.backend.GetRecentVideosAsyncTask;
+import com.valterc.mindcrackfront.app.main.video.MindcrackerVideoFragment;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -75,8 +78,13 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "TODO: Open video!", Toast.LENGTH_SHORT).show();
-                //TODO: Open video fragment
+                MindcrackFrontListItem listItem = (MindcrackFrontListItem) listAdapter.getItem(position);
+                FragmentManager fragmentManager = getFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.container, MindcrackerVideoFragment.newInstance(listItem.video.getMindcracker().getId(), listItem.video.getYoutubeId()))
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
             }
         });
 
