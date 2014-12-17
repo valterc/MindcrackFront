@@ -76,7 +76,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mindcracker_video, container, false);
+        View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         YouTubePlayerSupportFragment youTubePlayerFragment =
                 ( YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.fragmentYoutube);

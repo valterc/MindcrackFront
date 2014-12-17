@@ -10,19 +10,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginTop="2dp"
         android:gravity="center"
-        android:textSize="16sp"
-        android:text="Unable to load videos" />
+        android:text="Unable to load videos"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/buttonLoadMoreVideos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:padding="10dp"
-        android:text="Load More Videos"
+        android:text="Load Videos"
         android:textColor="#FF323232"
         android:textSize="15sp" />
 

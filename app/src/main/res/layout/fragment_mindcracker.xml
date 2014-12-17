@@ -31,7 +31,7 @@
             android:layout_below="@+id/progressBarLoading"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Getting the goodies..."
+            android:text="Loading channel info..."
             android:textSize="16sp"
             android:textColor="#666"/>
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Your internet connection may be disabled or the server is offline."
+            android:text="Check your internet connection and try again."
             android:textSize="18sp"
             android:layout_centerInParent="true"
             android:gravity="center"

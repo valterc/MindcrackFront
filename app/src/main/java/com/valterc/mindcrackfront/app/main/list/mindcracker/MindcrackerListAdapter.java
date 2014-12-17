@@ -42,7 +42,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
 
     @Override
     public Object getItem(int i) {
-        if (i < 0 || i > items.size() -1)
+        if (i < 0 || i > items.size() - 1)
             return null;
 
         return items.get(i);
@@ -62,11 +62,15 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
 
         int itemType = getItemViewType(i);
 
-        switch (itemType){
-            case MindcrackerListItem.TYPE_AD: return getAdView(i, view, viewGroup);
-            case MindcrackerListItem.TYPE_VIDEO: return getVideoView(i, view, viewGroup);
-            case MindcrackerListItem.TYPE_LOADING: return getLoadingView(i, view, viewGroup);
-            case MindcrackerListItem.TYPE_ERROR: return getErrorView(i, view, viewGroup);
+        switch (itemType) {
+            case MindcrackerListItem.TYPE_AD:
+                return getAdView(i, view, viewGroup);
+            case MindcrackerListItem.TYPE_VIDEO:
+                return getVideoView(i, view, viewGroup);
+            case MindcrackerListItem.TYPE_LOADING:
+                return getLoadingView(i, view, viewGroup);
+            case MindcrackerListItem.TYPE_ERROR:
+                return getErrorView(i, view, viewGroup);
         }
 
         return null;
@@ -113,7 +117,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
             view.setTag(viewHolder);
         }
 
-        MindcrackerVideoItemViewHolder viewHolder  = (MindcrackerVideoItemViewHolder) view.getTag();
+        MindcrackerVideoItemViewHolder viewHolder = (MindcrackerVideoItemViewHolder) view.getTag();
         PlaylistItem playlistItem = items.get(i).playlistItem;
 
         viewHolder.webImageViewVideoImage.setImageSource(playlistItem.getSnippet().getThumbnails().getMedium().getUrl());
@@ -151,12 +155,12 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
 
     @Override
     public int getItemViewType(int position) {
-        return ((MindcrackerListItem)getItem(position)).type;
+        return ((MindcrackerListItem) getItem(position)).type;
     }
 
     @Override
     public boolean isEnabled(int position) {
-        return ((MindcrackerListItem)getItem(position)).type == MindcrackerListItem.TYPE_VIDEO;
+        return ((MindcrackerListItem) getItem(position)).type == MindcrackerListItem.TYPE_VIDEO;
     }
 
     @Override
@@ -165,7 +169,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
         if (items.size() > 0 && items.get(items.size() - 1).type == MindcrackerListItem.TYPE_LOADING)
             items.remove(items.size() - 1);
 
-        if (response == null){
+        if (response == null) {
             items.add(new MindcrackerListItem(MindcrackerListItem.TYPE_ERROR));
         } else {
 
@@ -188,7 +192,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
 
     }
 
-    private void loadMoreVideos(){
+    private void loadMoreVideos() {
 
         loading = true;
 
@@ -202,5 +206,17 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
         new GetVideoPlaylistItemsAsyncTask().execute(videoPlaylistItemsInfo);
     }
 
+    /**
+     * Tries to load more videos if the previous load attempt failed.
+     */
+    public void RetryLoadVideos() {
+        if (loading)
+            return;
+
+        if (items.size() == 0 || items.get(items.size() - 1).type != MindcrackerListItem.TYPE_ERROR)
+            return;
+
+        loadMoreVideos();
+    }
 
 }

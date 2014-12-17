@@ -2,6 +2,7 @@ package com.valterc.data.download;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.valterc.data.cache.CacheDataInfo;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
@@ -13,6 +14,10 @@ import com.vcutils.Downloader;
  * Created by Valter on 12/11/2014.
  */
 public class DownloadImageAsyncTask extends AsyncTask<DownloadImageRequest, Void, DownloadImageResult> {
+
+    private static final int MAX_TRIES = 3;
+
+    private int tryCount;
 
     @Override
     protected DownloadImageResult doInBackground(DownloadImageRequest... requests) {
@@ -29,7 +34,11 @@ public class DownloadImageAsyncTask extends AsyncTask<DownloadImageRequest, Void
             return result;
         }
 
-        DownloadResponse<Bitmap> response = Downloader.downloadImage(request.getImageUrl());
+        DownloadResponse<Bitmap> response = null;
+
+        do {
+            response = Downloader.downloadImage(request.getImageUrl());
+        } while (++tryCount < MAX_TRIES && response.getResult() != DownloadResponse.DownloadResult.Ok);
 
         DownloadImageResult result = new DownloadImageResult();
         result.setImage(response.getResponse());

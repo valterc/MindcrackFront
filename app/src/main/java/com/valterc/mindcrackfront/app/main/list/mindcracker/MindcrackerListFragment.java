@@ -2,10 +2,17 @@ package com.valterc.mindcrackfront.app.main.list.mindcracker;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,7 +34,7 @@ import static com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask.*
 /**
  * Created by Valter on 24/05/2014.
  */
-public class MindcrackerListFragment extends ListFragment implements GetChannelListener {
+public class MindcrackerListFragment extends Fragment implements GetChannelListener, AdapterView.OnItemClickListener {
 
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
 
@@ -46,9 +53,40 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
     private String mindcrackerId;
     private Mindcracker mindcracker;
     private Channel channel;
+
+    private ListView listView;
+    private View viewLoading;
+    private View viewErrorLoading;
     private View headerView;
 
     public MindcrackerListFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_mindcracker, null);
+
+        listView = (ListView) view.findViewById(R.id.listView);
+        viewLoading = view.findViewById(R.id.relativeLayoutLoading);
+        viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
+
+        Button buttonTryAgain = (Button) view.findViewById(R.id.buttonTryAgain);
+        buttonTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewErrorLoading.setVisibility(View.GONE);
+                viewLoading.setVisibility(View.VISIBLE);
+
+                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) listView.getAdapter();
+                MindcrackerListAdapter mindcrackerListAdapter = (MindcrackerListAdapter) headerViewListAdapter.getWrappedAdapter();
+                mindcrackerListAdapter.RetryLoadVideos();
+
+                GetChannelInfo channelInfo = new GetChannelInfo(MindcrackerListFragment.this, mindcracker.getYoutubeId());
+                new GetChannelAsyncTask().execute(channelInfo);
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -86,20 +124,18 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
         super.onActivityCreated(savedInstanceState);
         this.headerView = getLayoutInflater(savedInstanceState).inflate(R.layout.list_mindcracker_header, null);
 
-        getListView().addHeaderView(headerView);
-        getListView().setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+        listView.addHeaderView(headerView);
+        listView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+        listView.setOnItemClickListener(this);
     }
 
     @Override
     public void onGetChannelComplete(Channel response) {
 
+        viewLoading.setVisibility(View.GONE);
+
         if (response == null) {
-            //TODO: Show error view
-
-            TextView textViewName = (TextView) this.headerView.findViewById(R.id.textViewName);
-            textViewName.setText("#ERROR#");
-
-            setListShown(true);
+            viewErrorLoading.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -116,9 +152,6 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
         WebImageView webImageView = (WebImageView) this.headerView.findViewById(R.id.webImageViewHeader);
         webImageView.setImageSource(bannerImageUrl);
 
-        webImageView = (WebImageView) this.headerView.findViewById(R.id.webImageViewLogo);
-        //webImageView.setImageSource(this.channel.getSnippet().getThumbnails().getMedium().getUrl());
-
         new DownloadImageAsyncTask().execute(new DownloadImageRequest(this.channel.getSnippet().getThumbnails().getMedium().getUrl(), new DownloadImageListener() {
             @Override
             public void OnDownloadComplete(String imageUrl, boolean error, Bitmap bitmap) {
@@ -131,7 +164,6 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
         TextView textViewName = (TextView) this.headerView.findViewById(R.id.textViewName);
         textViewName.setText(this.channel.getSnippet().getTitle());
 
-        setListShown(true);
     }
 
     private void setUpFavoriteButton() {
@@ -182,22 +214,18 @@ public class MindcrackerListFragment extends ListFragment implements GetChannelL
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-
-        ListAdapter adapter = getListView().getAdapter();
-        MindcrackerListItem item = (MindcrackerListItem) adapter.getItem(position);
-
-        if (item != null && listener != null) {
-            listener.onVideoSelected(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
-        }
-
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         listener = (MindcrackerListListener) activity;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ListAdapter adapter = listView.getAdapter();
+        MindcrackerListItem item = (MindcrackerListItem) adapter.getItem(position);
 
+        if (item != null && listener != null) {
+            listener.onVideoSelected(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
+        }
+    }
 }
