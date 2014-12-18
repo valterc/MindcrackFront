@@ -69,6 +69,11 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     }
 
     @Override
+    public boolean isEnabled(int position) {
+        return items.get(position).type != MindcrackFrontListItem.TYPE_TITLE;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         switch (getItemViewType(position)) {

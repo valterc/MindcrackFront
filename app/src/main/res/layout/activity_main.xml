@@ -38,15 +38,16 @@
 
     <fragment
         android:id="@+id/fragmentMindcrackActionBar"
+        android:name="com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment"
         tools:layout="@layout/fragment_mindrack_actionbar" />
 
     <FrameLayout
         android:id="@+id/frameLayoutSplash"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <!--
     <fragment

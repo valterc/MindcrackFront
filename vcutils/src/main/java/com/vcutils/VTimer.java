@@ -12,7 +12,7 @@ public class VTimer {
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
             try {
-                mExecutor.execute();
+                mExecutor.execute(VTimer.this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -63,7 +63,7 @@ public class VTimer {
     }
 
     public interface TimerExecutor {
-        public void execute();
+        public void execute(VTimer vTimer);
     }
 
 }

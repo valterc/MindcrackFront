@@ -78,7 +78,8 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MindcrackFrontListItem listItem = (MindcrackFrontListItem) listAdapter.getItem(position);
+                //Position is offset by -1 because the header view counts as 1 item but it is not in this adapter
+                MindcrackFrontListItem listItem = (MindcrackFrontListItem) listAdapter.getItem(position - 1);
                 FragmentManager fragmentManager = getFragmentManager();
 
                 fragmentManager.beginTransaction()

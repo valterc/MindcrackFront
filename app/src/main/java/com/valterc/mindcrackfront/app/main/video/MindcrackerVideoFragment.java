@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
  * create an instance of this fragment.
  *
  */
-public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlaybackEventListener {
+public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener {
 
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
     private static final String PARAM_VIDEO_ID = "videoId";
@@ -140,7 +141,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             youTubePlayer.cueVideo(videoId);
         }
 
-        youTubePlayer.setPlaybackEventListener(this);
+        youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+        youTubePlayer.setPlayerStateChangeListener(this);
     }
 
     @Override
@@ -173,6 +175,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             playerParams.width= RelativeLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
         }
+
+        //TODO: Hide action bar and other UI Elements
     }
 
     @Override
@@ -182,30 +186,36 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     }
 
     @Override
-    public void onPlaying() {
-
+    public void onLoading() {
+        Log.d(getClass().getSimpleName(), "onLoading");
     }
 
     @Override
-    public void onPaused() {
-
+    public void onLoaded(String s) {
+        Log.d(getClass().getSimpleName(), "onLoaded " +  s);
     }
 
     @Override
-    public void onStopped() {
+    public void onAdStarted() {
+        Log.d(getClass().getSimpleName(), "onAdStarted");
+    }
+
+    @Override
+    public void onVideoStarted() {
+        Log.d(getClass().getSimpleName(), "onVideoStarted");
+    }
+
+    @Override
+    public void onVideoEnded() {
+        Log.d(getClass().getSimpleName(), "onVideoEnded");
         adViewWrapper.setVisibility(View.VISIBLE);
         adView.setAdUnitId(MOPUB_VIDEO_AD_ID);
         adView.loadAd();
     }
 
     @Override
-    public void onBuffering(boolean b) {
-
-    }
-
-    @Override
-    public void onSeekTo(int i) {
-
+    public void onError(YouTubePlayer.ErrorReason errorReason) {
+        Log.d(getClass().getSimpleName(), "onError " + errorReason.toString());
     }
 
 

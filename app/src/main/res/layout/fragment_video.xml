@@ -2,40 +2,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
+    android:clickable="true"
     android:orientation="vertical"
-    tools:context=".main.video.MindcrackerVideoFragment"
-    android:background="#fff">
+    tools:context=".main.video.MindcrackerVideoFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#0000" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Min 24dp from top-->
         <fragment
-            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
             android:id="@+id/fragmentYoutube"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
-
-        <FrameLayout
-            android:id="@+id/frameLayoutAd"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" android:visibility="gone">
-
-            <com.mopub.mobileads.MoPubView
-                android:id="@+id/adview"
-                android:layout_width="fill_parent"
-                android:layout_height="250dp"
-                />
-
-            </FrameLayout>
-
-        </RelativeLayout>
+            android:layout_height="200dp" />
 
 
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayoutAd"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone">
+
+        <com.mopub.mobileads.MoPubView
+            android:id="@+id/adview"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp" />
+
+        <!--TODO: Close ad button-->
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Video Title Mindcrack test video lp prop hunt mario kart and other stuff also etho master"
+        android:textSize="20sp" />
+
+    <!--
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Video Title"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif-light"/>
+    -->
 
 </LinearLayout>

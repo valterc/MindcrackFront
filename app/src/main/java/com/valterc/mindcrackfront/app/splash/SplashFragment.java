@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class SplashFragment extends Fragment implements VTimer.TimerExecutor {
     private TextView textViewTitleMind;
     private TextView textViewTitleCrack;
     private TextView textViewTitleFront;
+    private View viewParentFrameLayout;
 
     private VTimer timer;
 
@@ -37,6 +39,9 @@ public class SplashFragment extends Fragment implements VTimer.TimerExecutor {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, null);
+
+        viewParentFrameLayout = container;
+        viewParentFrameLayout.setVisibility(View.VISIBLE);
 
         imageViewLogoUncracked = (ImageView) view.findViewById(R.id.imageViewSplashLogoUncracked);
         imageViewLogo = (ImageView) view.findViewById(R.id.imageViewSplashLogo);
@@ -51,6 +56,14 @@ public class SplashFragment extends Fragment implements VTimer.TimerExecutor {
         textViewTitleMind.setTypeface(typefaceTextBold);
         textViewTitleCrack.setTypeface(typefaceTextBold);
         textViewTitleFront.setTypeface(typefaceText);
+
+        new VTimer(new VTimer.TimerExecutor() {
+            @Override
+            public void execute(VTimer vTimer) {
+                viewParentFrameLayout.setVisibility(View.GONE);
+                vTimer.dispose();
+            }
+        }, 3100).start();
 
         return view;
     }
@@ -99,7 +112,7 @@ public class SplashFragment extends Fragment implements VTimer.TimerExecutor {
     }
 
     @Override
-    public void execute() {
+    public void execute(VTimer vTimer) {
         getFragmentManager().beginTransaction().remove(SplashFragment.this).setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitAllowingStateLoss();
         timer.dispose();
     }
