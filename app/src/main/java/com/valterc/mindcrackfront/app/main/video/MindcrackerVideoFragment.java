@@ -3,6 +3,7 @@ package com.valterc.mindcrackfront.app.main.video;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,10 +18,13 @@ import android.widget.RelativeLayout;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.api.services.youtube.model.Video;
 import com.mopub.mobileads.MoPubView;
 import com.valterc.IFragmentBack;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,23 +33,23 @@ import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
  * to handle interaction events.
  * Use the {@link MindcrackerVideoFragment#newInstance} factory method to
  * create an instance of this fragment.
- *
  */
-public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener {
+public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoAsyncTask.GetVideoListener {
 
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
     private static final String PARAM_VIDEO_ID = "videoId";
     private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
 
-    private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9 ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-
-
     private String mindrackerId;
     private String videoId;
+    private Typeface typefaceLight;
+    private Typeface typefaceNormal;
+    private boolean fullscreen;
+
     private View playerView;
     private View adViewWrapper;
     private MoPubView adView;
-    private boolean fullscreen;
+
 
     private MindcrackerVideoFragmentListener mListener;
 
@@ -71,7 +75,17 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         if (getArguments() != null) {
             mindrackerId = getArguments().getString(PARAM_MINDCRACKER_ID);
             videoId = getArguments().getString(PARAM_VIDEO_ID);
+        } else if (savedInstanceState != null) {
+            mindrackerId = savedInstanceState.getString(PARAM_MINDCRACKER_ID);
+            videoId = savedInstanceState.getString(PARAM_VIDEO_ID);
+
+            if (mindrackerId == null || videoId == null) {
+                OnBackKeyPressed();
+            }
         }
+
+        typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        typefaceNormal = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
 
     }
 
@@ -80,7 +94,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         YouTubePlayerSupportFragment youTubePlayerFragment =
-                ( YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.fragmentYoutube);
+                (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.fragmentYoutube);
         youTubePlayerFragment.initialize(YoutubeManager.YOUTUBE_ANDROID_KEY, this);
         playerView = youTubePlayerFragment.getView();
 
@@ -89,6 +103,13 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         adView = (MoPubView) view.findViewById(R.id.adview);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, this));
     }
 
     @Override
@@ -105,7 +126,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
         }
 
-
     }
 
     @Override
@@ -119,12 +139,15 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
     }
 
-
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onGetVideoComplete(Video response) {
+
     }
 
     @Override
@@ -172,7 +195,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
         } else {
-            playerParams.width= RelativeLayout.LayoutParams.MATCH_PARENT;
+            playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
         }
 
@@ -192,7 +215,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     @Override
     public void onLoaded(String s) {
-        Log.d(getClass().getSimpleName(), "onLoaded " +  s);
+        Log.d(getClass().getSimpleName(), "onLoaded " + s);
     }
 
     @Override
@@ -217,7 +240,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     public void onError(YouTubePlayer.ErrorReason errorReason) {
         Log.d(getClass().getSimpleName(), "onError " + errorReason.toString());
     }
-
 
     public interface MindcrackerVideoFragmentListener {
         public void returnToMindrackerList(String mindcrackerId);

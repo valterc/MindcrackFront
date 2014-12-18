@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:background="#0000" />
 
     <RelativeLayout
@@ -24,26 +24,28 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
+        <FrameLayout
+            android:id="@+id/frameLayoutAd"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone"
+            android:background="#000">
 
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/adview"
+                android:layout_width="fill_parent"
+                android:layout_height="250dp" />
+
+            <!--TODO: Close ad button-->
+
+        </FrameLayout>
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayoutAd"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:visibility="gone">
 
-        <com.mopub.mobileads.MoPubView
-            android:id="@+id/adview"
-            android:layout_width="fill_parent"
-            android:layout_height="250dp" />
-
-        <!--TODO: Close ad button-->
-
-    </FrameLayout>
 
     <TextView
+        android:id="@+id/textViewVideoTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -52,8 +54,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="sans-serif-light"
-        android:text="Video Title Mindcrack test video lp prop hunt mario kart and other stuff also etho master"
+        android:text="Video Title"
         android:textSize="20sp" />
 
     <!--

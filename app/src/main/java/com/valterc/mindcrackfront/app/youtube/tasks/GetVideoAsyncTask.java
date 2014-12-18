@@ -31,13 +31,21 @@ public class GetVideoAsyncTask extends AsyncTask<GetVideoAsyncTask.GetVideoInfo,
     @Override
     protected void onPostExecute(Video video) {
         super.onPostExecute(video);
-        listener.onGetVideoComplete(video);
+        if (listener != null) {
+            listener.onGetVideoComplete(video);
+        }
     }
 
 
-    public class GetVideoInfo {
+    public static class GetVideoInfo {
         private GetVideoListener listener;
         public String videoId;
+
+        public GetVideoInfo(String videoId, GetVideoListener listener){
+            this.videoId = videoId;
+            this.listener = listener;
+        }
+
     }
 
     public interface GetVideoListener {
