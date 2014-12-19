@@ -33,9 +33,12 @@ import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
  */
 public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoAsyncTask.GetVideoListener {
 
+    private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
+
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
     private static final String PARAM_VIDEO_ID = "videoId";
-    private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
+    private static final String PARAM_SET_AB_LOGO = "setActionBarLogo";
+
 
     private String mindrackerId;
     private String videoId;
@@ -48,9 +51,13 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private MoPubView adView;
     private View viewLoading;
     private View viewErrorLoading;
-    private TextView textViewVideoTitle;
 
-    public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId) {
+    private TextView textViewVideoTitle;
+    private TextView textViewVideoPublishDate;
+    private TextView textViewVideoLikeCount;
+    private TextView textViewVideoDescription;
+
+    public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId, boolean setActionBarLogo) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
 
         Bundle args = new Bundle();

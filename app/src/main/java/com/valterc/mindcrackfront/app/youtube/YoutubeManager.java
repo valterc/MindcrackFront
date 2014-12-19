@@ -4,6 +4,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.batch.BatchCallback;
 import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -44,6 +45,8 @@ public class YoutubeManager {
     private YouTube youtube;
 
     public YoutubeManager() {
+
+
 
         youtube = new YouTube.Builder(transport, jsonFactory, new HttpRequestInitializer() {
             public void initialize(HttpRequest request) throws IOException {
@@ -131,12 +134,15 @@ public class YoutubeManager {
     }
 
     public void likeVideo(String videoId) throws IOException {
-
-
+        YouTube.Videos.Rate rate = youtube.videos().rate(videoId, "like");
+        rate.setKey(YOUTUBE_BROWSER_KEY);
+        rate.execute();
     }
 
-    public void dislikeVideo(String videoId) {
-
+    public void dislikeVideo(String videoId) throws IOException {
+        YouTube.Videos.Rate rate = youtube.videos().rate(videoId, "dislike");
+        rate.setKey(YOUTUBE_BROWSER_KEY);
+        rate.execute();
     }
 
     public static class Gdata {

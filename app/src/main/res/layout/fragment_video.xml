@@ -12,6 +12,7 @@
         android:layout_height="35dp"
         android:background="#0000" />
 
+    <!-- Video and Ad -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -67,10 +68,12 @@
 
     </RelativeLayout>
 
+    <!-- Description -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/textViewVideoTitle"
             android:layout_width="match_parent"
@@ -84,12 +87,111 @@
             android:text="Video Title"
             android:textSize="20sp" />
 
+        <!-- More Info and Like/Dislike -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewVideoTitle"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp">
 
+            <TextView
+                android:id="@+id/textViewVideoPublishDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="16 of November at 18:52"
+                android:textColor="#888"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewVideoViewCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewVideoPublishDate"
+                android:layout_marginTop="2dp"
+                android:text="301 views"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true">
+
+                <!-- Like -->
+                <LinearLayout
+                    android:id="@+id/linearLayoutLikeVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#f4f4f4"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+
+                    <ImageView
+                        android:id="@+id/imageViewLike"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@drawable/like" />
+
+                    <TextView
+                        android:id="@+id/textViewLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:text="like"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <!-- Dislike -->
+                <LinearLayout
+                    android:id="@+id/linearLayoutDislikeVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_toEndOf="@+id/linearLayoutLikeVideo"
+                    android:layout_toRightOf="@+id/linearLayoutLikeVideo"
+                    android:background="#f4f4f4"
+                    android:clickable="true"
+                    android:padding="2dp">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@drawable/dislike" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/textViewVideoDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewVideoViewCount"
+                android:layout_marginTop="20dp"
+                android:textSize="16sp"
+                android:text="dksag dfkjshdf kashdf kasjdflkdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdhflksdhf lkshdf klashdfl kahsdfl khsadflk hsdlfj hsdljfh lshfsf s hsldjfh lshb sjhf hsjdf shjfdhj sbf jhsbf jhsdf " />
+
+
+        </RelativeLayout>
+
+        <!-- Loading -->
         <RelativeLayout
             android:id="@+id/relativeLayoutLoading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff">
+            android:background="#fff"
+            android:visibility="gone">
+            <!-- TODO: DEBUG ONLY: Set visibility to visible -->
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -118,6 +220,7 @@
 
         </RelativeLayout>
 
+        <!-- Error Loading -->
         <RelativeLayout
             android:id="@+id/relativeLayoutErrorLoading"
             android:layout_width="match_parent"
