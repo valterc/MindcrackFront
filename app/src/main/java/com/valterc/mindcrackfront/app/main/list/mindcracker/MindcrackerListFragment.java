@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +48,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     }
 
     private MindcrackActionBarFragment mindcrackActionBarFragment;
-    private MindcrackerListListener listener;
+    private ShowVideoListener listener;
     private String mindcrackerId;
     private Mindcracker mindcracker;
     private Channel channel;
@@ -228,7 +227,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        listener = (MindcrackerListListener) activity;
+        listener = (ShowVideoListener) activity;
     }
 
     @Override
@@ -237,7 +236,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         MindcrackerListItem item = (MindcrackerListItem) adapter.getItem(position);
 
         if (item != null && listener != null) {
-            listener.onVideoSelected(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
+            listener.showVideo(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
         }
     }
 }

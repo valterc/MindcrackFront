@@ -50,9 +50,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private View viewErrorLoading;
     private TextView textViewVideoTitle;
 
-    private MindcrackerVideoFragmentListener mListener;
-
-
     public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
 
@@ -158,22 +155,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (MindcrackerVideoFragmentListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onGetVideoComplete(Video response) {
 
         viewLoading.setVisibility(View.GONE);
@@ -275,10 +256,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onError(YouTubePlayer.ErrorReason errorReason) {
         Log.d(getClass().getSimpleName(), "onError " + errorReason.toString());
-    }
-
-    public interface MindcrackerVideoFragmentListener {
-        public void returnToMindrackerList(String mindcrackerId);
     }
 
 }

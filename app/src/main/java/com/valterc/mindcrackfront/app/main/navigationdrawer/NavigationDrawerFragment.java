@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
-import com.valterc.mindcrackfront.app.main.navigationdrawer.list.FavoriteMindcrackersAdapter;
 import com.valterc.mindcrackfront.app.main.navigationdrawer.list.NavigationDrawerAdapter;
 import com.valterc.mindcrackfront.app.main.navigationdrawer.list.NavigationDrawerListItem;
 
@@ -149,6 +148,9 @@ public class NavigationDrawerFragment extends ListFragment {
         NavigationDrawerListItem item = (NavigationDrawerListItem) getListAdapter().getItem(position);
         if (item.mindcracker != null) {
             mListener.onNavigationDrawerItemSelected(item.mindcracker);
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        } else {
+            mListener.onNavigationDrawerItemSelected(item);
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
     }
