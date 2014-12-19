@@ -1,19 +1,20 @@
 package com.valterc.mindcrackfront.app.main.video;
 
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,10 @@ import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Valter on 24/05/2014.
@@ -45,6 +50,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private Typeface typefaceLight;
     private Typeface typefaceNormal;
     private boolean fullscreen;
+    private SimpleDateFormat dateFormat;
+    private Boolean liked;
 
     private View playerView;
     private View adViewWrapper;
@@ -54,8 +61,11 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     private TextView textViewVideoTitle;
     private TextView textViewVideoPublishDate;
-    private TextView textViewVideoLikeCount;
+    private TextView textViewVideoViewCount;
     private TextView textViewVideoDescription;
+    private LinearLayout linearLayoutLike;
+    private LinearLayout linearLayoutDislike;
+    private View viewLoadingRating;
 
     public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId, boolean setActionBarLogo) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
@@ -90,6 +100,13 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         typefaceNormal = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
 
+        if (DateFormat.is24HourFormat(getActivity())) {
+            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'HH':'mm");
+        } else {
+            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'hh':'mma");
+        }
+        dateFormat.setTimeZone(TimeZone.getDefault());
+
     }
 
     @Override
@@ -105,9 +122,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         adView = (MoPubView) view.findViewById(R.id.adview);
         View viewCloseAd = view.findViewById(R.id.linearLayoutCloseAd);
 
-        textViewVideoTitle = (TextView) view.findViewById(R.id.textViewVideoTitle);
-
-        textViewVideoTitle.setTypeface(typefaceLight);
+        initVideoInfoViews(view);
 
         viewLoading = view.findViewById(R.id.relativeLayoutLoading);
         viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
@@ -138,6 +153,25 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         adView.setAdUnitId(MOPUB_VIDEO_AD_ID);
 
         return view;
+    }
+
+    private void initVideoInfoViews(View view) {
+
+        textViewVideoTitle = (TextView) view.findViewById(R.id.textViewVideoTitle);
+        textViewVideoPublishDate = (TextView) view.findViewById(R.id.textViewVideoPublishDate);
+        textViewVideoViewCount = (TextView) view.findViewById(R.id.textViewVideoViewCount);
+        textViewVideoDescription = (TextView) view.findViewById(R.id.textViewVideoDescription);
+        TextView textViewLike = (TextView) view.findViewById(R.id.textViewLike);
+
+        textViewVideoTitle.setTypeface(typefaceLight);
+        textViewVideoPublishDate.setTypeface(typefaceLight);
+        textViewVideoViewCount.setTypeface(typefaceLight);
+        textViewVideoDescription.setTypeface(typefaceLight);
+        textViewLike.setTypeface(typefaceLight);
+
+        linearLayoutLike = (LinearLayout) view.findViewById(R.id.linearLayoutLikeVideo);
+        linearLayoutDislike = (LinearLayout) view.findViewById(R.id.linearLayoutDislikeVideo);
+        viewLoadingRating = view.findViewById(R.id.relativeLayoutLoadingRating);
     }
 
     @Override
@@ -172,7 +206,15 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
 
         textViewVideoTitle.setText(response.getSnippet().getTitle());
+        textViewVideoPublishDate.setText(dateFormat.format(new Date(response.getSnippet().getPublishedAt().getValue())));
 
+        if (response.getStatistics() != null && response.getStatistics().getViewCount() != null) {
+            textViewVideoViewCount.setText(response.getStatistics().getViewCount().toString() + " views");
+        } else {
+            textViewVideoViewCount.setText("No views");
+        }
+
+        textViewVideoDescription.setText(response.getSnippet().getDescription());
     }
 
     @Override

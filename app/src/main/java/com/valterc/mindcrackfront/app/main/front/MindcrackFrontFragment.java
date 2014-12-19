@@ -82,8 +82,9 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
                 MindcrackFrontListItem listItem = (MindcrackFrontListItem) listAdapter.getItem(position - 1);
                 FragmentManager fragmentManager = getFragmentManager();
 
+                //TODO: Use interface in MainActivity to open video
                 fragmentManager.beginTransaction()
-                        .add(R.id.container, MindcrackerVideoFragment.newInstance(listItem.video.getMindcracker().getId(), listItem.video.getYoutubeId()))
+                        .add(R.id.container, MindcrackerVideoFragment.newInstance(listItem.video.getMindcracker().getId(), listItem.video.getYoutubeId(), true))
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
             }

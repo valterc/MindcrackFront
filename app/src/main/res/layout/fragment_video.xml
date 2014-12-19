@@ -68,7 +68,7 @@
 
     </RelativeLayout>
 
-    <!-- Description -->
+    <!-- Video Info -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -102,8 +102,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="16 of November at 18:52"
-                android:textColor="#888"
-                android:textSize="16sp" />
+                android:textColor="#bbb"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textViewVideoViewCount"
@@ -112,7 +112,7 @@
                 android:layout_below="@+id/textViewVideoPublishDate"
                 android:layout_marginTop="2dp"
                 android:text="301 views"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                     android:id="@+id/linearLayoutLikeVideo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#f4f4f4"
+                    android:background="@drawable/button_flat_selector"
                     android:clickable="true"
                     android:orientation="horizontal"
                     android:padding="2dp">
@@ -133,8 +133,8 @@
 
                     <ImageView
                         android:id="@+id/imageViewLike"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:src="@drawable/like" />
 
                     <TextView
@@ -145,7 +145,7 @@
                         android:layout_marginEnd="2dp"
                         android:layout_marginRight="2dp"
                         android:text="like"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -158,29 +158,50 @@
                     android:layout_marginStart="4dp"
                     android:layout_toEndOf="@+id/linearLayoutLikeVideo"
                     android:layout_toRightOf="@+id/linearLayoutLikeVideo"
-                    android:background="#f4f4f4"
+                    android:background="@drawable/button_flat_selector"
                     android:clickable="true"
                     android:padding="2dp">
 
                     <ImageView
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:src="@drawable/dislike" />
 
                 </LinearLayout>
 
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutLoadingRating"
+                    android:layout_width="103dp"
+                    android:layout_height="36dp"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true" />
+
+                </RelativeLayout>
+
             </RelativeLayout>
 
-
-            <TextView
-                android:id="@+id/textViewVideoDescription"
+            <!-- Description -->
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/textViewVideoViewCount"
-                android:layout_marginTop="20dp"
-                android:textSize="16sp"
-                android:text="dksag dfkjshdf kashdf kasjdflkdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdksag dfkjshdf kashdf kasjdflkahsdflk hasdkfjhas kdjfhlsak hfdlskahflskahsdflk hasdkfjhas kdjfhlsak hfdlskahflskdhflksdhf lkshdf klashdfl kahsdfl khsadflk hsdlfj hsdljfh lshfsf s hsldjfh lshb sjhf hsjdf shjfdhj sbf jhsbf jhsdf " />
+                android:layout_marginTop="10dp">
 
+                <TextView
+                    android:id="@+id/textViewVideoDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:paddingBottom="10dp"
+                    android:textColor="#666"
+                    android:textColorLink="#38afd1"
+                    android:textSize="14sp" />
+
+            </ScrollView>
 
         </RelativeLayout>
 

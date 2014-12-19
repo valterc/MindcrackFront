@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .add(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId))
+                .add(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId, false))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
 

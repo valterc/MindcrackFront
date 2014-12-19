@@ -17,6 +17,7 @@ import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoGetRatingResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.vcutils.DownloadResponse;
 import com.vcutils.Downloader;
@@ -143,6 +144,12 @@ public class YoutubeManager {
         YouTube.Videos.Rate rate = youtube.videos().rate(videoId, "dislike");
         rate.setKey(YOUTUBE_BROWSER_KEY);
         rate.execute();
+    }
+
+    public VideoGetRatingResponse getVideoRating(String videoId) throws IOException {
+        YouTube.Videos.GetRating rating = youtube.videos().getRating(videoId);
+        rating.setKey(YOUTUBE_BROWSER_KEY);
+        return rating.execute();
     }
 
     public static class Gdata {
