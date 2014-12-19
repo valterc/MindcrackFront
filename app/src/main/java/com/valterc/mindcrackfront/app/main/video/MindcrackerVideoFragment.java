@@ -13,7 +13,9 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -27,12 +29,7 @@ import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MindcrackerVideoFragment.MindcrackerVideoFragmentListener} interface
- * to handle interaction events.
- * Use the {@link MindcrackerVideoFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by Valter on 24/05/2014.
  */
 public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoAsyncTask.GetVideoListener {
 
@@ -49,7 +46,9 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private View playerView;
     private View adViewWrapper;
     private MoPubView adView;
-
+    private View viewLoading;
+    private View viewErrorLoading;
+    private TextView textViewVideoTitle;
 
     private MindcrackerVideoFragmentListener mListener;
 
@@ -98,9 +97,41 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         youTubePlayerFragment.initialize(YoutubeManager.YOUTUBE_ANDROID_KEY, this);
         playerView = youTubePlayerFragment.getView();
 
-
         adViewWrapper = view.findViewById(R.id.frameLayoutAd);
         adView = (MoPubView) view.findViewById(R.id.adview);
+        View viewCloseAd = view.findViewById(R.id.linearLayoutCloseAd);
+
+        textViewVideoTitle = (TextView) view.findViewById(R.id.textViewVideoTitle);
+
+        textViewVideoTitle.setTypeface(typefaceLight);
+
+        viewLoading = view.findViewById(R.id.relativeLayoutLoading);
+        viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
+
+        Button buttonTryAgain = (Button) view.findViewById(R.id.buttonTryAgain);
+        TextView textViewErrorTitle = (TextView) view.findViewById(R.id.textViewErrorTitle);
+        TextView textViewLoading = (TextView) view.findViewById(R.id.textViewLoading);
+
+        textViewErrorTitle.setTypeface(typefaceLight);
+        textViewLoading.setTypeface(typefaceLight);
+
+        viewCloseAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adViewWrapper.setVisibility(View.GONE);
+            }
+        });
+
+        buttonTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewErrorLoading.setVisibility(View.GONE);
+                viewLoading.setVisibility(View.VISIBLE);
+                new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, MindcrackerVideoFragment.this));
+            }
+        });
+
+        adView.setAdUnitId(MOPUB_VIDEO_AD_ID);
 
         return view;
     }
@@ -115,7 +146,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         adView.destroy();
 
         try {
@@ -125,7 +155,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         } catch (Exception e) {
 
         }
-
     }
 
     @Override
@@ -134,8 +163,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         try {
             mListener = (MindcrackerVideoFragmentListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -147,6 +175,15 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     @Override
     public void onGetVideoComplete(Video response) {
+
+        viewLoading.setVisibility(View.GONE);
+
+        if (response == null) {
+            viewErrorLoading.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        textViewVideoTitle.setText(response.getSnippet().getTitle());
 
     }
 
@@ -232,7 +269,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     public void onVideoEnded() {
         Log.d(getClass().getSimpleName(), "onVideoEnded");
         adViewWrapper.setVisibility(View.VISIBLE);
-        adView.setAdUnitId(MOPUB_VIDEO_AD_ID);
         adView.loadAd();
     }
 
