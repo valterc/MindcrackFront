@@ -86,7 +86,12 @@ public class MoPubView extends FrameLayout {
         }
 
         mAdViewController = AdViewControllerFactory.create(context, this);
-        registerScreenStateBroadcastReceiver();
+
+        //VC: Disable register broadcaster to avoid calling destroy() or receiving a exception for leaked receiver
+        {
+            //registerScreenStateBroadcastReceiver();
+            setAdVisibility(View.VISIBLE);
+        }
     }
 
     private void registerScreenStateBroadcastReceiver() {
