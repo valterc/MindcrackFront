@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
@@ -23,6 +24,8 @@ public class GetVideoSearchListAsyncTask extends AsyncTask<GetVideoSearchListAsy
             SearchListResponse response = MindcrackFrontApplication.getYoutubeManager().getVideosFromUserSearch(info.userId, info.pageToken);
             return response;
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
+            e.printStackTrace();
         }
 
         return null;

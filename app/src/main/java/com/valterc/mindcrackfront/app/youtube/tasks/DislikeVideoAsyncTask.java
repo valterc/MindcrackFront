@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class DislikeVideoAsyncTask extends AsyncTask<DislikeVideoAsyncTask.Disli
         try {
             MindcrackFrontApplication.getYoutubeManager().dislikeVideo(info.videoId);
         } catch (IOException e) {
-            e.printStackTrace();
+            MindcrackFrontApplication.handleException(e);
+            return null;
         }
 
         return info.videoId;

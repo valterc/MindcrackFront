@@ -1,1 +1,1 @@
-include ':app', ':vcutils', ':mopubsdk'
+include ':app', ':vcutils', ':mopub-sdk'

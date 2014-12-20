@@ -5,9 +5,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,10 +23,16 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.api.services.youtube.model.Video;
 import com.mopub.mobileads.MoPubView;
 import com.valterc.IFragmentBack;
+import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.main.MainActivity;
+import com.valterc.mindcrackfront.app.youtube.AuthenticationResult;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
+import com.valterc.mindcrackfront.app.youtube.tasks.DislikeVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoRatingAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.LikeVideoAsyncTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +41,7 @@ import java.util.TimeZone;
 /**
  * Created by Valter on 24/05/2014.
  */
-public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoAsyncTask.GetVideoListener {
+public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoListener, GetVideoRatingAsyncTask.GetVideoRatingListener, LikeVideoAsyncTask.LikeVideoListener, DislikeVideoAsyncTask.DislikeVideoListener {
 
     private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
 
@@ -51,7 +56,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private Typeface typefaceNormal;
     private boolean fullscreen;
     private SimpleDateFormat dateFormat;
-    private Boolean liked;
+    private String rating;
 
     private View playerView;
     private View adViewWrapper;
@@ -172,6 +177,35 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         linearLayoutLike = (LinearLayout) view.findViewById(R.id.linearLayoutLikeVideo);
         linearLayoutDislike = (LinearLayout) view.findViewById(R.id.linearLayoutDislikeVideo);
         viewLoadingRating = view.findViewById(R.id.relativeLayoutLoadingRating);
+
+        linearLayoutLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (likesVideo()) {
+                    return;
+                }
+
+                linearLayoutLike.setVisibility(View.GONE);
+                linearLayoutDislike.setVisibility(View.GONE);
+                viewLoadingRating.setVisibility(View.VISIBLE);
+                new LikeVideoAsyncTask().execute(new LikeVideoAsyncTask.LikeVideoInfo(MindcrackerVideoFragment.this, videoId));
+            }
+        });
+
+        linearLayoutDislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dislikesVideo()) {
+                    return;
+                }
+
+                linearLayoutLike.setVisibility(View.GONE);
+                linearLayoutDislike.setVisibility(View.GONE);
+                viewLoadingRating.setVisibility(View.VISIBLE);
+                new DislikeVideoAsyncTask().execute(new DislikeVideoAsyncTask.DislikeVideoInfo(MindcrackerVideoFragment.this, videoId));
+            }
+        });
+
     }
 
     @Override
@@ -179,6 +213,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         super.onViewCreated(view, savedInstanceState);
 
         new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, this));
+        //new GetVideoRatingAsyncTask().execute(new GetVideoRatingAsyncTask.GetVideoRatingInfo(MindcrackerVideoFragment.this, videoId));
     }
 
     @Override
@@ -306,5 +341,53 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     public void onError(YouTubePlayer.ErrorReason errorReason) {
         Log.d(getClass().getSimpleName(), "onError " + errorReason.toString());
     }
+
+    @Override
+    public void onGetVideoRatingComplete(String response) {
+        if (TextUtils.isEmpty(response)){
+            if (!MindcrackFrontApplication.getYoutubeManager().isAuthenticated()){
+                AuthenticationResult authenticationResult = MindcrackFrontApplication.getYoutubeManager().authenticate();
+                if (authenticationResult.getIntentChooseAccount() != null){
+                    getActivity().startActivityForResult(authenticationResult.getIntentChooseAccount(), MainActivity.REQUEST_CODE_SELECT_ACCOUNT);
+                }
+            }
+            return;
+        }
+
+        rating = response;
+    }
+
+    @Override
+    public void onLikeVideoComplete(String videoId) {
+        viewLoadingRating.setVisibility(View.GONE);
+        linearLayoutLike.setVisibility(View.VISIBLE);
+        linearLayoutDislike.setVisibility(View.VISIBLE);
+
+        if (TextUtils.isEmpty(videoId)){
+            if (!MindcrackFrontApplication.getYoutubeManager().isAuthenticated()){
+                AuthenticationResult authenticationResult = MindcrackFrontApplication.getYoutubeManager().authenticate();
+                if (authenticationResult.getIntentChooseAccount() != null){
+                    getActivity().startActivityForResult(authenticationResult.getIntentChooseAccount(), MainActivity.REQUEST_CODE_SELECT_ACCOUNT);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onDislikeVideoComplete(String videoId) {
+        viewLoadingRating.setVisibility(View.GONE);
+        linearLayoutLike.setVisibility(View.VISIBLE);
+        linearLayoutDislike.setVisibility(View.VISIBLE);
+    }
+
+    private boolean likesVideo(){
+        return !TextUtils.isEmpty(rating) && rating.equals("like");
+    }
+
+    private boolean dislikesVideo(){
+        return !TextUtils.isEmpty(rating) && rating.equals("dislike");
+    }
+
 
 }

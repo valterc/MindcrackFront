@@ -1,7 +1,9 @@
 package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.youtube.model.Video;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
@@ -23,6 +25,8 @@ public class GetVideoAsyncTask extends AsyncTask<GetVideoAsyncTask.GetVideoInfo,
             Video response = MindcrackFrontApplication.getYoutubeManager().getVideo(info.videoId);
             return response;
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
+            e.printStackTrace();
         }
 
         return null;

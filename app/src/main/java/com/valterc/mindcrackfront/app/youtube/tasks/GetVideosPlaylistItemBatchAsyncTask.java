@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
@@ -25,6 +26,7 @@ public class GetVideosPlaylistItemBatchAsyncTask extends AsyncTask<GetVideosPlay
         try {
             responseArrayList = MindcrackFrontApplication.getYoutubeManager().batchGetVideosFromPlaylists(info.playlists);
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
             e.printStackTrace();
         }
 

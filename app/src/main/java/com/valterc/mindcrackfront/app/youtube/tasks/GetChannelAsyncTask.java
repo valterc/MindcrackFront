@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.youtube.model.Channel;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
@@ -23,6 +24,7 @@ public class GetChannelAsyncTask extends AsyncTask<GetChannelAsyncTask.GetChanne
             Channel response = MindcrackFrontApplication.getYoutubeManager().getChannel(info.channelId);
             return response;
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
             e.printStackTrace();
         }
 

@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MindcrackFront.iml" filepath="$PROJECT_DIR$/MindcrackFront.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mopubsdk/mopubsdk.iml" filepath="$PROJECT_DIR$/mopubsdk/mopubsdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mopub-sdk/mopub-sdk.iml" filepath="$PROJECT_DIR$/mopub-sdk/mopub-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/vcutils/vcutils.iml" filepath="$PROJECT_DIR$/vcutils/vcutils.iml" />
     </modules>
   </component>

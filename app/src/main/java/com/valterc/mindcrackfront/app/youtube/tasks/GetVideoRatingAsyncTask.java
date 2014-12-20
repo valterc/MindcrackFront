@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.youtube.model.VideoGetRatingResponse;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
@@ -10,20 +11,21 @@ import java.io.IOException;
 /**
  * Created by Valter on 19/12/2014.
  */
-public class GetVideoRatingAsyncTask extends AsyncTask<GetVideoRatingAsyncTask.GetVideoRatingInfo, Void, VideoGetRatingResponse> {
+public class GetVideoRatingAsyncTask extends AsyncTask<GetVideoRatingAsyncTask.GetVideoRatingInfo, Void, String> {
 
     private GetVideoRatingListener listener;
 
     @Override
-    protected VideoGetRatingResponse doInBackground(GetVideoRatingInfo... params) {
+    protected String doInBackground(GetVideoRatingInfo... params) {
         GetVideoRatingInfo info = params[0];
         listener = info.listener;
 
-        VideoGetRatingResponse response = null;
+        String response = null;
 
         try {
             response = MindcrackFrontApplication.getYoutubeManager().getVideoRating(info.videoId);
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
             e.printStackTrace();
         }
 
@@ -31,7 +33,7 @@ public class GetVideoRatingAsyncTask extends AsyncTask<GetVideoRatingAsyncTask.G
     }
 
     @Override
-    protected void onPostExecute(VideoGetRatingResponse response) {
+    protected void onPostExecute(String response) {
         super.onPostExecute(response);
         if (listener != null){
             listener.onGetVideoRatingComplete(response);
@@ -49,7 +51,7 @@ public class GetVideoRatingAsyncTask extends AsyncTask<GetVideoRatingAsyncTask.G
     }
 
     public interface GetVideoRatingListener {
-        public void onGetVideoRatingComplete(VideoGetRatingResponse response);
+        public void onGetVideoRatingComplete(String response);
     }
 
 }

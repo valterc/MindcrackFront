@@ -1,5 +1,12 @@
 package com.valterc.mindcrackfront.app.youtube;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.batch.BatchCallback;
@@ -19,6 +26,7 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoGetRatingResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetMyChannelAsyncTask;
 import com.vcutils.DownloadResponse;
 import com.vcutils.Downloader;
 
@@ -31,6 +39,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -40,20 +49,83 @@ public class YoutubeManager {
 
     public final static String YOUTUBE_ANDROID_KEY = "AIzaSyDIFbSrCkqksheS7xS3lPYcF6vXM7X69JU";
     private final static String YOUTUBE_BROWSER_KEY = "AIzaSyAWyK1n0vTD45qSFTax7SDNpBV-FZFDJaQ";
+    private final static String PREF_ACCOUNT_NAME = "pref_youtube_auth_account_name";
 
+    private Context context;
     private final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     private final JsonFactory jsonFactory = new AndroidJsonFactory();
     private YouTube youtube;
+    private GoogleAccountCredential credential;
 
-    public YoutubeManager() {
+    public YoutubeManager(Context context) {
+        this.context = context;
 
+        HttpRequestInitializer httpRequestInitializer = null;
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (preferences.contains(PREF_ACCOUNT_NAME)) {
+            Log.d(getClass().getSimpleName(), "Using Account: " + preferences.getString(PREF_ACCOUNT_NAME, null));
+            credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton("https://www.googleapis.com/auth/youtube"));
+            credential.setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, null));
+            httpRequestInitializer = credential;
+        } else {
+            httpRequestInitializer = new HttpRequestInitializer() {
+                public void initialize(HttpRequest request) throws IOException {
+                }
+            };
+        }
+
+        youtube = new YouTube.Builder(transport, jsonFactory, httpRequestInitializer).setApplicationName("Mindcrack Front").build();
+    }
+
+    /**
+     * Authenticates the user with the selected account name
+     * Must run from the UI Thread.
+     *
+     * @return Authentication status or intent to request account.
+     */
+    public AuthenticationResult authenticate() {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (preferences.contains(PREF_ACCOUNT_NAME) && preferences.getString(PREF_ACCOUNT_NAME, null) != null) {
+            credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton("https://www.googleapis.com/auth/youtube"));
+            credential.setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, null));
+            youtube = new YouTube.Builder(transport, jsonFactory, credential).setApplicationName("Mindcrack Front").build();
+            return new AuthenticationResult();
+        } else {
+            this.credential = null;
+            GoogleAccountCredential googleAccountCredential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton("https://www.googleapis.com/auth/youtube"));
+            return new AuthenticationResult(googleAccountCredential.newChooseAccountIntent());
+        }
+    }
+
+    /**
+     * Authenticates the user with the specified account name
+     *
+     * @param accountName User account
+     */
+    public void authenticate(String accountName) {
+        if (accountName != null) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            preferences.edit().putString(PREF_ACCOUNT_NAME, accountName).apply();
+            authenticate();
+            new GetMyChannelAsyncTask().execute((GetMyChannelAsyncTask.GetMyChannelInfo)null);
+        }
+    }
+
+    public boolean isAuthenticated() {
+        return credential != null && credential.getSelectedAccount() != null;
+    }
+
+    public void clearAuth() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().remove(PREF_ACCOUNT_NAME).apply();
+        credential = null;
 
         youtube = new YouTube.Builder(transport, jsonFactory, new HttpRequestInitializer() {
             public void initialize(HttpRequest request) throws IOException {
             }
         }).setApplicationName("Mindcrack Front").build();
-
     }
 
     public SearchListResponse getVideosFromUserSearch(String userId) throws IOException {
@@ -94,6 +166,16 @@ public class YoutubeManager {
         VideoListResponse response = list.execute();
         return response.getItems().size() == 0 ? null : response.getItems().get(0);
     }
+
+    public Channel getMyChannel() throws IOException {
+        YouTube.Channels.List list = youtube.channels().list("id");
+        list.setKey(YOUTUBE_BROWSER_KEY);
+        list.setMine(true);
+
+        ChannelListResponse response = list.execute();
+        return response.getItems().size() == 0 ? null : response.getItems().get(0);
+    }
+
 
     public Channel getChannel(String channelId) throws IOException {
         YouTube.Channels.List list = youtube.channels().list("id, snippet, statistics, brandingSettings");
@@ -146,10 +228,11 @@ public class YoutubeManager {
         rate.execute();
     }
 
-    public VideoGetRatingResponse getVideoRating(String videoId) throws IOException {
+    public String getVideoRating(String videoId) throws IOException {
         YouTube.Videos.GetRating rating = youtube.videos().getRating(videoId);
         rating.setKey(YOUTUBE_BROWSER_KEY);
-        return rating.execute();
+        VideoGetRatingResponse response = rating.execute();
+        return response.getItems().size() > 0 ? response.getItems().get(0).getRating() : null;
     }
 
     public static class Gdata {

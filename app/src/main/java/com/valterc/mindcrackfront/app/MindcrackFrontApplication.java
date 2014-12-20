@@ -5,9 +5,11 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.valterc.data.cache.Cache;
 import com.valterc.mindcrackfront.app.data.DataManager;
 import com.valterc.mindcrackfront.app.data.Settings;
+import com.valterc.mindcrackfront.app.main.MainActivity;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 
 /**
@@ -40,19 +42,27 @@ public class MindcrackFrontApplication extends Application {
         return cache;
     }
 
+    private static ExceptionHandlerActivity exceptionHandlerActivity;
+    public static void setExceptionHandlerActivity(ExceptionHandlerActivity handlerActivity){
+        exceptionHandlerActivity = handlerActivity;
+    }
+    public static void removeExceptionHandlerActivity(ExceptionHandlerActivity handlerActivity) {
+        if (exceptionHandlerActivity == handlerActivity) {
+            exceptionHandlerActivity = null;
+        }
+    }
+
     @Override
     public void onCreate() {
 
         mContext = this;
         dataManager = new DataManager(getApplicationContext());
-        youtubeManager = new YoutubeManager();
+        youtubeManager = new YoutubeManager(getApplicationContext());
         settings = new Settings(getApplicationContext());
         cache = Cache.getInstance(getApplicationContext());
 
         super.onCreate();
     }
-
-
 
     @Override
     public void onTerminate() {
@@ -65,4 +75,12 @@ public class MindcrackFrontApplication extends Application {
 
         super.onTerminate();
     }
+
+    public static void handleException(Exception e) {
+        if (exceptionHandlerActivity != null){
+            exceptionHandlerActivity.handleException(e);
+        }
+    }
+
+
 }

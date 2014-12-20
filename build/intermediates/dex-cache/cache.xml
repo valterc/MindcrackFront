@@ -58,6 +58,13 @@
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\jdo2-api-2.3-eb-9c8a2e86abaa88e8bf75cb22721afc15769cf6f8.jar" />
     </item>
     <item
+        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\com.mopub\mopub-sdk\unspecified\libs\MMSDK-5.3.0.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="0caf3cd39dfd94dc3095e335d0b1ec9b7069b54e">
+        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\MMSDK-5.3.0-3ffe3216992eea0d951cc66970bb919b1c93f1d9.jar" />
+    </item>
+    <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\google-http-client-1.18.0-rc.jar"
         jumboMode="false"
         revision="21.0.2"
@@ -65,18 +72,18 @@
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\google-http-client-1.18.0-rc-da50b1a6cc6a282153c42d74ae39dbc58f880178.jar" />
     </item>
     <item
-        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\MindcrackFront\mopubsdk\unspecified\classes.jar"
-        jumboMode="false"
-        revision="21.0.2"
-        sha1="c5c96be56d3747791d55d55fdc6542c6e37f7490">
-        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\classes-dcccde46cf24a46dd82beeb91cea6250780e0174.jar" />
-    </item>
-    <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\protobuf-java-2.4.1.jar"
         jumboMode="false"
         revision="21.0.2"
         sha1="0c589509ec6fd86d5d2fda37e07c08538235d3b9">
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\protobuf-java-2.4.1-659b8ee22aec8a03c9ac7b327a9ce7a8a04d3816.jar" />
+    </item>
+    <item
+        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\com.mopub\mopub-sdk\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="209ac2d82e90af72201597a7445a236b0cc48e2e">
+        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\classes-f5352e755d30a6ff9963f28d31a5120a433893b2.jar" />
     </item>
     <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\google-api-client-protobuf-1.18.0-rc.jar"
@@ -91,6 +98,13 @@
         revision="21.0.2"
         sha1="3d0dad9942173217f6cf1108c7d91ceb6b1ce11a">
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\google-api-client-xml-1.18.0-rc-52ec6c899b6fc16e9733a6e6107a3e9bd824e231.jar" />
+    </item>
+    <item
+        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\classes-07e919dd95441597040821c4c14bc67515310f9f.jar" />
     </item>
     <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\jackson-core-2.1.3.jar"
@@ -156,13 +170,6 @@
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\google-http-client-jackson-1.18.0-rc-3c58b8d087952196fd9a46f63ea5e85866e8c0c9.jar" />
     </item>
     <item
-        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\MindcrackFront\mopubsdk\unspecified\libs\GoogleAdMobAdsSdk-6.4.1.jar"
-        jumboMode="false"
-        revision="21.0.2"
-        sha1="6262c554ef5744538d526465aa73704810705734">
-        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\GoogleAdMobAdsSdk-6.4.1-759b32ff8d5627ca1939e7a3690e3dab577e70dd.jar" />
-    </item>
-    <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\gson-2.1.jar"
         jumboMode="false"
         revision="21.0.2"
@@ -196,13 +203,6 @@
         revision="21.0.2"
         sha1="e32303ef8bd18a5c9272780d49b81c95e05ddf43">
         <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\jackson-core-asl-1.9.11-b610c38a184cce10ab8d745f0872b09c9363b903.jar" />
-    </item>
-    <item
-        jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\exploded-aar\MindcrackFront\mopubsdk\unspecified\libs\MMSDK.jar"
-        jumboMode="false"
-        revision="21.0.2"
-        sha1="38b438386a4f96546af4c6242a21ee4411e382ef">
-        <dex dex="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\build\intermediates\pre-dexed\debug\MMSDK-18654b01209324928ea2396c7c072d62ee846598.jar" />
     </item>
     <item
         jar="C:\Users\Valter\AndroidStudioProjects\MindcrackFront\app\libs\androidsvg-1.2.1.jar"

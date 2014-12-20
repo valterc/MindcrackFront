@@ -2,6 +2,7 @@ package com.valterc.mindcrackfront.app.youtube.tasks;
 
 import android.os.AsyncTask;
 
+import com.google.android.gms.auth.GoogleAuthException;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 
 import java.io.IOException;
@@ -22,7 +23,9 @@ public class LikeVideoAsyncTask extends AsyncTask<LikeVideoAsyncTask.LikeVideoIn
         try {
             MindcrackFrontApplication.getYoutubeManager().likeVideo(info.videoId);
         } catch (IOException e) {
+            MindcrackFrontApplication.handleException(e);
             e.printStackTrace();
+            return null;
         }
 
         return info.videoId;
