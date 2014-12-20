@@ -58,7 +58,7 @@
         <com.valterc.WebImageView
             android:id="@+id/webImageViewVideoImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="180dp"
             android:background="#FFDFDFDF"
             android:scaleType="fitXY"
             android:tint="#3000"/>

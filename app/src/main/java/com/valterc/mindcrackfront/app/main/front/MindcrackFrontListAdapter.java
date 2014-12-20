@@ -70,7 +70,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        return items.get(position).type != MindcrackFrontListItem.TYPE_TITLE;
+        return items.get(position).type == MindcrackFrontListItem.TYPE_VIDEO;
     }
 
     @Override
