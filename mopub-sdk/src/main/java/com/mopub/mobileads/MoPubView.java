@@ -61,6 +61,10 @@ public class MoPubView extends FrameLayout {
     public MoPubView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        if (isInEditMode()){
+            return;
+        }
+
         ManifestUtils.checkWebViewActivitiesDeclared(context);
 
         mContext = context;

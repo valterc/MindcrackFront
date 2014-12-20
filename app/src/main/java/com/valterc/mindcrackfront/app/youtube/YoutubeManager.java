@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -224,6 +225,18 @@ public class YoutubeManager {
 
     public void dislikeVideo(String videoId) throws IOException {
         YouTube.Videos.Rate rate = youtube.videos().rate(videoId, "dislike");
+        rate.setKey(YOUTUBE_BROWSER_KEY);
+        rate.execute();
+    }
+
+    public void rateVideo(String videoId, String rateString) throws IOException {
+        if (TextUtils.isEmpty(rateString))
+            throw new IllegalArgumentException("rateString cannot be null");
+
+        if (!rateString.equals("like") && !rateString.equals("dislike") && !rateString.equals("none"))
+            throw new IllegalArgumentException("rateString must be either 'like', 'dislike' or 'none'");
+
+        YouTube.Videos.Rate rate = youtube.videos().rate(videoId, rateString);
         rate.setKey(YOUTUBE_BROWSER_KEY);
         rate.execute();
     }

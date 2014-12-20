@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="#0000" />
+        android:background="#eaeaea" />
 
     <!-- Video and Ad -->
     <RelativeLayout
@@ -78,7 +78,7 @@
             android:id="@+id/textViewVideoTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -92,104 +92,120 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewVideoTitle"
-            android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginStart="10dp">
-
-            <TextView
-                android:id="@+id/textViewVideoPublishDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="16 of November at 18:52"
-                android:textColor="#bbb"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textViewVideoViewCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewVideoPublishDate"
-                android:layout_marginTop="2dp"
-                android:text="301 views"
-                android:textSize="16sp" />
+            >
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/relativeLayoutVideoQuickInfo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true">
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:background="#f7f7f7">
 
-                <!-- Like -->
-                <LinearLayout
-                    android:id="@+id/linearLayoutLikeVideo"
+                <TextView
+                    android:id="@+id/textViewVideoPublishDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_flat_selector"
-                    android:clickable="true"
-                    android:orientation="horizontal"
-                    android:padding="2dp">
+                    android:text="16 of November at 18:52"
+                    android:textColor="#bbb"
+                    android:textSize="12sp" />
 
-
-                    <ImageView
-                        android:id="@+id/imageViewLike"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/like" />
-
-                    <TextView
-                        android:id="@+id/textViewLike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:text="like"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <!-- Dislike -->
-                <LinearLayout
-                    android:id="@+id/linearLayoutDislikeVideo"
+                <TextView
+                    android:id="@+id/textViewVideoViewCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@+id/linearLayoutLikeVideo"
-                    android:layout_toRightOf="@+id/linearLayoutLikeVideo"
-                    android:background="@drawable/button_flat_selector"
-                    android:clickable="true"
-                    android:padding="2dp">
-
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/dislike" />
-
-                </LinearLayout>
+                    android:layout_below="@+id/textViewVideoPublishDate"
+                    android:layout_marginTop="2dp"
+                    android:text="301 views"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
-                    android:id="@+id/relativeLayoutLoadingRating"
-                    android:layout_width="103dp"
-                    android:layout_height="36dp"
-                    android:visibility="gone">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true">
 
-                    <ProgressBar
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_centerInParent="true" />
+                    <!-- Like -->
+                    <LinearLayout
+                        android:id="@+id/linearLayoutLikeVideo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_flat_selector"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+
+                        <ImageView
+                            android:id="@+id/imageViewLike"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/like" />
+
+                        <TextView
+                            android:id="@+id/textViewLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginRight="2dp"
+                            android:text="like"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <!-- Dislike -->
+                    <LinearLayout
+                        android:id="@+id/linearLayoutDislikeVideo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@+id/linearLayoutLikeVideo"
+                        android:layout_toRightOf="@+id/linearLayoutLikeVideo"
+                        android:background="@drawable/button_flat_selector"
+                        android:clickable="true"
+                        android:padding="2dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/dislike" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayoutLoadingRating"
+                        android:layout_width="103dp"
+                        android:layout_height="36dp"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
-            </RelativeLayout>
+                </RelativeLayout>
+
 
             <!-- Description -->
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/textViewVideoViewCount"
-                android:layout_marginTop="10dp">
+                android:layout_below="@+id/relativeLayoutVideoQuickInfo"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp">
 
                 <TextView
                     android:id="@+id/textViewVideoDescription"
@@ -199,7 +215,9 @@
                     android:paddingBottom="10dp"
                     android:textColor="#666"
                     android:textColorLink="#38afd1"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:alpha=".6"
+                    android:text="alksdka hsdakdh aksdj"/>
 
             </ScrollView>
 
