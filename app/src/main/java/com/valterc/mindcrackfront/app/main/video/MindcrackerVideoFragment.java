@@ -53,6 +53,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     private String mindrackerId;
     private String videoId;
+    private boolean setActionBarLogo;
     private Typeface typefaceLight;
     private Typeface typefaceNormal;
     private boolean fullscreen;
@@ -79,6 +80,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         Bundle args = new Bundle();
         args.putString(PARAM_MINDCRACKER_ID, mindcrackerId);
         args.putString(PARAM_VIDEO_ID, videoId);
+        args.putBoolean(PARAM_SET_AB_LOGO, setActionBarLogo);
         fragment.setArguments(args);
 
         return fragment;
@@ -94,9 +96,11 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         if (getArguments() != null) {
             mindrackerId = getArguments().getString(PARAM_MINDCRACKER_ID);
             videoId = getArguments().getString(PARAM_VIDEO_ID);
+            setActionBarLogo = getArguments().getBoolean(PARAM_SET_AB_LOGO);
         } else if (savedInstanceState != null) {
             mindrackerId = savedInstanceState.getString(PARAM_MINDCRACKER_ID);
             videoId = savedInstanceState.getString(PARAM_VIDEO_ID);
+            setActionBarLogo = savedInstanceState.getBoolean(PARAM_SET_AB_LOGO);
 
             if (mindrackerId == null || videoId == null) {
                 OnBackKeyPressed();
@@ -360,6 +364,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
 
         rating = response;
+        //TODO: Set layout to rating state
     }
 
     @Override
@@ -368,16 +373,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         linearLayoutLike.setVisibility(View.VISIBLE);
         linearLayoutDislike.setVisibility(View.VISIBLE);
 
-        /*
-        if (TextUtils.isEmpty(videoId)) {
-            if (!MindcrackFrontApplication.getYoutubeManager().isAuthenticated()) {
-                AuthenticationResult authenticationResult = MindcrackFrontApplication.getYoutubeManager().authenticate();
-                if (authenticationResult.getIntentChooseAccount() != null) {
-                    getActivity().startActivityForResult(authenticationResult.getIntentChooseAccount(), MainActivity.REQUEST_CODE_SELECT_ACCOUNT);
-                }
-            }
-        }
-        */
         if (!TextUtils.isEmpty(videoId) && videoId.equals(this.videoId)) {
             this.rating = "like";
             linearLayoutLike.setAlpha(1);
@@ -405,7 +400,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private boolean dislikesVideo() {
         return !TextUtils.isEmpty(rating) && rating.equals("dislike");
     }
-
 
     @Override
     public void onRateVideoComplete(String videoId, String rate) {
