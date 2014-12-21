@@ -253,7 +253,10 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     @Override
     public void restoreContext(MindcrackActionBarFragment actionBarFragment) {
         setUpFavoriteButton();
-        mindcrackActionBarFragment.setCenterImage(bitmapCenterLogo);
+
+        if (bitmapCenterLogo != null) {
+            mindcrackActionBarFragment.setCenterImage(bitmapCenterLogo);
+        }
     }
 
     @Override

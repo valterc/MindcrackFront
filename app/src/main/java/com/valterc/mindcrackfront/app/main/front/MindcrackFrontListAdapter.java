@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.mopub.mobileads.MoPubView;
 import com.valterc.WebImageView;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.utils.DateFormatter;
 import com.valterc.mindcrackfront.app.youtube.GDataYoutubeVideo;
 
 import java.text.SimpleDateFormat;
@@ -28,19 +29,11 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MindcrackFrontListItem> items;
     private Typeface typefaceLight;
-    private SimpleDateFormat dateFormat;
 
     public MindcrackFrontListAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
         typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
-
-        if (DateFormat.is24HourFormat(context)) {
-            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'HH':'mm");
-        } else {
-            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'hh':'mma");
-        }
-        dateFormat.setTimeZone(TimeZone.getDefault());
     }
 
     @Override
@@ -109,7 +102,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         videoItemViewHolder.webImageViewVideo.setImageSource(item.video.getThumbnailMediumUrl());
         videoItemViewHolder.imageViewUserLogo.setImageResource(item.video.getMindcracker().getImageResourceId());
         videoItemViewHolder.textViewUserName.setText(item.video.getMindcracker().getName());
-        videoItemViewHolder.textViewVideoPublishDate.setText(dateFormat.format(item.video.getPublishDate()));
+        videoItemViewHolder.textViewVideoPublishDate.setText(DateFormatter.format(item.video.getPublishDate()));
         videoItemViewHolder.textViewVideoTitle.setText(item.video.getTitle());
 
         return view;

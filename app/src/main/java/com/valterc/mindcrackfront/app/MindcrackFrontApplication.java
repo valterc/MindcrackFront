@@ -1,15 +1,11 @@
 package com.valterc.mindcrackfront.app;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.os.Bundle;
 
-import com.google.android.gms.auth.GoogleAuthException;
 import com.valterc.data.cache.Cache;
 import com.valterc.mindcrackfront.app.data.DataManager;
 import com.valterc.mindcrackfront.app.data.Settings;
-import com.valterc.mindcrackfront.app.main.MainActivity;
+import com.valterc.mindcrackfront.app.utils.DateFormatter;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 
 /**
@@ -60,6 +56,8 @@ public class MindcrackFrontApplication extends Application {
         youtubeManager = new YoutubeManager(getApplicationContext());
         settings = new Settings(getApplicationContext());
         cache = Cache.getInstance(getApplicationContext());
+
+        DateFormatter.setUp(getApplicationContext());
 
         super.onCreate();
     }

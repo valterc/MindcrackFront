@@ -34,6 +34,7 @@ import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.main.MainActivity;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarContextHolder;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
+import com.valterc.mindcrackfront.app.utils.DateFormatter;
 import com.valterc.mindcrackfront.app.youtube.AuthenticationResult;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 import com.valterc.mindcrackfront.app.youtube.tasks.DislikeVideoAsyncTask;
@@ -67,7 +68,6 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private Typeface typefaceLight;
     private Typeface typefaceNormal;
     private boolean fullscreen;
-    private SimpleDateFormat dateFormat;
     private String rating;
     private Video video;
 
@@ -123,15 +123,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         typefaceNormal = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
 
-        if (DateFormat.is24HourFormat(getActivity())) {
-            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'HH':'mm");
-        } else {
-            dateFormat = new SimpleDateFormat("dd' of 'MMMM' at 'hh':'mma");
-        }
-        dateFormat.setTimeZone(TimeZone.getDefault());
-
         this.mindcrackActionBarFragment = (MindcrackActionBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentMindcrackActionBar);
-
         mindcrackActionBarFragment.setContextHolder(this);
     }
 
@@ -298,7 +290,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         this.video = response;
 
         textViewVideoTitle.setText(response.getSnippet().getTitle());
-        textViewVideoPublishDate.setText(dateFormat.format(new Date(response.getSnippet().getPublishedAt().getValue())));
+        textViewVideoPublishDate.setText(DateFormatter.format(new Date(response.getSnippet().getPublishedAt().getValue())));
 
         if (response.getStatistics() != null && response.getStatistics().getViewCount() != null) {
             textViewVideoViewCount.setText(response.getStatistics().getViewCount().toString() + " views");
