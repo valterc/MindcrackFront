@@ -35,7 +35,6 @@ public class MainActivity extends ActionBarActivity
 
     public static final int REQUEST_CODE_SELECT_ACCOUNT = 0x2140;
     public static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 0x2141;
-
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
@@ -76,10 +75,15 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(Mindcracker mindcracker) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container);
+        if (fragment != null && fragment instanceof MindcrackerVideoFragment){
+            ((MindcrackerVideoFragment)fragment).forceDestroy();
+        }
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, MindcrackerListFragment.newInstance(mindcracker.getId()))
                 .commit();
-
     }
 
     @Override
@@ -91,7 +95,6 @@ public class MainActivity extends ActionBarActivity
     public void showVideo(String mindcrackerId, String videoId) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         fragmentManager.beginTransaction()
                 .add(R.id.container, MindcrackerVideoFragment.newInstance(mindcrackerId, videoId, false))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

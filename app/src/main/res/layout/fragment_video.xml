@@ -8,6 +8,7 @@
     tools:context=".main.video.MindcrackerVideoFragment">
 
     <RelativeLayout
+        android:id="@+id/relativeLayoutTopSpace"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="#eaeaea" />

@@ -1,5 +1,6 @@
 package com.valterc.mindcrackfront.app.main.video;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -13,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -70,6 +72,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private boolean fullscreen;
     private String rating;
     private Video video;
+    private YouTubePlayer youTubePlayer;
 
     private View playerView;
     private View adViewWrapper;
@@ -85,7 +88,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private LinearLayout linearLayoutLike;
     private LinearLayout linearLayoutDislike;
     private View viewLoadingRating;
-
+    private View viewTopSpace;
 
     public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId, boolean setActionBarLogo) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
@@ -139,6 +142,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         adViewWrapper = view.findViewById(R.id.frameLayoutAd);
         adView = (MoPubView) view.findViewById(R.id.adview);
         View viewCloseAd = view.findViewById(R.id.linearLayoutCloseAd);
+
+        viewTopSpace = view.findViewById(R.id.relativeLayoutTopSpace);
 
         initVideoInfoViews(view);
 
@@ -260,6 +265,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         super.onDestroyView();
         adView.destroy();
 
+        mindcrackActionBarFragment.show();
+
         mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
         mindcrackActionBarFragment.setRightImageOnClickListener(null);
         mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
@@ -306,6 +313,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
 
+        this.youTubePlayer = youTubePlayer;
+
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         youTubePlayer.setOnFullscreenListener(this);
 
@@ -319,6 +328,10 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
         youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
         youTubePlayer.setPlayerStateChangeListener(this);
+
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            youTubePlayer.setFullscreen(true);
+        }
     }
 
     @Override
@@ -329,6 +342,9 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onFullscreen(boolean b) {
         fullscreen = b;
+        if (!b) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         updateLayout();
     }
 
@@ -347,16 +363,23 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         if (fullscreen) {
             playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+            mindcrackActionBarFragment.hide();
+            viewTopSpace.setVisibility(View.GONE);
         } else {
             playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
             playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+            mindcrackActionBarFragment.show();
+            viewTopSpace.setVisibility(View.VISIBLE);
         }
 
-        //TODO: Hide action bar and other UI Elements
     }
 
     @Override
     public boolean OnBackKeyPressed() {
+        if (fullscreen){
+            youTubePlayer.setFullscreen(false);
+            return true;
+        }
         getFragmentManager().beginTransaction().remove(this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitAllowingStateLoss();
         return true;
     }
@@ -482,6 +505,12 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
                 return true;
             }
         });
+    }
+
+    public void forceDestroy(){
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getFragmentManager().beginTransaction().remove(this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitAllowingStateLoss();
     }
 
     @Override

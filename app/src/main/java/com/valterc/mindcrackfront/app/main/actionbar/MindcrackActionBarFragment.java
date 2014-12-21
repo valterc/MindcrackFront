@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
     private Bitmap bitmapMindcrackLogo;
     private ArrayDeque<MindcrackActionBarContextHolder> contextHolderQueue;
 
+    private View viewActivityContent;
     private TextView textViewTitle;
     private ImageView imageViewCenter;
     private ImageSwitcher imageSwitcherRightImage;
@@ -128,6 +130,12 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
         imageSwitcherLeftImage.setImageResource(R.drawable.menu_button);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewActivityContent = getActivity().findViewById(R.id.drawer_layout);
     }
 
     public void setRightImageOnClickListener(View.OnClickListener listener){
@@ -256,4 +264,21 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
         return contextHolder != null && contextHolderQueue.contains(contextHolder);
     }
 
+    public void hide() {
+        if (getView() != null) {
+            getView().setVisibility(View.GONE);
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewActivityContent.getLayoutParams();
+            layoutParams.setMargins(layoutParams.leftMargin, 0, layoutParams.rightMargin, layoutParams.bottomMargin);
+            viewActivityContent.requestLayout();
+        }
+    }
+
+    public void show() {
+        if (getView() != null) {
+            getView().setVisibility(View.VISIBLE);
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewActivityContent.getLayoutParams();
+            layoutParams.setMargins(layoutParams.leftMargin, getResources().getDimensionPixelSize(R.dimen.action_bar_content_margin), layoutParams.rightMargin, layoutParams.bottomMargin);
+            viewActivityContent.requestLayout();
+        }
+    }
 }
