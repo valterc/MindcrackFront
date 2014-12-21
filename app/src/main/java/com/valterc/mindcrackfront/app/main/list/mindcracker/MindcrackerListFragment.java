@@ -25,6 +25,7 @@ import com.valterc.data.download.DownloadImageRequest;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
+import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarContextHolder;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask;
 
@@ -33,7 +34,7 @@ import static com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask.*
 /**
  * Created by Valter on 24/05/2014.
  */
-public class MindcrackerListFragment extends Fragment implements GetChannelListener, AdapterView.OnItemClickListener {
+public class MindcrackerListFragment extends Fragment implements GetChannelListener, AdapterView.OnItemClickListener, MindcrackActionBarContextHolder {
 
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
 
@@ -53,6 +54,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     private Mindcracker mindcracker;
     private Channel channel;
     private Typeface typefaceLight;
+    private Bitmap bitmapCenterLogo;
 
     private ListView listView;
     private View viewLoading;
@@ -166,8 +168,11 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         new DownloadImageAsyncTask().execute(new DownloadImageRequest(this.channel.getSnippet().getThumbnails().getMedium().getUrl(), new DownloadImageListener() {
             @Override
             public void OnDownloadComplete(String imageUrl, boolean error, Bitmap bitmap) {
-                if (!error){
-                    mindcrackActionBarFragment.setCenterImage(bitmap);
+                if (!error) {
+                    bitmapCenterLogo = bitmap;
+                    if (mindcrackActionBarFragment.isCurrentContextHolder(MindcrackerListFragment.this)) {
+                        mindcrackActionBarFragment.setCenterImage(bitmap);
+                    }
                 }
             }
         }));
@@ -179,9 +184,13 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
 
     private void setUpFavoriteButton() {
 
+        if (!mindcrackActionBarFragment.isContextHolder(this)) {
+            mindcrackActionBarFragment.setContextHolder(this);
+        }
+
         mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
 
-        if (MindcrackFrontApplication.getDataManager().isMindcrackerFavorite(mindcracker)){
+        if (MindcrackFrontApplication.getDataManager().isMindcrackerFavorite(mindcracker)) {
             mindcrackActionBarFragment.setRightImageResource(R.drawable.heart);
             mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
         } else {
@@ -192,7 +201,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         mindcrackActionBarFragment.setRightImageOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MindcrackFrontApplication.getDataManager().isMindcrackerFavorite(mindcracker)){
+                if (MindcrackFrontApplication.getDataManager().isMindcrackerFavorite(mindcracker)) {
                     mindcrackActionBarFragment.setRightImageResource(R.drawable.heart_sad);
                     mindcrackActionBarFragment.setRightImageInAnimation(R.anim.beat_fade_in);
                     MindcrackFrontApplication.getDataManager().removeFavorite(mindcracker);
@@ -208,7 +217,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
             @Override
             public boolean onLongClick(View v) {
                 Toast.makeText(getActivity(), "Favorite", Toast.LENGTH_SHORT).show();
-                return false;
+                return true;
             }
         });
 
@@ -221,6 +230,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
         mindcrackActionBarFragment.setRightImageResource(0);
         mindcrackActionBarFragment.resetCenterImage();
+        mindcrackActionBarFragment.removeContextHolder(this);
         super.onDetach();
     }
 
@@ -238,5 +248,19 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         if (item != null && listener != null) {
             listener.showVideo(mindcrackerId, item.playlistItem.getSnippet().getResourceId().getVideoId());
         }
+    }
+
+    @Override
+    public void restoreContext(MindcrackActionBarFragment actionBarFragment) {
+        setUpFavoriteButton();
+        mindcrackActionBarFragment.setCenterImage(bitmapCenterLogo);
+    }
+
+    @Override
+    public void contextLost(MindcrackActionBarFragment actionBarFragment) {
+        mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
+        mindcrackActionBarFragment.setRightImageOnClickListener(null);
+        mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
+        mindcrackActionBarFragment.setRightImageResource(0);
     }
 }

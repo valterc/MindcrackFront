@@ -1,6 +1,7 @@
 package com.valterc.mindcrackfront.app.main.video;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,24 +17,33 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
 import com.mopub.mobileads.MoPubView;
 import com.valterc.IFragmentBack;
+import com.valterc.data.download.DownloadImageAsyncTask;
+import com.valterc.data.download.DownloadImageListener;
+import com.valterc.data.download.DownloadImageRequest;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.main.MainActivity;
+import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarContextHolder;
+import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.youtube.AuthenticationResult;
 import com.valterc.mindcrackfront.app.youtube.YoutubeManager;
 import com.valterc.mindcrackfront.app.youtube.tasks.DislikeVideoAsyncTask;
+import com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoAsyncTask.*;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetVideoRatingAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.LikeVideoAsyncTask;
 import com.valterc.mindcrackfront.app.youtube.tasks.RateVideoAsyncTask;
+import com.vcutils.IntentUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,7 +52,7 @@ import java.util.TimeZone;
 /**
  * Created by Valter on 24/05/2014.
  */
-public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoListener, GetVideoRatingAsyncTask.GetVideoRatingListener, LikeVideoAsyncTask.LikeVideoListener, DislikeVideoAsyncTask.DislikeVideoListener, RateVideoAsyncTask.RateVideoListener {
+public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoListener, GetVideoRatingAsyncTask.GetVideoRatingListener, LikeVideoAsyncTask.LikeVideoListener, DislikeVideoAsyncTask.DislikeVideoListener, RateVideoAsyncTask.RateVideoListener, MindcrackActionBarContextHolder {
 
     private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
 
@@ -59,12 +69,14 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private boolean fullscreen;
     private SimpleDateFormat dateFormat;
     private String rating;
+    private Video video;
 
     private View playerView;
     private View adViewWrapper;
     private MoPubView adView;
     private View viewLoading;
     private View viewErrorLoading;
+    private MindcrackActionBarFragment mindcrackActionBarFragment;
 
     private TextView textViewVideoTitle;
     private TextView textViewVideoPublishDate;
@@ -73,6 +85,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private LinearLayout linearLayoutLike;
     private LinearLayout linearLayoutDislike;
     private View viewLoadingRating;
+
 
     public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId, boolean setActionBarLogo) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
@@ -117,6 +130,9 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
         dateFormat.setTimeZone(TimeZone.getDefault());
 
+        this.mindcrackActionBarFragment = (MindcrackActionBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentMindcrackActionBar);
+
+        mindcrackActionBarFragment.setContextHolder(this);
     }
 
     @Override
@@ -222,6 +238,28 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         super.onViewCreated(view, savedInstanceState);
 
         new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, this));
+        if (setActionBarLogo){
+            GetChannelAsyncTask.GetChannelInfo channelInfo = new GetChannelAsyncTask.GetChannelInfo(new GetChannelAsyncTask.GetChannelListener() {
+                @Override
+                public void onGetChannelComplete(Channel response) {
+                    if (response == null){
+                        return;
+                    }
+
+                    new DownloadImageAsyncTask().execute(new DownloadImageRequest(response.getSnippet().getThumbnails().getMedium().getUrl(), new DownloadImageListener() {
+                        @Override
+                        public void OnDownloadComplete(String imageUrl, boolean error, Bitmap bitmap) {
+                            if (!error) {
+                                if (mindcrackActionBarFragment.isCurrentContextHolder(MindcrackerVideoFragment.this)) {
+                                    mindcrackActionBarFragment.setCenterImage(bitmap);
+                                }
+                            }
+                        }
+                    }));
+                }
+            }, MindcrackFrontApplication.getDataManager().getMindcracker(mindrackerId).getYoutubeId());
+            new GetChannelAsyncTask().execute(channelInfo);
+        }
         //new GetVideoRatingAsyncTask().execute(new GetVideoRatingAsyncTask.GetVideoRatingInfo(MindcrackerVideoFragment.this, videoId));
     }
 
@@ -230,12 +268,20 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         super.onDestroyView();
         adView.destroy();
 
+        mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
+        mindcrackActionBarFragment.setRightImageOnClickListener(null);
+        mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
+        mindcrackActionBarFragment.setRightImageResource(0);
+        if (setActionBarLogo) {
+            mindcrackActionBarFragment.resetCenterImage();
+        }
+        mindcrackActionBarFragment.removeContextHolder(this);
+
         try {
             YouTubePlayerSupportFragment f = (YouTubePlayerSupportFragment) getFragmentManager().findFragmentById(R.id.fragmentYoutube);
             if (f != null)
                 getFragmentManager().beginTransaction().remove(f).commit();
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
     }
 
@@ -249,6 +295,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             return;
         }
 
+        this.video = response;
+
         textViewVideoTitle.setText(response.getSnippet().getTitle());
         textViewVideoPublishDate.setText(dateFormat.format(new Date(response.getSnippet().getPublishedAt().getValue())));
 
@@ -259,6 +307,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
 
         textViewVideoDescription.setText(response.getSnippet().getDescription());
+
+        setUpActionBarButton();
     }
 
     @Override
@@ -364,7 +414,16 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         }
 
         rating = response;
-        //TODO: Set layout to rating state
+        if (rating.equals("none")) {
+            linearLayoutLike.setAlpha(1f);
+            linearLayoutDislike.setAlpha(1f);
+        } else if (rating.equals("like")) {
+            linearLayoutLike.setAlpha(1f);
+            linearLayoutDislike.setAlpha(.3f);
+        } else {
+            linearLayoutLike.setAlpha(.3f);
+            linearLayoutDislike.setAlpha(1f);
+        }
     }
 
     @Override
@@ -401,6 +460,38 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         return !TextUtils.isEmpty(rating) && rating.equals("dislike");
     }
 
+    private void setUpActionBarButton() {
+        if (video == null) {
+            return;
+        }
+
+        mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
+        mindcrackActionBarFragment.setRightImageResource(R.drawable.share);
+        mindcrackActionBarFragment.setRightImageOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(video.getSnippet().getTitle());
+                stringBuilder.append(": http://youtu.be/");
+                stringBuilder.append(video.getId());
+
+                if (stringBuilder.length() + " via http://j.mp/mindcapp".length() <= 140)
+                    stringBuilder.append(" via http://j.mp/mindcapp");
+
+                IntentUtils.shareText(getActivity(), stringBuilder.toString());
+            }
+        });
+
+        mindcrackActionBarFragment.setRightImageOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getActivity(), "Share video", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+    }
+
     @Override
     public void onRateVideoComplete(String videoId, String rate) {
         viewLoadingRating.setVisibility(View.GONE);
@@ -411,6 +502,22 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             rating = rate;
             linearLayoutLike.setAlpha(1);
             linearLayoutDislike.setAlpha(1);
+        }
+    }
+
+    @Override
+    public void restoreContext(MindcrackActionBarFragment actionBarFragment) {
+        setUpActionBarButton();
+    }
+
+    @Override
+    public void contextLost(MindcrackActionBarFragment actionBarFragment) {
+        mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
+        mindcrackActionBarFragment.setRightImageOnClickListener(null);
+        mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
+        mindcrackActionBarFragment.setRightImageResource(0);
+        if (setActionBarLogo) {
+            mindcrackActionBarFragment.resetCenterImage();
         }
     }
 }

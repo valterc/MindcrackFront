@@ -1,9 +1,7 @@
 package com.valterc.mindcrackfront.app.main.actionbar;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -11,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +26,7 @@ import com.valterc.mindcrackfront.app.main.navigationdrawer.NavigationDrawerStat
 import com.valterc.utils.ImageUtils;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 
 /**
  * Created by Valter on 08/11/2014.
@@ -38,6 +36,7 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
     private boolean navigationDrawerOpen;
     private Typeface typefaceText;
     private Bitmap bitmapMindcrackLogo;
+    private ArrayDeque<MindcrackActionBarContextHolder> contextHolderQueue;
 
     private TextView textViewTitle;
     private ImageView imageViewCenter;
@@ -57,9 +56,7 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
         SVG svg = null;
         try {
             svg = SVG.getFromAsset(getActivity().getAssets(), "mindcrack_logo.svg");
-        } catch (SVGParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SVGParseException | IOException e) {
             e.printStackTrace();
         }
 
@@ -74,6 +71,8 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
 
         drawerFragment = (NavigationDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         drawerFragment.setStateListener(this);
+
+        contextHolderQueue = new ArrayDeque<>();
     }
 
     @Override
@@ -180,6 +179,10 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
     }
 
     public void setCenterImage(Bitmap bitmap){
+        if (bitmap == null) {
+            resetCenterImage();
+        }
+
         Bitmap roundedBitmap = ImageUtils.getRoundBitmap(bitmap);
         TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{ imageViewCenter.getDrawable() == null ? new ColorDrawable(0x00FFFFFF) : imageViewCenter.getDrawable(), new BitmapDrawable(getResources(), roundedBitmap)});
         transitionDrawable.setCrossFadeEnabled(true);
@@ -212,6 +215,45 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
 
         imageSwitcherLeftImage.setImageResource(R.drawable.menu_button);
         navigationDrawerOpen = false;
+    }
+
+    public void setContextHolder(MindcrackActionBarContextHolder contextHolder){
+        if (contextHolder == null){
+            return;
+        }
+
+        if (!contextHolderQueue.isEmpty()){
+            MindcrackActionBarContextHolder lastContextHolder = contextHolderQueue.peekFirst();
+            lastContextHolder.contextLost(this);
+        }
+
+        contextHolderQueue.addFirst(contextHolder);
+    }
+
+    public void removeContextHolder(MindcrackActionBarContextHolder contextHolder){
+        if (contextHolder == null)
+            return;
+
+        if (!contextHolderQueue.contains(contextHolder)){
+            return;
+        }
+
+        if (contextHolderQueue.peekFirst().equals(contextHolder)){
+            contextHolderQueue.removeFirstOccurrence(contextHolder);
+            if (!contextHolderQueue.isEmpty()) {
+                contextHolderQueue.peekFirst().restoreContext(this);
+            }
+        } else {
+            contextHolderQueue.removeFirstOccurrence(contextHolder);
+        }
+    }
+
+    public boolean isCurrentContextHolder(MindcrackActionBarContextHolder contextHolder){
+        return contextHolder != null && !contextHolderQueue.isEmpty() && contextHolderQueue.peekFirst().equals(contextHolder);
+    }
+
+    public boolean isContextHolder(MindcrackActionBarContextHolder contextHolder){
+        return contextHolder != null && contextHolderQueue.contains(contextHolder);
     }
 
 }
