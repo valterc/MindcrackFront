@@ -34,8 +34,9 @@
 
             <com.mopub.mobileads.MoPubView
                 android:id="@+id/adview"
-                android:layout_width="fill_parent"
-                android:layout_height="250dp" />
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutCloseAd"
@@ -68,6 +69,12 @@
         </FrameLayout>
 
     </RelativeLayout>
+
+    <com.mopub.mobileads.MoPubView
+        android:id="@+id/adview_banner"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"/>
 
     <!-- Video Info -->
     <RelativeLayout

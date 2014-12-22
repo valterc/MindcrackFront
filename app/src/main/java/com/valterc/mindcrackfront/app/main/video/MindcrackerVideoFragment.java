@@ -26,6 +26,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.Video;
+import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.valterc.IFragmentBack;
 import com.valterc.data.download.DownloadImageAsyncTask;
@@ -58,6 +59,7 @@ import java.util.TimeZone;
 public class MindcrackerVideoFragment extends Fragment implements IFragmentBack, YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.PlayerStateChangeListener, GetVideoListener, GetVideoRatingAsyncTask.GetVideoRatingListener, LikeVideoAsyncTask.LikeVideoListener, DislikeVideoAsyncTask.DislikeVideoListener, RateVideoAsyncTask.RateVideoListener, MindcrackActionBarContextHolder {
 
     private static final String MOPUB_VIDEO_AD_ID = "486c4437924d44519385a9818634916e";
+    private static final String MOPUB_VIDEO_BANNER_AD_ID = "b2e649962b144b02913b7e9991f791ee";
 
     private static final String PARAM_MINDCRACKER_ID = "mindcrackerId";
     private static final String PARAM_VIDEO_ID = "videoId";
@@ -77,6 +79,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private View playerView;
     private View adViewWrapper;
     private MoPubView adView;
+    private MoPubView adViewBanner;
     private View viewLoading;
     private View viewErrorLoading;
     private MindcrackActionBarFragment mindcrackActionBarFragment;
@@ -142,6 +145,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         adViewWrapper = view.findViewById(R.id.frameLayoutAd);
         adView = (MoPubView) view.findViewById(R.id.adview);
         View viewCloseAd = view.findViewById(R.id.linearLayoutCloseAd);
+        adViewBanner = (MoPubView) view.findViewById(R.id.adview_banner);
 
         viewTopSpace = view.findViewById(R.id.relativeLayoutTopSpace);
 
@@ -174,6 +178,34 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         });
 
         adView.setAdUnitId(MOPUB_VIDEO_AD_ID);
+        adViewBanner.setAdUnitId(MOPUB_VIDEO_BANNER_AD_ID);
+
+        adViewBanner.setBannerAdListener(new MoPubView.BannerAdListener() {
+            @Override
+            public void onBannerLoaded(MoPubView banner) {
+                adViewBanner.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
+                adViewBanner.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onBannerClicked(MoPubView banner) {
+
+            }
+
+            @Override
+            public void onBannerExpanded(MoPubView banner) {
+
+            }
+
+            @Override
+            public void onBannerCollapsed(MoPubView banner) {
+
+            }
+        });
 
         return view;
     }
@@ -411,6 +443,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         Log.d(getClass().getSimpleName(), "onVideoEnded");
         adViewWrapper.setVisibility(View.VISIBLE);
         adView.loadAd();
+        adViewBanner.loadAd();
     }
 
     @Override
