@@ -92,6 +92,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private LinearLayout linearLayoutDislike;
     private View viewLoadingRating;
     private View viewTopSpace;
+    private View viewYoutubeApp;
 
     public static MindcrackerVideoFragment newInstance(String mindcrackerId, String videoId, boolean setActionBarLogo) {
         MindcrackerVideoFragment fragment = new MindcrackerVideoFragment();
@@ -174,6 +175,19 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
                 viewErrorLoading.setVisibility(View.GONE);
                 viewLoading.setVisibility(View.VISIBLE);
                 new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, MindcrackerVideoFragment.this));
+            }
+        });
+
+        viewYoutubeApp = view.findViewById(R.id.relativeLayoutYoutubeApp);
+        viewYoutubeApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    IntentUtils.actionView(getActivity(), "market://details?id=com.google.android.youtube");
+                } catch (Exception ignore){
+                    IntentUtils.actionView(getActivity(), "http://play.google.com/store/apps/details?id=com.google.android.youtube");
+                }
+
             }
         });
 
@@ -345,6 +359,10 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
 
+        if (viewYoutubeApp.getVisibility() != View.GONE){
+            viewYoutubeApp.setVisibility(View.GONE);
+        }
+
         this.youTubePlayer = youTubePlayer;
 
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
@@ -368,7 +386,9 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
+        if (youTubeInitializationResult == YouTubeInitializationResult.SERVICE_MISSING){
+            viewYoutubeApp.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

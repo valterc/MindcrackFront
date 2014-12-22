@@ -1,12 +1,12 @@
 package com.valterc.mindcrackfront.app.main.navigationdrawer;
 
 import android.graphics.Color;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
@@ -38,7 +38,6 @@ public class NavigationDrawerFragment extends ListFragment {
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
     private NavigationDrawerListener mListener;
-    private ActionBarDrawerToggle mDrawerToggle;
     private NavigationDrawerStateListener mStateListener;
 
     private DrawerLayout mDrawerLayout;
@@ -94,11 +93,31 @@ public class NavigationDrawerFragment extends ListFragment {
         mDrawerLayout = drawerLayout;
 
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
 
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, R.drawable.ic_drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if (!isAdded()) {
+                    return;
+                }
+
+                if (!mUserLearnedDrawer) {
+                    mUserLearnedDrawer = true;
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+                }
+
+                if (mStateListener != null) {
+                    mStateListener.onOpen();
+                }
+            }
+
             @Override
             public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
                 if (!isAdded()) {
                     return;
                 }
@@ -108,39 +127,11 @@ public class NavigationDrawerFragment extends ListFragment {
             }
 
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
+            public void onDrawerStateChanged(int newState) {
 
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).commit();
-                }
-
-                if (mStateListener != null) {
-                    mStateListener.onOpen();
-                }
-
-            }
-        };
-
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
-            if (mStateListener != null) {
-                mStateListener.onOpen();
-            }
-        }
-
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
             }
         });
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
     }
 
     private void selectItem(int position) {
@@ -180,7 +171,6 @@ public class NavigationDrawerFragment extends ListFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     public void setStateListener(NavigationDrawerStateListener stateListener) {
