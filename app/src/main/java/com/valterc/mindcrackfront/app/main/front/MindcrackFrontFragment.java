@@ -178,4 +178,9 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
 
     }
 
+    public void setIsStreamingHeaderVisible(boolean headerVisible) {
+        listAdapter.setUseMarginInFirstItem(!headerVisible);
+        listAdapter.notifyDataSetChanged();
+    }
+
 }

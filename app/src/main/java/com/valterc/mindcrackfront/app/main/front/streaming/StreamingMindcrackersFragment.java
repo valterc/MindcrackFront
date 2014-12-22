@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.main.front.MindcrackFrontFragment;
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask;
 import com.valterc.mindcrackfront.app.twitch.GetUsersStreamingAsyncTask.*;
 import com.valterc.mindcrackfront.app.twitch.TwitchAPI;
@@ -25,7 +26,7 @@ public class StreamingMindcrackersFragment extends Fragment implements GetUsersS
     private View view;
     private ExpandableGridView gridView;
 
-    public StreamingMindcrackersFragment(){
+    public StreamingMindcrackersFragment() {
 
     }
 
@@ -58,7 +59,7 @@ public class StreamingMindcrackersFragment extends Fragment implements GetUsersS
 
     @Override
     public void onGetUsersStreamingComplete(String[] users) {
-        if (users != null && users.length > 0){
+        if (users != null && users.length > 0) {
             gridView.setAdapter(new StreamingMindcrackersAdapter(getActivity(), users));
             view.setVisibility(View.VISIBLE);
         } else {
@@ -68,6 +69,10 @@ public class StreamingMindcrackersFragment extends Fragment implements GetUsersS
             //Test code
             //gridView.setAdapter(new StreamingMindcrackersAdapter(getActivity(), new String[]{"sethbling", "ethotv", "sevadus", "anderzel"}));
             //view.setVisibility(View.VISIBLE);
+        }
+
+        if (getParentFragment() != null && getParentFragment() instanceof MindcrackFrontFragment) {
+            ((MindcrackFrontFragment) getParentFragment()).setIsStreamingHeaderVisible(users != null && users.length > 0);
         }
     }
 }

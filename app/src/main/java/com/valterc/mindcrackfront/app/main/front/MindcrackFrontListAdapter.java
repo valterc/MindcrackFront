@@ -29,6 +29,7 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MindcrackFrontListItem> items;
     private Typeface typefaceLight;
+    private Boolean useMarginInFirstItem;
 
     public MindcrackFrontListAdapter(Context context) {
         this.context = context;
@@ -121,6 +122,14 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         TextView textView = (TextView) view.findViewById(R.id.textViewTitle);
         textView.setText(item.title);
 
+        View viewSpace = view.findViewById(R.id.spaceTitleTop);
+
+        if (position == 0 && useMarginInFirstItem) {
+            viewSpace.setVisibility(View.VISIBLE);
+        } else {
+            viewSpace.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
@@ -148,9 +157,13 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
     }
 
 
-    public void SetItems(ArrayList<MindcrackFrontListItem> items){
+    public void SetItems(ArrayList<MindcrackFrontListItem> items) {
         this.items = items;
         super.notifyDataSetChanged();
+    }
+
+    public void setUseMarginInFirstItem(Boolean useMarginInFirstItem) {
+        this.useMarginInFirstItem = useMarginInFirstItem;
     }
 
     private class FrontAdItemViewHolder {
