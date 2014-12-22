@@ -380,6 +380,8 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             youTubePlayer.setFullscreen(false);
             return true;
         }
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getFragmentManager().beginTransaction().remove(this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitAllowingStateLoss();
         return true;
     }
