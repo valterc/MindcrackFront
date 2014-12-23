@@ -15,6 +15,7 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.valterc.IFragmentBack;
 import com.valterc.mindcrackfront.app.ExceptionHandlerActivity;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
@@ -29,6 +30,7 @@ import com.valterc.mindcrackfront.app.main.navigationdrawer.list.NavigationDrawe
 import com.valterc.mindcrackfront.app.main.settings.SettingsFragment;
 import com.valterc.mindcrackfront.app.main.video.MindcrackerVideoFragment;
 import com.valterc.mindcrackfront.app.splash.SplashFragment;
+import com.valterc.mindcrackfront.app.youtube.AuthenticationResult;
 
 
 public class MainActivity extends ActionBarActivity
@@ -78,8 +80,8 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         Fragment fragment = fragmentManager.findFragmentById(R.id.container);
-        if (fragment != null && fragment instanceof MindcrackerVideoFragment){
-            ((MindcrackerVideoFragment)fragment).forceDestroy();
+        if (fragment != null && fragment instanceof MindcrackerVideoFragment) {
+            ((MindcrackerVideoFragment) fragment).forceDestroy();
         }
 
         fragmentManager.beginTransaction()
@@ -164,8 +166,20 @@ public class MainActivity extends ActionBarActivity
                 } else if (e instanceof UserRecoverableAuthIOException) {
                     UserRecoverableAuthIOException userRecoverableAuthIOException = (UserRecoverableAuthIOException) e;
                     startActivityForResult(userRecoverableAuthIOException.getIntent(), REQUEST_CODE_RECOVER_FROM_AUTH_ERROR);
+                } else if (e instanceof GoogleJsonResponseException) {
+                    GoogleJsonResponseException googleJsonResponseException = (GoogleJsonResponseException) e;
+                    if (googleJsonResponseException.getDetails().getCode() == 401) {
+                        if (!MindcrackFrontApplication.getYoutubeManager().isAuthenticated()) {
+                            AuthenticationResult authenticationResult = MindcrackFrontApplication.getYoutubeManager().authenticate();
+                            if (authenticationResult.getIntentChooseAccount() != null) {
+                                startActivityForResult(authenticationResult.getIntentChooseAccount(), MainActivity.REQUEST_CODE_SELECT_ACCOUNT);
+                            }
+                        }
+                    }
                 }
             }
+
+
         });
     }
 }
