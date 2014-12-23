@@ -11,6 +11,7 @@ public class NavigationDrawerListItem {
     public static final int TYPE_EMPTY = 1;
     public static final int TYPE_FAVORITE = 2;
     public static final int TYPE_NORMAL = 3;
+    public static final int TYPE_LINK = 4;
 
     public int type;
     public Mindcracker mindcracker;

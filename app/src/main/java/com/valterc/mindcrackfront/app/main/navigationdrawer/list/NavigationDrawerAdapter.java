@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class NavigationDrawerAdapter extends BaseAdapter {
 
-    private static final int TYPE_COUNT = 4;
+    private static final int TYPE_COUNT = 5;
 
     private Context context;
     private DataManager dataManager;
@@ -33,9 +33,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
     private BindableListener favoriteMindcrackersListener;
     private BindableListener mindcrackersListener;
 
-    public NavigationDrawerAdapter(Context context){
+    public NavigationDrawerAdapter(Context context) {
         this.context = context;
         this.dataManager = MindcrackFrontApplication.getDataManager();
+
+        //TODO: Load and set typeface on textviews
 
         buildListItems();
 
@@ -56,7 +58,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
             @Override
             public void onChange(String property, Object o, Object extra) {
-                if (extra != null){
+                if (extra != null) {
                     Integer inte = (Integer) extra;
                     if (inte == 1)
                         selectedPosition++;
@@ -78,7 +80,7 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         items = new ArrayList<>();
         items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_TITLE, "Favorites"));
 
-        if (this.dataManager.getFavoriteMindcrackers() == null || this.dataManager.getFavoriteMindcrackers().isEmpty()){
+        if (this.dataManager.getFavoriteMindcrackers() == null || this.dataManager.getFavoriteMindcrackers().isEmpty()) {
             items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_EMPTY));
         } else {
             for (int i = 0; i < this.dataManager.getFavoriteMindcrackers().size(); i++) {
@@ -94,11 +96,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
             items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_NORMAL, mindcracker));
         }
 
-        items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_TITLE, "Settings"));
-
+        items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_LINK, "Settings"));
+        items.add(new NavigationDrawerListItem(NavigationDrawerListItem.TYPE_LINK, "About"));
     }
 
-    public void setSelection(int position){
+    public void setSelection(int position) {
         selectedPosition = position;
         notifyDataSetChanged();
     }
@@ -125,7 +127,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        return getItemViewType(position) == NavigationDrawerListItem.TYPE_FAVORITE || getItemViewType(position) == NavigationDrawerListItem.TYPE_NORMAL;
+        return getItemViewType(position) == NavigationDrawerListItem.TYPE_FAVORITE ||
+                getItemViewType(position) == NavigationDrawerListItem.TYPE_NORMAL ||
+                getItemViewType(position) == NavigationDrawerListItem.TYPE_LINK;
     }
 
     @Override
@@ -138,18 +142,23 @@ public class NavigationDrawerAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         NavigationDrawerListItem item = (NavigationDrawerListItem) getItem(i);
-        switch (item.type)  {
-            case 0: return getTitleView(i, view, viewGroup);
-            case 1: return getEmptyView(i, view, viewGroup);
-            case 2: return getFavoriteView(i, view, viewGroup);
-            case 3: return getNormalView(i, view, viewGroup);
+        switch (item.type) {
+            case 0:
+                return getTitleView(i, view, viewGroup);
+            case 1:
+                return getEmptyView(i, view, viewGroup);
+            case 2:
+                return getFavoriteView(i, view, viewGroup);
+            case 3:
+                return getNormalView(i, view, viewGroup);
+            case 4:
+                return getLinkView(i, view, viewGroup);
         }
 
         return null;
     }
 
-
-    private View getTitleView(int i, View view, ViewGroup viewGroup){
+    private View getTitleView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = View.inflate(context, R.layout.list_navigation_title, null);
         }
@@ -162,7 +171,20 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         return view;
     }
 
-    private View getEmptyView(int i, View view, ViewGroup viewGroup){
+    private View getLinkView(int i, View view, ViewGroup viewGroup) {
+        if (view == null) {
+            view = View.inflate(context, R.layout.list_navigation_title, null);
+        }
+
+        NavigationDrawerListItem m = (NavigationDrawerListItem) getItem(i);
+
+        TextView textViewTitle = (TextView) view.findViewById(R.id.textViewTitle);
+        textViewTitle.setText(m.title);
+
+        return view;
+    }
+
+    private View getEmptyView(int i, View view, ViewGroup viewGroup) {
 
         if (view == null) {
             view = View.inflate(context, R.layout.list_navigation_nofavorites, null);
@@ -171,9 +193,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         return view;
     }
 
-    private View getFavoriteView(int i, View view, ViewGroup viewGroup){
+    private View getFavoriteView(int i, View view, ViewGroup viewGroup) {
 
-        if (view == null){
+        if (view == null) {
             view = View.inflate(context, R.layout.list_navigation_mindcracker, null);
 
             FavoriteMindcrackerViewHolder viewHolder = new FavoriteMindcrackerViewHolder();
@@ -203,9 +225,9 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         return view;
     }
 
-    private View getNormalView(int i, View view, ViewGroup viewGroup){
+    private View getNormalView(int i, View view, ViewGroup viewGroup) {
 
-        if (view == null){
+        if (view == null) {
             view = View.inflate(context, R.layout.list_navigation_mindcracker, null);
 
             MindcrackersViewHolder viewHolder = new MindcrackersViewHolder();

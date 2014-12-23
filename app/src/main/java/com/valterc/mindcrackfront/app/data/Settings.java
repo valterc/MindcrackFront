@@ -39,9 +39,11 @@ public class Settings {
 
     private SharedPreferences sharedPreferences;
 
+    /* Settings */
     private Boolean showAds;
     private Boolean showSplashScreen;
     private long firstRunTimeStamp;
+    private Boolean autoLikeVideos;
 
     public Settings(Context context) {
         sharedPreferences = context.getSharedPreferences(SETTINGS_FILE_NAME, Context.MODE_PRIVATE);
@@ -148,6 +150,14 @@ public class Settings {
         this.firstRunTimeStamp = firstRunTimeStamp;
     }
 
+    public Boolean getAutoLikeVideos() {
+        return autoLikeVideos;
+    }
+
+    public void setAutoLikeVideos(Boolean autoLikeVideos) {
+        this.autoLikeVideos = autoLikeVideos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -156,6 +166,7 @@ public class Settings {
         Settings settings = (Settings) o;
 
         if (firstRunTimeStamp != settings.firstRunTimeStamp) return false;
+        if (!autoLikeVideos.equals(settings.autoLikeVideos)) return false;
         if (!showAds.equals(settings.showAds)) return false;
         if (!showSplashScreen.equals(settings.showSplashScreen)) return false;
 
@@ -167,6 +178,7 @@ public class Settings {
         int result = showAds.hashCode();
         result = 31 * result + showSplashScreen.hashCode();
         result = 31 * result + (int) (firstRunTimeStamp ^ (firstRunTimeStamp >>> 32));
+        result = 31 * result + autoLikeVideos.hashCode();
         return result;
     }
 }

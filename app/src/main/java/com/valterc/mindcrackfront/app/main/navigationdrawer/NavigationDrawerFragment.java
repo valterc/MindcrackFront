@@ -44,7 +44,6 @@ public class NavigationDrawerFragment extends ListFragment {
     private View mFragmentContainerView;
 
     private int mCurrentSelectedListPosition = 0;
-    private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
     public NavigationDrawerFragment() {
@@ -59,7 +58,6 @@ public class NavigationDrawerFragment extends ListFragment {
 
         if (savedInstanceState != null) {
             mCurrentSelectedListPosition = savedInstanceState.getInt(STATE_SELECTED_LIST_POSITION);
-            mFromSavedInstanceState = true;
         }
 
     }
@@ -82,6 +80,15 @@ public class NavigationDrawerFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         selectItem(position);
+
+        NavigationDrawerListItem item = (NavigationDrawerListItem) getListAdapter().getItem(position);
+        if (item.mindcracker != null) {
+            mListener.onNavigationDrawerItemSelected(item.mindcracker);
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        } else {
+            mListener.onNavigationDrawerItemSelected(item);
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
     }
 
     public boolean isDrawerOpen() {
@@ -136,14 +143,6 @@ public class NavigationDrawerFragment extends ListFragment {
 
     private void selectItem(int position) {
         ((NavigationDrawerAdapter) getListAdapter()).setSelection(position);
-        NavigationDrawerListItem item = (NavigationDrawerListItem) getListAdapter().getItem(position);
-        if (item.mindcracker != null) {
-            mListener.onNavigationDrawerItemSelected(item.mindcracker);
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        } else {
-            mListener.onNavigationDrawerItemSelected(item);
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.valterc.mindcrackfront.app.main.list.mindcracker.ShowVideoListener;
 import com.valterc.mindcrackfront.app.main.navigationdrawer.NavigationDrawerFragment;
 import com.valterc.mindcrackfront.app.main.navigationdrawer.NavigationDrawerListener;
 import com.valterc.mindcrackfront.app.main.navigationdrawer.list.NavigationDrawerListItem;
+import com.valterc.mindcrackfront.app.main.settings.SettingsFragment;
 import com.valterc.mindcrackfront.app.main.video.MindcrackerVideoFragment;
 import com.valterc.mindcrackfront.app.splash.SplashFragment;
 
@@ -88,7 +89,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerListItem item) {
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, new SettingsFragment())
+                .commit();
     }
 
     @Override
