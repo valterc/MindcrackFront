@@ -145,6 +145,10 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     @Override
     public void onGetChannelComplete(Channel response) {
 
+        if (isDetached() || getActivity() == null){
+            return;
+        }
+
         viewLoading.setVisibility(View.GONE);
 
         if (response == null) {

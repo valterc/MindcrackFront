@@ -184,7 +184,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             public void onClick(View v) {
                 try {
                     IntentUtils.actionView(getActivity(), "market://details?id=com.google.android.youtube");
-                } catch (Exception ignore){
+                } catch (Exception ignore) {
                     IntentUtils.actionView(getActivity(), "http://play.google.com/store/apps/details?id=com.google.android.youtube");
                 }
 
@@ -281,11 +281,11 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         super.onViewCreated(view, savedInstanceState);
 
         new GetVideoAsyncTask().execute(new GetVideoInfo(videoId, this));
-        if (setActionBarLogo){
+        if (setActionBarLogo) {
             GetChannelAsyncTask.GetChannelInfo channelInfo = new GetChannelAsyncTask.GetChannelInfo(new GetChannelAsyncTask.GetChannelListener() {
                 @Override
                 public void onGetChannelComplete(Channel response) {
-                    if (response == null){
+                    if (response == null) {
                         return;
                     }
 
@@ -333,6 +333,10 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onGetVideoComplete(Video response) {
 
+        if (isDetached() || getActivity() == null) {
+            return;
+        }
+
         viewLoading.setVisibility(View.GONE);
 
         if (response == null) {
@@ -359,7 +363,11 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
 
-        if (viewYoutubeApp.getVisibility() != View.GONE){
+        if (isDetached() || getActivity() == null) {
+            return;
+        }
+
+        if (viewYoutubeApp.getVisibility() != View.GONE) {
             viewYoutubeApp.setVisibility(View.GONE);
         }
 
@@ -379,14 +387,19 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
         youTubePlayer.setPlayerStateChangeListener(this);
 
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             youTubePlayer.setFullscreen(true);
         }
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        if (youTubeInitializationResult == YouTubeInitializationResult.SERVICE_MISSING){
+
+        if (isDetached()) {
+            return;
+        }
+
+        if (youTubeInitializationResult == YouTubeInitializationResult.SERVICE_MISSING) {
             viewYoutubeApp.setVisibility(View.VISIBLE);
         }
     }
@@ -428,7 +441,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
     @Override
     public boolean OnBackKeyPressed() {
-        if (fullscreen){
+        if (fullscreen) {
             youTubePlayer.setFullscreen(false);
             return true;
         }
@@ -562,7 +575,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         });
     }
 
-    public void forceDestroy(){
+    public void forceDestroy() {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getFragmentManager().beginTransaction().remove(this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commitAllowingStateLoss();
