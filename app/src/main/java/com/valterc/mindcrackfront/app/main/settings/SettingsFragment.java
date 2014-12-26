@@ -91,6 +91,17 @@ public class SettingsFragment extends Fragment implements IFragmentBack {
             }
         }, SettingsListItem.TYPE_BUTTON, "Empty Data Cache", "Removes all cache data stored by the app.");
 
+        SettingsListItem<Boolean> settingShowSplash = new SettingsListItem<Boolean>(new SettingsListItem.SettingsInteractionListener<Boolean>() {
+            @Override
+            public void onInteraction(SettingsListItem item, Boolean newValue) {
+                MindcrackFrontApplication.getSettings().setShowSplashScreen(newValue);
+            }
+
+            @Override
+            public void onClick(SettingsListItem item) {
+            }
+        }, SettingsListItem.TYPE_SWITCH, "Show splash", "Show the splash logo when you open the app.", MindcrackFrontApplication.getSettings().getShowSplashScreen());
+
         SettingsListItem<Boolean> settingAutoLike = new SettingsListItem<Boolean>(new SettingsListItem.SettingsInteractionListener<Boolean>() {
             @Override
             public void onInteraction(SettingsListItem item, Boolean newValue) {
@@ -112,6 +123,7 @@ public class SettingsFragment extends Fragment implements IFragmentBack {
 
         settingsListAdapter.addItem(settingClearAuth);
         settingsListAdapter.addItem(settingClearCache);
+        settingsListAdapter.addItem(settingShowSplash);
         settingsListAdapter.addItem(settingAutoLike);
 
         listViewSettings.setAdapter(settingsListAdapter);
