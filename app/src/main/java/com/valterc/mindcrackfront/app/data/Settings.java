@@ -17,7 +17,6 @@ public class Settings {
     private static final String TAG = "Settings";
     /*
 
-    1w5M0D
     5fEInK
     w3BGtc
     0qBlx9
@@ -36,6 +35,7 @@ public class Settings {
     private static final String KEY_SHOW_ADS = "g98uMr";
     private static final String KEY_SHOW_SPLASH = "ZQyqaO";
     private static final String KEY_FIRST_RUN_TIMESTAMP = "1kBKnc";
+    private static final String KEY_AUTO_LIKE_VIDEOS = "1w5M0D";
 
     private SharedPreferences sharedPreferences;
 
@@ -60,12 +60,14 @@ public class Settings {
         Boolean showAds = sharedPreferences.getBoolean(KEY_SHOW_ADS, true);
         Boolean showSplash = sharedPreferences.getBoolean(KEY_SHOW_SPLASH, true);
         long firstRunTimeStamp = sharedPreferences.getLong(KEY_FIRST_RUN_TIMESTAMP, -1);
+        Boolean autoLikeVideos = sharedPreferences.getBoolean(KEY_AUTO_LIKE_VIDEOS, false);
 
         String hash = sharedPreferences.getString(KEY_HASH_VALUES, "");
 
         this.showAds = showAds;
         this.showSplashScreen = showSplash;
         this.firstRunTimeStamp = firstRunTimeStamp;
+        this.autoLikeVideos = autoLikeVideos;
 
         String localHash = ComputeHash(hashCode() + "");
 
@@ -82,6 +84,8 @@ public class Settings {
         this.showAds = true;
         this.showSplashScreen = true;
         this.firstRunTimeStamp = Calendar.getInstance().getTimeInMillis();
+        this.autoLikeVideos = false;
+
         Log.d(TAG, "Default setting values loaded!");
     }
 
@@ -113,6 +117,7 @@ public class Settings {
         editor.putBoolean(KEY_SHOW_ADS, getShowAds());
         editor.putBoolean(KEY_SHOW_SPLASH, getShowSplashScreen());
         editor.putLong(KEY_FIRST_RUN_TIMESTAMP, getFirstRunTimeStamp());
+        editor.putBoolean(KEY_AUTO_LIKE_VIDEOS, getAutoLikeVideos());
 
         editor.putString(KEY_HASH_VALUES, ComputeHash(hashCode() + ""));
 

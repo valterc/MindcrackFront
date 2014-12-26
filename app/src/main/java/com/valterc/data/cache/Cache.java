@@ -264,4 +264,9 @@ public class Cache {
 
     }
 
+    public void Clear(){
+        storage.CleanCacheDirectory();
+        cacheInfo = new CacheInfo();
+    }
+
 }

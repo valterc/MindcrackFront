@@ -21,6 +21,7 @@ import com.valterc.mindcrackfront.app.ExceptionHandlerActivity;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
+import com.valterc.mindcrackfront.app.main.front.IShowFrontFragmentListener;
 import com.valterc.mindcrackfront.app.main.front.MindcrackFrontFragment;
 import com.valterc.mindcrackfront.app.main.list.mindcracker.MindcrackerListFragment;
 import com.valterc.mindcrackfront.app.main.list.mindcracker.ShowVideoListener;
@@ -34,7 +35,7 @@ import com.valterc.mindcrackfront.app.youtube.AuthenticationResult;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerListener, ShowVideoListener, ExceptionHandlerActivity {
+        implements NavigationDrawerListener, ShowVideoListener, IShowFrontFragmentListener, ExceptionHandlerActivity {
 
     public static final int REQUEST_CODE_SELECT_ACCOUNT = 0x2140;
     public static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 0x2141;
@@ -106,6 +107,20 @@ public class MainActivity extends ActionBarActivity
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
 
+    }
+
+    @Override
+    public void showFrontFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container);
+        if (fragment != null && fragment instanceof MindcrackerVideoFragment) {
+            ((MindcrackerVideoFragment) fragment).forceDestroy();
+        }
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, new MindcrackFrontFragment())
+                .commit();
     }
 
     @Override
@@ -182,4 +197,5 @@ public class MainActivity extends ActionBarActivity
 
         });
     }
+
 }
