@@ -480,7 +480,11 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             adViewBanner.loadAd();
         }
 
-        //TODO: Like video if auto like is on
+        if (MindcrackFrontApplication.getSettings().getAutoLikeVideos()) {
+            if (viewLoadingRating.getVisibility() != View.VISIBLE && (TextUtils.isEmpty(rating) || rating.equals("none"))) {
+                new LikeVideoAsyncTask().execute(new LikeVideoAsyncTask.LikeVideoInfo(MindcrackerVideoFragment.this, videoId));
+            }
+        }
     }
 
     @Override
