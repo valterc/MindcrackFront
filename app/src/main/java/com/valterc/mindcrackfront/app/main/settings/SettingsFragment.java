@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.valterc.IFragmentBack;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.main.front.IShowFrontFragmentListener;
 
 /**
@@ -33,6 +34,15 @@ public class SettingsFragment extends Fragment implements IFragmentBack {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MindcrackActionBarFragment mindcrackActionBarFragment = (MindcrackActionBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragmentMindcrackActionBar);
+
+        mindcrackActionBarFragment.setRightImageInAnimation(android.R.anim.fade_in);
+        mindcrackActionBarFragment.setRightImageOnClickListener(null);
+        mindcrackActionBarFragment.setRightImageOnLongClickListener(null);
+        mindcrackActionBarFragment.setRightImageResource(0);
+        mindcrackActionBarFragment.resetCenterImage();
+
         typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
     }
 

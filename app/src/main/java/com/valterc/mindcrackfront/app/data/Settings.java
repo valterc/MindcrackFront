@@ -87,7 +87,6 @@ public class Settings {
         this.autoLikeVideos = false;
 
         Log.d(TAG, "Default setting values loaded!");
-        storeValues();
     }
 
     private String ComputeHash(String key){
