@@ -124,17 +124,21 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
                 listItems.add(new MindcrackFrontListItem(recommendedVideo));
             }
 
-            listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+            if (MindcrackFrontApplication.getSettings().getShowAds()) {
+                listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+            }
+
             listItems.add(new MindcrackFrontListItem("Recent videos"));
 
             for (int i = 0; i < recentVideos.size(); i++) {
                 MindcrackerVideo recentVideo = recentVideos.get(i);
                 listItems.add(new MindcrackFrontListItem(recentVideo));
 
-                if ((i + 1) % 10 == 0) {
-                    listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                if (MindcrackFrontApplication.getSettings().getShowAds()) {
+                    if ((i + 1) % 10 == 0) {
+                        listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                    }
                 }
-
             }
 
             for (MindcrackerVideo recentVideo : recentVideos) {
@@ -148,8 +152,10 @@ public class MindcrackFrontFragment extends Fragment implements GetRecentVideosA
                 MindcrackerVideo recentVideo = recentVideos.get(i);
                 listItems.add(new MindcrackFrontListItem(recentVideo));
 
-                if ((i + 1) % 10 == 0) {
-                    listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                if (MindcrackFrontApplication.getSettings().getShowAds()) {
+                    if ((i + 1) % 10 == 0) {
+                        listItems.add(new MindcrackFrontListItem(MindcrackFrontListItem.TYPE_AD));
+                    }
                 }
 
             }

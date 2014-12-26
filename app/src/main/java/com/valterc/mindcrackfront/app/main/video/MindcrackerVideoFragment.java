@@ -474,9 +474,13 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     @Override
     public void onVideoEnded() {
         Log.d(getClass().getSimpleName(), "onVideoEnded");
-        adViewWrapper.setVisibility(View.VISIBLE);
-        adView.loadAd();
-        adViewBanner.loadAd();
+        if (MindcrackFrontApplication.getSettings().getShowAds()) {
+            adViewWrapper.setVisibility(View.VISIBLE);
+            adView.loadAd();
+            adViewBanner.loadAd();
+        }
+
+        //TODO: Like video if auto like is on
     }
 
     @Override
