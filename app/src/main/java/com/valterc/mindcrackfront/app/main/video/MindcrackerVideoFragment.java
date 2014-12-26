@@ -482,6 +482,9 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
 
         if (MindcrackFrontApplication.getSettings().getAutoLikeVideos()) {
             if (viewLoadingRating.getVisibility() != View.VISIBLE && (TextUtils.isEmpty(rating) || rating.equals("none"))) {
+                linearLayoutLike.setVisibility(View.GONE);
+                linearLayoutDislike.setVisibility(View.GONE);
+                viewLoadingRating.setVisibility(View.VISIBLE);
                 new LikeVideoAsyncTask().execute(new LikeVideoAsyncTask.LikeVideoInfo(MindcrackerVideoFragment.this, videoId));
             }
         }
