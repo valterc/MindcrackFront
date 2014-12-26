@@ -23,7 +23,7 @@ public class SettingsListAdapter extends BaseAdapter {
     private ArrayList<SettingsListItem<?>> items;
     private Typeface typefaceLight;
 
-    public SettingsListAdapter(Context context){
+    public SettingsListAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
         typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
@@ -59,16 +59,18 @@ public class SettingsListAdapter extends BaseAdapter {
 
         SettingsListItem<?> item = getItem(position);
 
-        switch (item.getType()){
-            case SettingsListItem.TYPE_BUTTON: return getViewButton(position, item, convertView);
-            case SettingsListItem.TYPE_SWITCH: return getViewSwitch(position, (SettingsListItem<Boolean>) item, convertView);
+        switch (item.getType()) {
+            case SettingsListItem.TYPE_BUTTON:
+                return getViewButton(position, item, convertView);
+            case SettingsListItem.TYPE_SWITCH:
+                return getViewSwitch(position, (SettingsListItem<Boolean>) item, convertView);
         }
 
         return convertView;
     }
 
-    private View getViewButton(int position, final SettingsListItem<?> item, View convertView){
-        if (convertView == null){
+    private View getViewButton(int position, final SettingsListItem<?> item, View convertView) {
+        if (convertView == null) {
             convertView = View.inflate(context, R.layout.list_settings_switch, null);
 
             TextView textViewTitle = (TextView) convertView.findViewById(R.id.textViewSettingTitle);
@@ -104,8 +106,8 @@ public class SettingsListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private View getViewSwitch(int position, final SettingsListItem<Boolean> item, View convertView){
-        if (convertView == null){
+    private View getViewSwitch(int position, final SettingsListItem<Boolean> item, View convertView) {
+        if (convertView == null) {
             convertView = View.inflate(context, R.layout.list_settings_switch, null);
 
             TextView textViewTitle = (TextView) convertView.findViewById(R.id.textViewSettingTitle);

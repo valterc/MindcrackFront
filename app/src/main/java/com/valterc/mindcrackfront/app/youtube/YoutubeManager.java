@@ -65,7 +65,6 @@ public class YoutubeManager {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (preferences.contains(PREF_ACCOUNT_NAME)) {
-            Log.d(getClass().getSimpleName(), "Using Account: " + preferences.getString(PREF_ACCOUNT_NAME, null));
             credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton("https://www.googleapis.com/auth/youtube"));
             credential.setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, null));
             httpRequestInitializer = credential;
@@ -110,7 +109,7 @@ public class YoutubeManager {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             preferences.edit().putString(PREF_ACCOUNT_NAME, accountName).apply();
             authenticate();
-            new GetMyChannelAsyncTask().execute((GetMyChannelAsyncTask.GetMyChannelInfo)null);
+            new GetMyChannelAsyncTask().execute((GetMyChannelAsyncTask.GetMyChannelInfo) null);
         }
     }
 

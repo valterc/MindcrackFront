@@ -87,6 +87,7 @@ public class Settings {
         this.autoLikeVideos = false;
 
         Log.d(TAG, "Default setting values loaded!");
+        storeValues();
     }
 
     private String ComputeHash(String key){
@@ -114,10 +115,10 @@ public class Settings {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(KEY_DUMMY_VALUE, dummyValue);
 
-        editor.putBoolean(KEY_SHOW_ADS, getShowAds());
-        editor.putBoolean(KEY_SHOW_SPLASH, getShowSplashScreen());
-        editor.putLong(KEY_FIRST_RUN_TIMESTAMP, getFirstRunTimeStamp());
-        editor.putBoolean(KEY_AUTO_LIKE_VIDEOS, getAutoLikeVideos());
+        editor.putBoolean(KEY_SHOW_ADS, showAds);
+        editor.putBoolean(KEY_SHOW_SPLASH, showSplashScreen);
+        editor.putLong(KEY_FIRST_RUN_TIMESTAMP, firstRunTimeStamp);
+        editor.putBoolean(KEY_AUTO_LIKE_VIDEOS, autoLikeVideos);
 
         editor.putString(KEY_HASH_VALUES, ComputeHash(hashCode() + ""));
 
