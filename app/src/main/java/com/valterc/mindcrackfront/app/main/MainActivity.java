@@ -21,6 +21,7 @@ import com.valterc.mindcrackfront.app.ExceptionHandlerActivity;
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.data.Mindcracker;
+import com.valterc.mindcrackfront.app.main.about.AboutFragment;
 import com.valterc.mindcrackfront.app.main.front.IShowFrontFragmentListener;
 import com.valterc.mindcrackfront.app.main.front.MindcrackFrontFragment;
 import com.valterc.mindcrackfront.app.main.list.mindcracker.MindcrackerListFragment;
@@ -57,8 +58,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        //TODO: <debug> Remove false
-        if (false && MindcrackFrontApplication.getSettings().getShowSplashScreen()) {
+        if (MindcrackFrontApplication.getSettings().getShowSplashScreen()) {
             getSupportFragmentManager().beginTransaction().add(R.id.frameLayoutSplash, new SplashFragment()).commit();
         }
     }
@@ -73,6 +73,16 @@ public class MainActivity extends ActionBarActivity
     protected void onDestroy() {
         super.onDestroy();
         MindcrackFrontApplication.removeExceptionHandlerActivity(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //Save all data
+        MindcrackFrontApplication.getDataManager().save();
+        MindcrackFrontApplication.getCache().Dispose();
+        MindcrackFrontApplication.getSettings().save();
     }
 
     @Override
@@ -92,10 +102,23 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(NavigationDrawerListItem item) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, new SettingsFragment())
-                .commit();
+
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container);
+        if (fragment != null && fragment instanceof MindcrackerVideoFragment) {
+            ((MindcrackerVideoFragment) fragment).forceDestroy();
+        }
+
+        if (item.title.equals("Settings")) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new SettingsFragment())
+                    .commit();
+        } else if (item.title.equals("About")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new AboutFragment())
+                    .commit();
+        }
     }
 
     @Override

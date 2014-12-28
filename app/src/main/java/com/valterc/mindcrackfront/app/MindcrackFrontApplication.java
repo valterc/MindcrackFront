@@ -1,6 +1,8 @@
 package com.valterc.mindcrackfront.app;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.support.v4.app.NotificationCompat;
 
 import com.valterc.data.cache.Cache;
 import com.valterc.mindcrackfront.app.data.DataManager;
@@ -60,18 +62,6 @@ public class MindcrackFrontApplication extends Application {
         DateFormatter.setUp(getApplicationContext());
 
         super.onCreate();
-    }
-
-    @Override
-    public void onTerminate() {
-
-        //TODO: Unsync state, do not call dispose on other places,
-        // or else we need to init this singletions again or use the object direct singleton if available
-        getDataManager().dispose();
-        getCache().Dispose();
-        getSettings().dispose();
-
-        super.onTerminate();
     }
 
     public static void handleException(Exception e) {

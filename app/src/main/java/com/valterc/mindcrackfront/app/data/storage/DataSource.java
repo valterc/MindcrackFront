@@ -22,11 +22,11 @@ public class DataSource {
 
     private DataSQLiteHelper mSqliteHelper;
 
-    public DataSource(Context c){
+    public DataSource(Context c) {
         mSqliteHelper = new DataSQLiteHelper(c);
     }
 
-    private SQLiteDatabase getDatabase(){
+    private SQLiteDatabase getDatabase() {
         return mSqliteHelper.getDatabase();
     }
 
@@ -52,7 +52,7 @@ public class DataSource {
         String lastVideoId = c.getString(c.getColumnIndex("last_video_id"));
         String lastVideoDateString = c.getString(c.getColumnIndex("last_video_date"));
 
-        Date lastVideoDate  = null;
+        Date lastVideoDate = null;
         if (lastVideoDateString != null) {
             try {                                    //2014-04-24T16:01:15.000Z
                 lastVideoDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH).parse(lastVideoDateString);
@@ -67,13 +67,13 @@ public class DataSource {
     }
 
 
-    public ArrayList<Mindcracker> getMindcrackers(){
+    public ArrayList<Mindcracker> getMindcrackers() {
 
         ArrayList<Mindcracker> mindcrackers = new ArrayList<Mindcracker>();
 
         Cursor c = getDatabase().query(
                 "mindcrackers",
-                new String[] { "id",
+                new String[]{"id",
                         "name",
                         "youtube_name",
                         "youtube_id",
@@ -100,7 +100,7 @@ public class DataSource {
         return mindcrackers;
     }
 
-    public ArrayList<Mindcracker> getFavoriteMindcrackers(){
+    public ArrayList<Mindcracker> getFavoriteMindcrackers() {
         ArrayList<Mindcracker> mindcrackers = new ArrayList<Mindcracker>();
 
         Cursor c = getDatabase().rawQuery("SELECT * FROM mindcrackers m JOIN favorites f ON m.id = f.mindcracker_id", null);
@@ -118,7 +118,7 @@ public class DataSource {
         return mindcrackers;
     }
 
-    public Boolean updateMindcrackers(ArrayList<Mindcracker> mindcrackers){
+    public Boolean updateMindcrackers(ArrayList<Mindcracker> mindcrackers) {
 
         Boolean result = true;
 
@@ -140,11 +140,11 @@ public class DataSource {
         try {
 
             for (int i = 0; i < mindcrackers.size(); i++) {
-                 Mindcracker m = mindcrackers.get(i);
+                Mindcracker m = mindcrackers.get(i);
 
                 statement.clearBindings();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH);
 
                 int index = 1;
                 statement.bindString(index++, m.getName());
@@ -156,8 +156,21 @@ public class DataSource {
                 statement.bindLong(index++, m.getNotificationsEnabled() ? 1 : 0);
                 statement.bindLong(index++, m.getUnseenVideoCount());
                 statement.bindLong(index++, m.getHits());
-                statement.bindString(index++, m.getLastVideoId());
-                statement.bindString(index++, m.getLastVideoDate() == null ? null : sdf.format(m.getLastVideoDate()));
+
+                if (m.getLastVideoId() != null) {
+                    statement.bindString(index++, m.getLastVideoId());
+                }
+                else {
+                    statement.bindNull(index++);
+                }
+
+                if (m.getLastVideoDate() != null) {
+                    statement.bindString(index++, sdf.format(m.getLastVideoDate()));
+                }
+                else {
+                    statement.bindNull(index++);
+                }
+
                 statement.bindString(index++, m.getId());
 
 
@@ -167,7 +180,7 @@ public class DataSource {
                     statement.execute();
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("DataSource", e.getMessage());
             result = false;
         }
@@ -176,7 +189,7 @@ public class DataSource {
         return result;
     }
 
-    public Boolean updateFavoriteMindcrackers(ArrayList<Mindcracker> favoriteMindcrackers){
+    public Boolean updateFavoriteMindcrackers(ArrayList<Mindcracker> favoriteMindcrackers) {
 
         Boolean result = true;
 
@@ -189,7 +202,7 @@ public class DataSource {
 
         deleteStatement.close();
 
-        SQLiteStatement statement = getDatabase().compileStatement("INSERT INTO favorite VALUES (?, ?)");
+        SQLiteStatement statement = getDatabase().compileStatement("INSERT INTO favorites VALUES (?, ?)");
 
         try {
 
@@ -205,7 +218,7 @@ public class DataSource {
 
             statement.close();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("DataSource", e.getMessage());
             result = false;
         }
@@ -213,7 +226,7 @@ public class DataSource {
         return result;
     }
 
-    public void dispose(){
+    public void dispose() {
         mSqliteHelper.disposeDatabase();
     }
 

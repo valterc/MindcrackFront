@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/imageViewAboutLogo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:alpha=".9"
+        android:src="@drawable/icon_512_no_back" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAboutAppName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewAboutLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textViewTitleMind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mind"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/textViewTitleCrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="crack"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/textViewTitleFront"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Front"
+            android:textSize="26sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDeveloperContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutAboutAppName"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:background="#f4f4f4">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_margin="2dp">
+
+            <TextView
+                android:id="@+id/textViewDevelopedBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DEVELOPED BY"
+                android:textColor="#888"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/textViewDeveloperName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valter Costa"
+                android:textSize="27sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewCopyrightNotice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="'Mindcrack' and the Mindcrack logo are property of their respective owner. Videos, logos and channel art are property of their respective owners. No copyright infringement intended."
+            android:textColor="#999"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

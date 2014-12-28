@@ -31,9 +31,13 @@ public class DataManager extends BindableBase {
     }
 
     public void dispose() {
+        save();
+        dataSource.dispose();
+    }
+
+    public void save() {
         dataSource.updateMindcrackers(getMindcrackers());
         dataSource.updateFavoriteMindcrackers(getFavoriteMindcrackers());
-        dataSource.dispose();
     }
 
 

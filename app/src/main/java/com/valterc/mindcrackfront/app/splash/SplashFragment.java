@@ -50,12 +50,12 @@ public class SplashFragment extends Fragment implements VTimer.TimerExecutor {
         textViewTitleCrack = (TextView) view.findViewById(R.id.textViewTitleCrack);
         textViewTitleFront = (TextView) view.findViewById(R.id.textViewTitleFront);
 
-        Typeface typefaceText = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
-        Typeface typefaceTextBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        Typeface typefaceThin = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
+        Typeface typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
 
-        textViewTitleMind.setTypeface(typefaceTextBold);
-        textViewTitleCrack.setTypeface(typefaceTextBold);
-        textViewTitleFront.setTypeface(typefaceText);
+        textViewTitleMind.setTypeface(typefaceLight);
+        textViewTitleCrack.setTypeface(typefaceLight);
+        textViewTitleFront.setTypeface(typefaceThin);
 
         new VTimer(new VTimer.TimerExecutor() {
             @Override

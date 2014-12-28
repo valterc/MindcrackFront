@@ -251,12 +251,12 @@ public class Cache {
 
         try {
             storage.SaveData("info", cacheInfo.serialize());
-
+/*
             Log.d("Cache", "Cache info ---------------");
             Log.d("Cache", "Data count: " + cacheInfo.GetDataCount());
             Log.d("Cache", "Total size: " + cacheInfo.GetSize() / 1024 + "KB");
             Log.d("Cache", "--------------------------");
-
+*/
             Log.d("Cache", "Cache info stored");
         } catch (IOException e) {
             e.printStackTrace();

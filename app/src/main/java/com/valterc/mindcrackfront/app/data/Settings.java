@@ -108,7 +108,7 @@ public class Settings {
         return null;
     }
 
-    public void storeValues(){
+    private void storeValues(){
         boolean dummyValue = Math.random() > .5;
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -126,7 +126,7 @@ public class Settings {
         Log.d(TAG, "Values stored, result: " + result);
     }
 
-    public void dispose() {
+    public void save() {
        storeValues();
     }
 

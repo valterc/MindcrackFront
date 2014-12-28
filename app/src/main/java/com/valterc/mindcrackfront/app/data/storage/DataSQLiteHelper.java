@@ -19,10 +19,10 @@ public class DataSQLiteHelper {
     // ===========================================================
 
     private final static String DB_FILE_NAME = "data";
-    private final static int DB_VERSION = 2;
+    private final static int DB_VERSION = 1;
     private final static String DB_GET_VERSION = "pragma user_version;";
     private final static String DB_SET_VERSION = "pragma user_version = " + DB_VERSION + ";";
-    private final static Boolean FORCE_UPDATE = true;
+    private final static Boolean FORCE_UPDATE = false;
 
     // ===========================================================
     // Fields
