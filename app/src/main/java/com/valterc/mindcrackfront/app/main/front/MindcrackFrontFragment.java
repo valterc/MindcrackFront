@@ -1,6 +1,5 @@
 package com.valterc.mindcrackfront.app.main.front;
 
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.valterc.mindcrackfront.app.MindcrackFrontApplication;
 import com.valterc.mindcrackfront.app.R;
@@ -22,7 +20,6 @@ import com.valterc.mindcrackfront.app.data.backend.GetRecentVideosAsyncTask;
 import com.valterc.mindcrackfront.app.main.video.MindcrackerVideoFragment;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 /**
  * Created by Valter on 07/12/2014.

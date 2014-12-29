@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ListView.*;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ import com.valterc.mindcrackfront.app.data.Mindcracker;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarContextHolder;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask;
+import com.valterc.views.HeaderGridView;
 
 import static com.valterc.mindcrackfront.app.youtube.tasks.GetChannelAsyncTask.*;
 
@@ -56,7 +60,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     private Typeface typefaceLight;
     private Bitmap bitmapCenterLogo;
 
-    private ListView listView;
+    private AbsListView absListView;
     private View viewLoading;
     private View viewErrorLoading;
     private View headerView;
@@ -68,7 +72,12 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mindcracker, null);
 
-        listView = (ListView) view.findViewById(R.id.listView);
+        if (view.findViewById(R.id.listView) != null) {
+            absListView = (ListView) view.findViewById(R.id.listView);
+        } else {
+            absListView = (HeaderGridView) view.findViewById(R.id.gridView);
+        }
+
         viewLoading = view.findViewById(R.id.relativeLayoutLoading);
         viewErrorLoading = view.findViewById(R.id.relativeLayoutErrorLoading);
 
@@ -90,7 +99,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
                 viewErrorLoading.setVisibility(View.GONE);
                 viewLoading.setVisibility(View.VISIBLE);
 
-                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) listView.getAdapter();
+                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) absListView.getAdapter();
                 MindcrackerListAdapter mindcrackerListAdapter = (MindcrackerListAdapter) headerViewListAdapter.getWrappedAdapter();
                 mindcrackerListAdapter.RetryLoadVideos();
 
@@ -137,15 +146,21 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
         super.onActivityCreated(savedInstanceState);
         this.headerView = getLayoutInflater(savedInstanceState).inflate(R.layout.list_mindcracker_header, null);
 
-        listView.addHeaderView(headerView);
-        listView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
-        listView.setOnItemClickListener(this);
+        if (absListView instanceof ListView) {
+            ((ListView) absListView).addHeaderView(headerView);
+            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+        } else {
+            ((HeaderGridView) absListView).addHeaderView(headerView);
+            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+        }
+
+        absListView.setOnItemClickListener(this);
     }
 
     @Override
     public void onGetChannelComplete(Channel response) {
 
-        if (isDetached() || getActivity() == null){
+        if (isDetached() || getActivity() == null) {
             return;
         }
 
@@ -246,7 +261,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ListAdapter adapter = listView.getAdapter();
+        ListAdapter adapter = absListView.getAdapter();
         MindcrackerListItem item = (MindcrackerListItem) adapter.getItem(position);
 
         if (item != null && listener != null) {
