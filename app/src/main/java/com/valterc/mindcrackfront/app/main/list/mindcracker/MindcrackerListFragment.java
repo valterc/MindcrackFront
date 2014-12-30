@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ListView.*;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.WrapperListAdapter;
 
 import com.google.api.services.youtube.model.Channel;
 import com.valterc.WebImageView;
@@ -59,6 +60,7 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
     private Channel channel;
     private Typeface typefaceLight;
     private Bitmap bitmapCenterLogo;
+    private Boolean tabletMode;
 
     private AbsListView absListView;
     private View viewLoading;
@@ -74,8 +76,10 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
 
         if (view.findViewById(R.id.listView) != null) {
             absListView = (ListView) view.findViewById(R.id.listView);
+            tabletMode = false;
         } else {
             absListView = (HeaderGridView) view.findViewById(R.id.gridView);
+            tabletMode = true;
         }
 
         viewLoading = view.findViewById(R.id.relativeLayoutLoading);
@@ -99,8 +103,8 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
                 viewErrorLoading.setVisibility(View.GONE);
                 viewLoading.setVisibility(View.VISIBLE);
 
-                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) absListView.getAdapter();
-                MindcrackerListAdapter mindcrackerListAdapter = (MindcrackerListAdapter) headerViewListAdapter.getWrappedAdapter();
+                WrapperListAdapter wrapperListAdapter = (WrapperListAdapter) absListView.getAdapter();
+                MindcrackerListAdapter mindcrackerListAdapter = (MindcrackerListAdapter) wrapperListAdapter.getWrappedAdapter();
                 mindcrackerListAdapter.RetryLoadVideos();
 
                 GetChannelInfo channelInfo = new GetChannelInfo(MindcrackerListFragment.this, mindcracker.getYoutubeId());
@@ -148,10 +152,10 @@ public class MindcrackerListFragment extends Fragment implements GetChannelListe
 
         if (absListView instanceof ListView) {
             ((ListView) absListView).addHeaderView(headerView);
-            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker, tabletMode));
         } else {
             ((HeaderGridView) absListView).addHeaderView(headerView);
-            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker));
+            absListView.setAdapter(new MindcrackerListAdapter(getActivity(), this.mindcracker, tabletMode));
         }
 
         absListView.setOnItemClickListener(this);

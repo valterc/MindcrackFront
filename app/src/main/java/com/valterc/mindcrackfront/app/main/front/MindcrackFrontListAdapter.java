@@ -28,12 +28,15 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<MindcrackFrontListItem> items;
+    private boolean tabletMode;
     private Typeface typefaceLight;
     private Boolean useMarginInFirstItem;
 
-    public MindcrackFrontListAdapter(Context context) {
+    public MindcrackFrontListAdapter(Context context, ArrayList<MindcrackFrontListItem> items, boolean tabletMode) {
         this.context = context;
-        items = new ArrayList<>();
+        this.items = items;
+        this.tabletMode = tabletMode;
+        this.useMarginInFirstItem = false;
         typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
     }
 
@@ -147,7 +150,11 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         FrontAdItemViewHolder adViewHolder = (FrontAdItemViewHolder) view.getTag();
 
         if (adViewHolder.adView.getAdUnitId() == null) {
-            adViewHolder.adView.setAdUnitId("2a8f0f76e9764bf7aecab2c87ea3e187");
+            if (tabletMode){
+                adViewHolder.adView.setAdUnitId("adb29b0f904b4296b6a04e026607500f");
+            } else {
+                adViewHolder.adView.setAdUnitId("2a8f0f76e9764bf7aecab2c87ea3e187");
+            }
             adViewHolder.adView.loadAd();
         } else {
             adViewHolder.adView.forceRefresh();
@@ -156,14 +163,14 @@ public class MindcrackFrontListAdapter extends BaseAdapter {
         return view;
     }
 
-
-    public void SetItems(ArrayList<MindcrackFrontListItem> items) {
+    public void setItems(ArrayList<MindcrackFrontListItem> items) {
         this.items = items;
         super.notifyDataSetChanged();
     }
 
     public void setUseMarginInFirstItem(Boolean useMarginInFirstItem) {
         this.useMarginInFirstItem = useMarginInFirstItem;
+        super.notifyDataSetChanged();
     }
 
     private class FrontAdItemViewHolder {

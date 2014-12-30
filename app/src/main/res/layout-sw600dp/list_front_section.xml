@@ -20,11 +20,11 @@
         android:fontFamily="sans-serif-light" />
 
     <com.valterc.views.ExpandableGridView
-        android:id="@+id/expandableGridViewStreaming"
+        android:id="@+id/expandableGridViewItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:columnWidth="200dp"
+        android:columnWidth="300dp"
         android:gravity="center"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"

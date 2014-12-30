@@ -27,12 +27,14 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
     private Context context;
     private ArrayList<MindcrackerListItem> items;
     private Mindcracker mindcracker;
+    private Boolean tabletMode;
     private String pageToken;
     private Typeface typefaceLight;
 
-    public MindcrackerListAdapter(Context context, Mindcracker mindcracker) {
+    public MindcrackerListAdapter(Context context, Mindcracker mindcracker, Boolean tabletMode) {
         this.context = context;
         this.mindcracker = mindcracker;
+        this.tabletMode = tabletMode;
         this.items = new ArrayList<>();
 
         typefaceLight = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
@@ -148,7 +150,11 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
         MindcrackerAdItemViewHolder viewHolder = (MindcrackerAdItemViewHolder) view.getTag();
 
         if (viewHolder.adView.getAdUnitId() == null) {
-            viewHolder.adView.setAdUnitId("d58184bc052f48b8acebe28345f54bd5");
+            if (tabletMode){
+                viewHolder.adView.setAdUnitId("81e0787a975e40759220fd3f737248df");
+            } else {
+                viewHolder.adView.setAdUnitId("d58184bc052f48b8acebe28345f54bd5");
+            }
             viewHolder.adView.loadAd();
         } else {
             viewHolder.adView.forceRefresh();
