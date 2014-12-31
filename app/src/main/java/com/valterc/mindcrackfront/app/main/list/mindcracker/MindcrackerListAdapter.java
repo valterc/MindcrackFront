@@ -193,7 +193,7 @@ public class MindcrackerListAdapter extends BaseAdapter implements GetVideoPlayl
                 items.add(new MindcrackerListItem(playlistItem, MindcrackerListItem.TYPE_VIDEO));
 
                 if (MindcrackFrontApplication.getSettings().getShowAds()) {
-                    if ((items.size() - items.size() / 5 - 1) % 5 == 0)
+                    if ((items.size() - items.size() / 10 - 1) % 10 == 0)
                         items.add(new MindcrackerListItem(playlistItem, MindcrackerListItem.TYPE_AD));
                 }
             }

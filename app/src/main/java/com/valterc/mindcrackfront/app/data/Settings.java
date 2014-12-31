@@ -132,8 +132,7 @@ public class Settings {
 
     public Boolean getShowAds() {
         //Only show ads after a day from the first run of the app
-        //TODO: Debug
-        return true; //showAds && Calendar.getInstance().getTimeInMillis() - getFirstRunTimeStamp() > 3600 * 1000 * 24;
+        return showAds && Calendar.getInstance().getTimeInMillis() - getFirstRunTimeStamp() > 3600 * 1000 * 24;
     }
 
     public void setShowAds(Boolean showAds) {

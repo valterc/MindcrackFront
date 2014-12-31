@@ -75,6 +75,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
     private String rating;
     private Video video;
     private YouTubePlayer youTubePlayer;
+    private boolean tabletMode;
 
     private View playerView;
     private View adViewWrapper;
@@ -127,6 +128,7 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
             }
         }
 
+        tabletMode = getResources().getBoolean(R.bool.isTablet);
         typefaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         typefaceNormal = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Regular.ttf");
 
@@ -425,17 +427,33 @@ public class MindcrackerVideoFragment extends Fragment implements IFragmentBack,
         RelativeLayout.LayoutParams playerParams =
                 (RelativeLayout.LayoutParams) playerView.getLayoutParams();
 
-        if (fullscreen) {
-            playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-            playerParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-            mindcrackActionBarFragment.hide();
-            viewTopSpace.setVisibility(View.GONE);
+        if (tabletMode){
+            if (fullscreen) {
+                playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                playerParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                mindcrackActionBarFragment.hide();
+                viewTopSpace.setVisibility(View.GONE);
+            } else {
+                playerParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 550, getResources().getDisplayMetrics());
+                playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 350, getResources().getDisplayMetrics());
+                mindcrackActionBarFragment.show();
+                viewTopSpace.setVisibility(View.VISIBLE);
+            }
         } else {
-            playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-            playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-            mindcrackActionBarFragment.show();
-            viewTopSpace.setVisibility(View.VISIBLE);
+            if (fullscreen) {
+                playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                playerParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                mindcrackActionBarFragment.hide();
+                viewTopSpace.setVisibility(View.GONE);
+            } else {
+                playerParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                playerParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+                mindcrackActionBarFragment.show();
+                viewTopSpace.setVisibility(View.VISIBLE);
+            }
         }
+
+
 
     }
 
