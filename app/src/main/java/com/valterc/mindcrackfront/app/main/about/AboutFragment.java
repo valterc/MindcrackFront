@@ -1,6 +1,7 @@
 package com.valterc.mindcrackfront.app.main.about;
 
 import android.app.Activity;
+import android.app.Application;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.valterc.IFragmentBack;
+import com.valterc.mindcrackfront.app.BuildConfig;
 import com.valterc.mindcrackfront.app.R;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.main.front.IShowFrontFragmentListener;
@@ -53,6 +55,7 @@ public class AboutFragment extends Fragment implements IFragmentBack {
         TextView textViewDevelopedBy = (TextView) view.findViewById(R.id.textViewDevelopedBy);
         TextView textViewDevelopedName = (TextView) view.findViewById(R.id.textViewDeveloperName);
         TextView textViewCopyrightNotice = (TextView) view.findViewById(R.id.textViewCopyrightNotice);
+        TextView textViewAppVersion = (TextView) view.findViewById(R.id.textViewAppVersion);
 
         textViewTitleMind.setTypeface(typefaceLight);
         textViewTitleCrack.setTypeface(typefaceLight);
@@ -60,6 +63,9 @@ public class AboutFragment extends Fragment implements IFragmentBack {
         textViewDevelopedBy.setTypeface(typefaceThin);
         textViewDevelopedName.setTypeface(typefaceLight);
         textViewCopyrightNotice.setTypeface(typefaceLight);
+        textViewAppVersion.setTypeface(typefaceLight);
+
+        textViewAppVersion.setText(BuildConfig.VERSION_NAME);
 
         LinearLayout linearLayoutDeveloperContact = (LinearLayout) view.findViewById(R.id.linearLayoutDeveloperContact);
         linearLayoutDeveloperContact.setOnClickListener(new View.OnClickListener() {

@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutAboutAppName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewAboutLogo"
         android:layout_centerHorizontal="true"
@@ -45,19 +45,31 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewAppVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutAboutAppName"
+        android:layout_alignRight="@+id/linearLayoutAboutAppName"
+        android:layout_alignEnd="@+id/linearLayoutAboutAppName"
+        android:textColor="#999"
+        android:text="version 1.0"
+        android:textSize="12sp"/>
+
     <LinearLayout
         android:id="@+id/linearLayoutDeveloperContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayoutAboutAppName"
         android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
-        android:background="#f4f4f4">
+        android:background="#f4f4f4"
+        android:gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewDevelopedBy"
