@@ -1,6 +1,8 @@
 package com.valterc.mindcrackfront.app.main.actionbar;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -47,7 +49,7 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
     private NavigationDrawerFragment drawerFragment;
 
     public MindcrackActionBarFragment() {
-
+        contextHolderQueue = new ArrayDeque<>();
     }
 
     @Override
@@ -55,6 +57,8 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
         super.onCreate(savedInstanceState);
 
         typefaceText = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
+        /*
         SVG svg = null;
         try {
             svg = SVG.getFromAsset(getActivity().getAssets(), "mindcrack_logo.svg");
@@ -70,11 +74,12 @@ public class MindcrackActionBarFragment extends Fragment implements NavigationDr
             Canvas bmcanvas = new Canvas(bitmapMindcrackLogo);
             svg.renderToCanvas(bmcanvas);
         }
+        */
+
+        bitmapMindcrackLogo = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.mc_logo);
 
         drawerFragment = (NavigationDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         drawerFragment.setStateListener(this);
-
-        contextHolderQueue = new ArrayDeque<>();
     }
 
     @Override

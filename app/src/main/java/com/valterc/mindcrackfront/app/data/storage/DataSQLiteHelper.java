@@ -120,7 +120,7 @@ public class DataSQLiteHelper {
 
         try {
             database.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         database = null;
