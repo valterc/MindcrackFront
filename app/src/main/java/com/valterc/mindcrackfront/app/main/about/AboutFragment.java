@@ -2,11 +2,13 @@ package com.valterc.mindcrackfront.app.main.about;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.valterc.IFragmentBack;
 import com.valterc.mindcrackfront.app.BuildConfig;
 import com.valterc.mindcrackfront.app.R;
+import com.valterc.mindcrackfront.app.main.MainActivity;
 import com.valterc.mindcrackfront.app.main.actionbar.MindcrackActionBarFragment;
 import com.valterc.mindcrackfront.app.main.front.IShowFrontFragmentListener;
 import com.vcutils.IntentUtils;
@@ -76,6 +79,18 @@ public class AboutFragment extends Fragment implements IFragmentBack {
         });
 
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (getActivity() != null){
+            if (getActivity() instanceof MainActivity){
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.showAboutFragment();
+            }
+        }
     }
 
     @Override

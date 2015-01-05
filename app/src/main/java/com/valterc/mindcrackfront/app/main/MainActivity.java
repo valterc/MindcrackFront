@@ -115,10 +115,21 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, new SettingsFragment())
                     .commit();
         } else if (item.title.equals("About")){
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, new AboutFragment())
-                    .commit();
+            showAboutFragment();
         }
+    }
+
+    public void showAboutFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Fragment fragment = fragmentManager.findFragmentById(R.id.container);
+        if (fragment != null && fragment instanceof MindcrackerVideoFragment) {
+            ((MindcrackerVideoFragment) fragment).forceDestroy();
+        }
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, new AboutFragment())
+                .commit();
     }
 
     @Override
